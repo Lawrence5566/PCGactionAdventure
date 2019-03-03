@@ -110,8 +110,45 @@ public class GraphGenerator : MonoBehaviour {
 		return path;
 	}
 
-	void findLoopsInGraph(){
-		
+	List<node> findLoopsInGraph(node curr, node previous, List<node> visited, List<node> path, List<node> deadEndNodes){
+		Debug.Log (curr.name);
+		path.Add (curr);
+		visited.Add (curr); //mark current node as visited
+
+		//recurse for next random node
+		//List<node> validNodes = curr.connectedNodes; //this does not work, if you delete from valid nodes, you delete from connectedNodes as this is a reference
+		List<node>  validNodes = new List<node> (curr.connectedNodes); //use this instead
+		node newNode;
+		for (int i = 0; i < validNodes.Count; i++) {
+			int index = Random.Range(0, validNodes.Count); 			//pick a node from connections
+			newNode = validNodes [index]; 								//set node
+
+			Debug.Log ("newNode: " + newNode.name);
+
+			if (deadEndNodes.Contains(newNode)){
+				validNodes.Remove (newNode); 
+			}else if (!visited.Contains (newNode)) { //if node is not visited, recur			
+				path = findLoopsInGraph (newNode, curr, visited, path, deadEndNodes);
+				break; 
+			} else if (newNode != previous) {
+				//found loop
+				path.Add (newNode);
+				return path;
+			} else {
+				validNodes.Remove (newNode); 
+			}
+
+			if(validNodes.Count == 0){ 	//hit a dead end, no loops here, go back to node that can find loop
+				path.Remove(curr);										//remove current node from path, and add to dead end nodes
+				visited.Remove(curr);
+				deadEndNodes.Add(curr);
+				path = findLoopsInGraph(path[path.Count - 2], path[path.Count - 3], visited, path, deadEndNodes);				//recurse to go back to previous node
+				break; //to stop the max 4 loops
+			}
+		}
+
+		return path;
+			
 	}
 
 	KeyValuePair<connection, node> addConnection(node a, node b){ //create connection from A -> B and add to each other's connectedNodes
@@ -307,6 +344,13 @@ public class GraphGenerator : MonoBehaviour {
 
 		routeA [0].AddFeature (new token("obstacle", obstacleCircle)); //test add
 		routeA [0].AddFeature (new token("obstacle", obstacleCircle)); //test add
+
+		List<node> route = findLoopsInGraph (startNode, null, new List<node> (), new List<node> (), new List<node> ()); //test find loop
+
+		Debug.Log("loop:");
+		foreach (node n in route){
+			Debug.Log (n.name);
+		}
 	}
 
 	connection getRandomUniqueConnection(List<KeyValuePair<connection, node>> routeA, List<KeyValuePair<connection, node>> routeB){ //gets a random unique connection from routeA by comparing to routeB

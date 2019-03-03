@@ -6,7 +6,7 @@ public class MobSpawner : MonoBehaviour {
 	public GameObject DiaEnemyPrefab;
 	public Material[] DiaMaterials;
 
-	int minPoints = 3; //must be changed manually
+	//int minPoints = 3; //must be changed manually
 
 	List<KeyValuePair<int, string>> mobOptions = new List<KeyValuePair<int, string>> (){
 		new KeyValuePair<int, string> (3, "lvl1mob"),
