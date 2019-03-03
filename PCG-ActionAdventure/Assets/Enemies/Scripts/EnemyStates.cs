@@ -16,6 +16,7 @@ public class EnemyStates : MonoBehaviour {
 	public Rigidbody rigid;
 
 	public GameObject weapon;
+	public Transform rightHand;
 
 	public List<Rigidbody> ragdollRigids = new List<Rigidbody>();
 	public List<Collider> ragdollColliders = new List<Collider>();
@@ -101,12 +102,14 @@ public class EnemyStates : MonoBehaviour {
 		anim.SetBool (StaticStrings.canMove, false);
 	}
 
+	/*
 	public void SetWeapon(GameObject w){
 		Transform rightHand = weapon.transform.parent;
 		if (weapon != null) { //destroy weapon
 			Destroy (weapon);
 		}
-		//add new weapon
-		weapon = Instantiate(w, rightHand);
-	}
+		//set new weapon (its already instantiated)
+		weapon = w;
+		w.transform.parent = rightHand;
+	}*/
 }

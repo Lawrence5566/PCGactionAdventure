@@ -18,6 +18,8 @@ public class GraphGenerator : MonoBehaviour {
 	public Sprite hiddenCircle;
 	node[] nodeArray = new node[12];
 	node startNode;
+
+	int maxRouteLength = 8;
 		
 	void Start () {
 
@@ -108,6 +110,10 @@ public class GraphGenerator : MonoBehaviour {
 		return path;
 	}
 
+	void findLoopsInGraph(){
+		
+	}
+
 	KeyValuePair<connection, node> addConnection(node a, node b){ //create connection from A -> B and add to each other's connectedNodes
 		var relativePoint = a.obj.transform.InverseTransformPoint(b.obj.transform.position); //for arrow direction
 		int relPoint;
@@ -184,8 +190,27 @@ public class GraphGenerator : MonoBehaviour {
 
 		//generate 2 paths between them
 		//find a path between start and goal:
-		List<node> routeA = new List<node>();
-		List<node> routeB = new List<node>();
+
+		List<node> routeA = findAPath (startNode, new List<node> (), new List<node> ());
+		List<node> routeB = findAPath (startNode, new List<node> (), new List<node> ());
+
+		while (true){ 
+			if (routeA.Count > maxRouteLength) { //make sure route is not too long
+				routeA = findAPath (startNode, new List<node> (), new List<node> ());
+				continue;
+			} 
+			if (routeB.Count > maxRouteLength) {
+				routeB = findAPath (startNode, new List<node> (), new List<node> ());
+				continue;
+			}
+			if (Enumerable.SequenceEqual (routeA, routeB)) {//make sure routes are different
+				routeB = findAPath (startNode, new List<node> (), new List<node> ());
+				continue;
+			}
+
+			break;
+		}
+
 		
 		do { //make sure routes are different
 			routeA = findAPath (startNode, new List<node> (), new List<node> ());
@@ -212,6 +237,7 @@ public class GraphGenerator : MonoBehaviour {
 
 	}
 
+	/*
 	void GrowRoute(List<KeyValuePair<connection,node>> route){ //testing
 		//rooms > rooms + room
 		//this will add a connection to a room, but not add the room to the route (so it'll be a side room?)
@@ -232,23 +258,17 @@ public class GraphGenerator : MonoBehaviour {
 			break; //found a room we can use, stop the loop
 		}
 
-
-
-
-
-
 		//Rooms > Rooms + room
-		/*
-		if (room.connectedNodes.Count == 0){
-			return; //no free rooms to expand to
-		} else{
-			addConnection (room, room.connectedNodes [Random.Range (0, room.connectedNodes.Count)]); //pick a random room and add a route connection to it
-		}*/
-
+		//if (room.connectedNodes.Count == 0){
+		//	return; //no free rooms to expand to
+		//} else{
+		//	addConnection (room, room.connectedNodes [Random.Range (0, room.connectedNodes.Count)]); //pick a random room and add a route connection to it
+		//}
 		//Rooms > Rooms + room + Obstacle
 		//Rooms > Rooms + room + item
 
 	}
+	*/
 
 	void ProcessNodeArray(List<node> routeA, List<node> routeB){ //final prep processing for converting GraphToMap 
 		//destroy all connections

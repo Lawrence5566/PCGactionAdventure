@@ -147,7 +147,7 @@ MonoBehaviour:
   weaponModel: {fileID: 1020744188431956}
   damageCollider: {fileID: 1298664740746084}
   type: 1
-  damage: 10
+  damage: 5
 --- !u!114 &114575826573653704
 MonoBehaviour:
   m_ObjectHideFlags: 1

@@ -298,9 +298,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   temp_Enemy: {fileID: 2062427021}
-  temp_Type: 1
-  temp_Dmg: 5
-  temp_SwordType: 0
+  temp_Type: 4
+  temp_Dmg: 10
+  temp_SwordType: 1
   broadswordPrefab: {fileID: 1020744188431956, guid: 40642408571de44418de22ce9e1c4868,
     type: 2}
   katanaPrefab: {fileID: 1025256421703284, guid: af5b5a4086b49f342ac750b87fa864d4,
@@ -371,6 +371,11 @@ Prefab:
       propertyPath: m_RootOrder
       value: 5
       objectReference: {fileID: 0}
+    - target: {fileID: 114406907443101654, guid: cad6c5162ca4d3143a15018ac86e1c83,
+        type: 2}
+      propertyPath: rightHand
+      value: 
+      objectReference: {fileID: 1621699825}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: cad6c5162ca4d3143a15018ac86e1c83, type: 2}
   m_IsPrefabAsset: 0
@@ -606,6 +611,11 @@ Prefab:
       propertyPath: m_Name
       value: BoxManEnemy (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 114406907443101654, guid: cad6c5162ca4d3143a15018ac86e1c83,
+        type: 2}
+      propertyPath: rightHand
+      value: 
+      objectReference: {fileID: 2128197254}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: cad6c5162ca4d3143a15018ac86e1c83, type: 2}
   m_IsPrefabAsset: 0
@@ -2874,6 +2884,11 @@ Transform:
   m_Father: {fileID: 569854965}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!4 &1621699825 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4656326061693434, guid: cad6c5162ca4d3143a15018ac86e1c83,
+    type: 2}
+  m_PrefabInternal: {fileID: 132763381}
 --- !u!1 &1626167006
 GameObject:
   m_ObjectHideFlags: 0
@@ -3693,3 +3708,8 @@ Transform:
   m_Father: {fileID: 2077112815}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!4 &2128197254 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4656326061693434, guid: cad6c5162ca4d3143a15018ac86e1c83,
+    type: 2}
+  m_PrefabInternal: {fileID: 341660402}

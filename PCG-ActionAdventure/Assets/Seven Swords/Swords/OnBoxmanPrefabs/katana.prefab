@@ -45,7 +45,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &4160571928419024
 Transform:
   m_ObjectHideFlags: 1
@@ -88,7 +88,7 @@ MeshRenderer:
   m_ReflectionProbeUsage: 1
   m_RenderingLayerMask: 4294967295
   m_Materials:
-  - {fileID: 2100000, guid: 2d53df72e4df3fb4183adab4ef943222, type: 2}
+  - {fileID: 2100000, guid: b5683b7235a00be418f1ff1c4f31e520, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -157,5 +157,5 @@ MonoBehaviour:
   isTwoHanded: 1
   weaponModel: {fileID: 1025256421703284}
   damageCollider: {fileID: 1930173642909424}
-  type: 1
+  type: 4
   damage: 10

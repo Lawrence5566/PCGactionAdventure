@@ -37,27 +37,30 @@ public class WeaponManager : MonoBehaviour {
 
 		switch (swordType) {
 		case SwordType.broadsword:
-			newWeapon = broadswordPrefab; //creates weapon in world
+			newWeapon = Instantiate(broadswordPrefab, enemy.rightHand); //creates weapon in world
 			break;
 		case SwordType.katana:
-			newWeapon = katanaPrefab;
+			newWeapon = Instantiate(katanaPrefab, enemy.rightHand);
 			break;
 		case SwordType.longsword:
-			newWeapon = longswordPrefab;
+			newWeapon = Instantiate(longswordPrefab, enemy.rightHand);
 			break;
 		case SwordType.rapier:
-			newWeapon = rapierPrefab;
+			newWeapon = Instantiate(rapierPrefab, enemy.rightHand);
 			break;
 		case SwordType.sabre:
-			newWeapon = sabrePrefab;
+			newWeapon = Instantiate(sabrePrefab, enemy.rightHand);
 			break;
 		case SwordType.scimitar:
-			newWeapon = scimitarPrefab;
+			newWeapon = Instantiate(scimitarPrefab, enemy.rightHand);
 			break;
 		case SwordType.ulfberht:
-			newWeapon = ulfberhtPrefab;
+			newWeapon = Instantiate(ulfberhtPrefab, enemy.rightHand);
 			break;
 		}
+
+		Destroy (enemy.weapon); //destroy old weapon
+		enemy.weapon = newWeapon;
 			
 		Weapon WeaponScript = newWeapon.GetComponent<Weapon>(); //get its script from prefab
 		WeaponScript.CloseDamageColliders(); //make sure damage colliders are off before giving to enemy (otherwise it hurts the enemy)
@@ -84,8 +87,6 @@ public class WeaponManager : MonoBehaviour {
 
 		//set damage
 		WeaponScript.damage = dmg;
-
-		enemy.SetWeapon (newWeapon); //give to enemy
 	}
 }
 
