@@ -110,44 +110,64 @@ public class GraphGenerator : MonoBehaviour {
 		return path;
 	}
 
-	List<node> findLoopsInGraph(node curr, node previous, List<node> visited, List<node> path, List<node> deadEndNodes){
-		Debug.Log (curr.name);
-		path.Add (curr);
-		visited.Add (curr); //mark current node as visited
+	//find loops in graph by looking through nodes connected to first past in 'curr' node
+	List<List<node>> findLoopsInGraph(node curr, node previous, List<node> path, List<node> deadEndNodes, int activeNodes, List<List<node>> loops){
+
+		if (!path.Contains(curr)) //only if path doesn't already contain current
+			path.Add (curr);	
 
 		//recurse for next random node
-		//List<node> validNodes = curr.connectedNodes; //this does not work, if you delete from valid nodes, you delete from connectedNodes as this is a reference
 		List<node>  validNodes = new List<node> (curr.connectedNodes); //use this instead
+
+		validNodes.Remove (previous);							//remove previous node
+		foreach(node n in deadEndNodes) validNodes.Remove(n); 	//remove dead end nodes
+
+		int validNodesCount = validNodes.Count;
 		node newNode;
-		for (int i = 0; i < validNodes.Count; i++) {
+
+		for (int i = 0; i < validNodesCount; i++) {
 			int index = Random.Range(0, validNodes.Count); 			//pick a node from connections
 			newNode = validNodes [index]; 								//set node
 
-			Debug.Log ("newNode: " + newNode.name);
-
-			if (deadEndNodes.Contains(newNode)){
-				validNodes.Remove (newNode); 
-			}else if (!visited.Contains (newNode)) { //if node is not visited, recur			
-				path = findLoopsInGraph (newNode, curr, visited, path, deadEndNodes);
+			if (!path.Contains (newNode)) { //if node is not visited, recur
+				loops = findLoopsInGraph (newNode, curr, path, deadEndNodes, activeNodes, loops);
 				break; 
 			} else if (newNode != previous) {
 				//found loop
-				path.Add (newNode);
-				return path;
-			} else {
-				validNodes.Remove (newNode); 
-			}
 
-			if(validNodes.Count == 0){ 	//hit a dead end, no loops here, go back to node that can find loop
-				path.Remove(curr);										//remove current node from path, and add to dead end nodes
-				visited.Remove(curr);
-				deadEndNodes.Add(curr);
-				path = findLoopsInGraph(path[path.Count - 2], path[path.Count - 3], visited, path, deadEndNodes);				//recurse to go back to previous node
-				break; //to stop the max 4 loops
+				int indexNewNode = path.IndexOf (newNode);
+				//start from first branch off (first instance of newNode) and remove all nodes before
+				for (int n = indexNewNode; n >= 0; n-- ) {
+					if (path [n] == newNode) //skip the branch node
+						continue;
+					path.RemoveAt(n);
+				}
+
+				loops.Add (new List<node>(path)); //add path to loops by copying (not reference)
+
+				validNodes.Remove(newNode); //remove from valid nodes so we can look for a new path
 			}
+				
 		}
 
-		return path;
+		if(validNodes.Count == 0){ 	//hit a dead end, no loops here, go back to node previous node to try find a loop
+			if (deadEndNodes.Count >= activeNodes){ //looked through all possible nodes
+				return loops;
+			}
+
+			path.Remove(curr);										//remove current node from path, and add to dead end nodes
+			deadEndNodes.Add(curr);
+
+			node newPrevious = null;
+			if (path.Count > 1)
+				newPrevious = path [path.Count - 2];
+
+			loops = findLoopsInGraph(path[path.Count - 1], newPrevious, path, deadEndNodes, activeNodes, loops);				//recurse to go back to previous node
+		}
+
+		return loops;
+
+		//remove duplicates when outputting (as some can be made cus of dead end stuff)
 			
 	}
 
@@ -345,14 +365,26 @@ public class GraphGenerator : MonoBehaviour {
 		routeA [0].AddFeature (new token("obstacle", obstacleCircle)); //test add
 		routeA [0].AddFeature (new token("obstacle", obstacleCircle)); //test add
 
-		List<node> route = findLoopsInGraph (startNode, null, new List<node> (), new List<node> (), new List<node> ()); //test find loop
-
-		Debug.Log("loop:");
-		foreach (node n in route){
-			Debug.Log (n.name);
+		int activeNodes = 0;
+		foreach (node n in nodeArray) { //calculate number of nodes in graph that are active
+			if (n.connectionToNodes.Count > 0)
+				activeNodes++;
 		}
+
+		List<List<node>> loops = findLoopsInGraph (startNode, null, new List<node> (), new List<node> (), activeNodes, new List<List<node>>()); //test find loop
+
+		string curr = "loop: ";
+		foreach(List<node> loop in loops){
+			foreach (node n in loop){
+				curr = curr + n.name + " ";
+			}
+			Debug.Log (curr);
+			curr = "loop: ";
+		}
+
 	}
 
+	//may not be needed now we are using loops?
 	connection getRandomUniqueConnection(List<KeyValuePair<connection, node>> routeA, List<KeyValuePair<connection, node>> routeB){ //gets a random unique connection from routeA by comparing to routeB
 		List<KeyValuePair<connection, node>> routeAunique = new List<KeyValuePair<connection, node>>();
 		foreach (KeyValuePair<connection, node> k1 in routeA){ //get list of unique key value pairs by connection
