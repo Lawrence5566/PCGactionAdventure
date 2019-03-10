@@ -13,8 +13,10 @@ public class GraphGenerator : MonoBehaviour {
 	public Sprite connectionArrowSpr;
 	public Sprite enemyCircle;
 	public Sprite lockKeyCircle;
-	public Sprite obstacleCircle;
-	public Sprite itemCircle;
+    public Sprite monsterCircle;
+    public Sprite trapCircle;
+
+    public Sprite itemCircle;
 	public Sprite hiddenCircle;
 	node[] nodeArray = new node[12];
 	node startNode;
@@ -341,6 +343,7 @@ public class GraphGenerator : MonoBehaviour {
 
 		//reconnect along routes
 		//add connections for route & converting to KeyValuePairs
+        //keep routeA and routeB solo nodes as we use them later
 		List<KeyValuePair<connection, node>> RouteA = new List<KeyValuePair<connection, node>> ();
 		List<KeyValuePair<connection, node>> RouteB = new List<KeyValuePair<connection, node>> ();
 		for (int i = 1; i < routeA.Count; i++) { //start from one ahead, so that we don't go out of range
@@ -350,20 +353,8 @@ public class GraphGenerator : MonoBehaviour {
 			RouteB.Add(addConnection (routeB [i - 1], routeB [i]));
 		}
 
-		int ACount = routeA.Count;
-		int BCount = routeB.Count;
-		if (ACount > 3 && BCount > 3) { //both routes are long
-			TwoAlternativePaths(RouteA,RouteB); //alternative paths rule
-		} else if (ACount > 3 && BCount <= 3) { //A is long, B is short
-			HiddenShortcut(RouteA,RouteB); //add hidden shortcut to short route
-		} else if (ACount <= 3 && BCount > 3) { //A is short, B is long
-			HiddenShortcut(RouteB, RouteA); 
-		} else { //both are short
-			
-		}
-
-		routeA [0].AddFeature (new token("obstacle", obstacleCircle)); //test add
-		routeA [0].AddFeature (new token("obstacle", obstacleCircle)); //test add
+		//routeA [0].AddFeature (new token("obstacle", obstacleCircle)); //test add
+		//routeA [0].AddFeature (new token("obstacle", obstacleCircle)); //test add
 
 		int activeNodes = 0;
 		foreach (node n in nodeArray) { //calculate number of nodes in graph that are active
@@ -373,6 +364,7 @@ public class GraphGenerator : MonoBehaviour {
 
 		List<List<node>> loops = findLoopsInGraph (startNode, null, new List<node> (), new List<node> (), activeNodes, new List<List<node>>()); //test find loop
 
+        //output loops for testing
 		string curr = "loop: ";
 		foreach(List<node> loop in loops){
 			foreach (node n in loop){
@@ -382,7 +374,79 @@ public class GraphGenerator : MonoBehaviour {
 			curr = "loop: ";
 		}
 
-	}
+        foreach (List<node> loop in loops) {
+        
+            List<KeyValuePair<connection, node>> loopRouteA = new List<KeyValuePair<connection, node>>();
+            List<KeyValuePair<connection, node>> loopRouteB = new List<KeyValuePair<connection, node>>();
+
+            foreach (KeyValuePair<connection, node> k in RouteA) {  //foreach connection in RouteA
+                if (loop.Contains(k.Value)){                        //if loop contains node
+                    loopRouteA.Add(k);                              //add to connection to RouteA half of loop
+                }
+            }
+
+            foreach (KeyValuePair<connection, node> k in RouteB) {  //foreach connection in RouteA
+                if (loop.Contains(k.Value)){                        //if loop contains node
+                    loopRouteB.Add(k);                              //add to route connection
+                }
+            }
+
+
+            //testing
+            string one = "loopPart1: ";
+            string two = "loopPart2: ";
+            foreach (KeyValuePair<connection, node> k in loopRouteA)
+            {
+                one += k.Value.name + ", ";
+            }
+            foreach (KeyValuePair<connection, node> k in loopRouteB)
+            {
+                two += k.Value.name + ", ";
+            }
+
+            Debug.Log(one);
+            Debug.Log(two);
+
+            //now perform patterns on the two halfs of the route
+            //make sure when doing patterns not to put obstacles on the node in both loop parts (both loop parts contain the node that joins them)
+
+            int ACount = loopRouteA.Count;
+            int BCount = loopRouteB.Count;
+            
+            if (ACount > 3 && BCount > 3){ //both routes are long
+                TwoAlternativePaths(loopRouteA, loopRouteB); //alternative paths rule
+            }
+            else if (ACount > 3 && BCount <= 3) { //A is long, B is short
+                HiddenShortcut(loopRouteA, loopRouteB); //add hidden shortcut to short route
+            }
+            else if (ACount <= 3 && BCount > 3){ //A is short, B is long
+                HiddenShortcut(loopRouteB, loopRouteA);
+            }
+            else{ //both are short
+                TwoAlternativePaths(loopRouteA, loopRouteB); //alternative paths rule ???
+            }
+
+
+        }
+
+
+        /*
+        int ACount = routeA.Count;
+        int BCount = routeB.Count;
+        if (ACount > 3 && BCount > 3){ //both routes are long
+            TwoAlternativePaths(RouteA, RouteB); 
+        }else if (ACount > 3 && BCount <= 3)
+        { //A is long, B is short
+            HiddenShortcut(RouteA, RouteB); //add hidden shortcut to short route
+        }else if (ACount <= 3 && BCount > 3)
+        { //A is short, B is long
+            HiddenShortcut(RouteB, RouteA);
+        }else
+        { //both are short
+
+        }*/
+
+    }
 
 	//may not be needed now we are using loops?
 	connection getRandomUniqueConnection(List<KeyValuePair<connection, node>> routeA, List<KeyValuePair<connection, node>> routeB){ //gets a random unique connection from routeA by comparing to routeB
@@ -437,18 +501,19 @@ public class GraphGenerator : MonoBehaviour {
 
 	//pattern rules:
 	void TwoAlternativePaths(List<KeyValuePair<connection, node>> routeA, List<KeyValuePair<connection, node>> routeB){ //only ran on both long paths
+        //add monster on routeA, trap on routeB
 		Debug.Log("run Alternate Paths rule");
 
 		node uniqueNode = getRandomUniqueNode (routeA, routeB);
 		if (uniqueNode.name == "null node") { // if no nodes unique, add to connction instead
 			//place obstacle on one route(monster)
-			getRandomUniqueConnection(routeA,routeB).AddFeatureToConnection (new token ("obstacle", obstacleCircle)); 
+			getRandomUniqueConnection(routeA,routeB).AddFeatureToConnection (new token ("monster", monsterCircle)); 
 		} else {								//node is unique, so add monster
-			//place obstacle on one node(monster)
-			uniqueNode.AddFeature(new token("obstacle", obstacleCircle)); //add a obstacle
+			//place monster on a nodes
+			uniqueNode.AddFeature(new token("monster", monsterCircle)); //add a obstacle
 		}
 			
-		getRandomUniqueConnection(routeB, routeA).AddFeatureToConnection(new token("obstacle", obstacleCircle)); 				//add a obstacle on a connection (trap)
+		getRandomUniqueConnection(routeB, routeA).AddFeatureToConnection(new token("trap", trapCircle)); 				//add a obstacle on a connection (trap)
 	}
 
 	void HiddenShortcut(List<KeyValuePair<connection, node>> longRoute, List<KeyValuePair<connection, node>> shortRoute){
