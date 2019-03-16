@@ -22,6 +22,8 @@ public class GraphGenerator : MonoBehaviour {
 	node startNode;
 
 	int maxRouteLength = 8;
+
+	node[] dramaticCycleNodes = new node[2];
 		
 	void Start () {
 
@@ -68,7 +70,7 @@ public class GraphGenerator : MonoBehaviour {
 		DungeonRule();
 
 		//pass on to map converter:
-		int[,] map = FindObjectOfType<GraphToMapConverter>().CreateMap(nodeArray);
+		int[,] map = FindObjectOfType<GraphToMapConverter>().CreateMap(nodeArray, dramaticCycleNodes);
 		//generate mesh:
 		FindObjectOfType<MeshGenerator>().GenerateMesh(map,1); //squareSize of 1
 
@@ -144,7 +146,7 @@ public class GraphGenerator : MonoBehaviour {
 						continue;
 					path.RemoveAt(n);
 				}
-
+					
 				loops.Add (new List<node>(path)); //add path to loops by copying (not reference)
 
 				validNodes.Remove(newNode); //remove from valid nodes so we can look for a new path
@@ -353,6 +355,9 @@ public class GraphGenerator : MonoBehaviour {
 			RouteB.Add(addConnection (routeB [i - 1], routeB [i]));
 		}
 
+		RouteA.Insert (0, new KeyValuePair<connection, node> (new connection (), startNode)); //add start node to beginning of routes
+		RouteB.Insert (0, new KeyValuePair<connection, node> (new connection (), startNode)); //(this is for loop stuff later)
+
 		//routeA [0].AddFeature (new token("obstacle", obstacleCircle)); //test add
 		//routeA [0].AddFeature (new token("obstacle", obstacleCircle)); //test add
 
@@ -362,17 +367,7 @@ public class GraphGenerator : MonoBehaviour {
 				activeNodes++;
 		}
 
-		List<List<node>> loops = findLoopsInGraph (startNode, null, new List<node> (), new List<node> (), activeNodes, new List<List<node>>()); //test find loop
-
-        //output loops for testing
-		string curr = "loop: ";
-		foreach(List<node> loop in loops){
-			foreach (node n in loop){
-				curr = curr + n.name + " ";
-			}
-			Debug.Log (curr);
-			curr = "loop: ";
-		}
+		List<List<node>> loops = findLoopsInGraph (startNode, null, new List<node> (), new List<node> (), activeNodes, new List<List<node>> ());
 
         foreach (List<node> loop in loops) {
         
@@ -380,7 +375,7 @@ public class GraphGenerator : MonoBehaviour {
             List<KeyValuePair<connection, node>> loopRouteB = new List<KeyValuePair<connection, node>>();
 
             foreach (KeyValuePair<connection, node> k in RouteA) {  //foreach connection in RouteA
-                if (loop.Contains(k.Value)){                        //if loop contains node
+                if (loop.Contains(k.Value)){                        //if loop contains node from that connection
                     loopRouteA.Add(k);                              //add to connection to RouteA half of loop
                 }
             }
@@ -414,16 +409,20 @@ public class GraphGenerator : MonoBehaviour {
             int BCount = loopRouteB.Count;
             
             if (ACount > 3 && BCount > 3){ //both routes are long
-                TwoAlternativePaths(loopRouteA, loopRouteB); //alternative paths rule
+                //TwoAlternativePaths(loopRouteA, loopRouteB); //alternative paths rule
             }
             else if (ACount > 3 && BCount <= 3) { //A is long, B is short
-                HiddenShortcut(loopRouteA, loopRouteB); //add hidden shortcut to short route
+                //HiddenShortcut(loopRouteA, loopRouteB); //add hidden shortcut to short route
+				DramaticCycle(loopRouteB);
+
             }
             else if (ACount <= 3 && BCount > 3){ //A is short, B is long
-                HiddenShortcut(loopRouteB, loopRouteA);
+               // HiddenShortcut(loopRouteB, loopRouteA);
+				DramaticCycle(loopRouteA);
             }
-            else{ //both are short
-                TwoAlternativePaths(loopRouteA, loopRouteB); //alternative paths rule ???
+            else{ //both are short, but still pass the shorter one into the shorter postion!
+                //TwoAlternativePaths(loopRouteA, loopRouteB); //alternative paths rule ???
+
             }
 
 
@@ -521,6 +520,24 @@ public class GraphGenerator : MonoBehaviour {
 		getRandomUniqueConnection(shortRoute,longRoute).AddFeatureToConnection(new token("hidden", hiddenCircle)); 
 	
 	}
+
+	void DramaticCycle(List<KeyValuePair<connection, node>> shortRoute){// may only need short route?
+		Debug.Log("dramatic cycle");
+		//Random.Range (0, routeAunique.Count)].Key
+		dramaticCycleNodes[0] = shortRoute[0].Value; 					//start of dramatic view
+		dramaticCycleNodes[1] = shortRoute[shortRoute.Count - 1].Value;	//end of dramatic view
+
+		//remove connection to nodes on short path
+		//find some way to remove the connections in connectedNodes also
+		//foreach node in nodearray remove connections to this node? etc
+		for(int i = 0; i < shortRoute.Count; i++){ //skip first connection
+			Debug.Log("remove: " + shortRoute[i].Value.name);
+			//Destroy (shortRoute [i].Key.obj);
+
+		}
+	}
+
+
 		
 
 }
@@ -531,7 +548,7 @@ public class node{
 	public List<KeyValuePair<connection, node>> connectionToNodes = new List<KeyValuePair<connection, node>>(); //connects connections to connected nodes - might be able to just use this?
 
 	public string name;
-	public connection[] connections = new connection[4]; //array of 4 connections: left, top, right, bot
+	public connection[] connections = new connection[4]; //array of 4 connections: left, top, right, bot - might not be needed
 	public GameObject obj;
 	public List<node> connectedNodes = new List<node>();
 	private List<token> features = new List<token> ();
@@ -591,7 +608,7 @@ public class token{
 	}
 }
 
-public class connection{ //may not need
+public class connection{
 	public Vector3 position;
 	public GameObject obj;
 	private List<token> features = new List<token> ();

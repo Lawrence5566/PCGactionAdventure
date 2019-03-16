@@ -11,13 +11,13 @@ public class GraphToMapConverter : MonoBehaviour {
 	int height;
 	//int maxRoomNumber = 12;
 	int maxRoomSize = 55; //4 extra since borders of rooms are 2 squares big each side, and 1 extra to prevent out of range errors
-	int minRoomSize = 20;
+	int minRoomSize = 30;
 	int nodeArrayXsize = 3;
 	int nodeArrayYsize = 4;
 
 	List<Room> roList =  new List<Room>(); 							//for gizmo testing
 
-	public int[,] CreateMap(node[] nodeArray ){  					//takes node array, converts to rooms and combines rooms into one map
+	public int[,] CreateMap(node[] nodeArray, node[] dramaticCycleNodes ){  					//takes node array, converts to rooms and combines rooms into one map
 
 		List<Room> roomsList = new List<Room> ();
 		RoomGenerator roomGenerator = new RoomGenerator ();
@@ -75,8 +75,7 @@ public class GraphToMapConverter : MonoBehaviour {
 				}
 				currentX++;
 			}
-
-
+				
 			Room currRoom = new Room (newRegion, Map);  //create room out of region
 			currRoom.node = nodeArray[n];
 			roomsList.Add (currRoom);					//add to list of rooms
@@ -86,6 +85,17 @@ public class GraphToMapConverter : MonoBehaviour {
 		roList = roomsList; //for testing
 
 		ConnectRooms(roomsList);
+
+		if (dramaticCycleNodes [0] != null || dramaticCycleNodes [1] != null) {
+			//get all rooms equal to dynamic view nodes (should only be 2)
+			List<Room> dynamicViewRooms = roomsList.FindAll (x => x.node == dramaticCycleNodes [0] || x.node == dramaticCycleNodes [1]);
+			Debug.Log ("dynamicview rooms size: " + dynamicViewRooms.Count );
+			if (dynamicViewRooms.Count > 1) {
+				CreateDynamicView (dynamicViewRooms);
+				Debug.Log (dynamicViewRooms[0].node.name +","+ dynamicViewRooms[1].node.name );
+				Debug.Log ("creating dynamic view");
+			}
+		}
 
 		return Map;
 
@@ -100,51 +110,65 @@ public class GraphToMapConverter : MonoBehaviour {
 					continue;
 				}
 
-				int bestDistance = 0;
-				Coord bestTileA = new Coord ();
-				Coord bestTileB = new Coord ();
-				bool possibleConnectionFound = false;
+				if (roomA.node.connectedNodes.Contains (roomB.node)) { //if roomA node should connected to roomB
+					Coord bestTileA = new Coord ();
+					Coord bestTileB = new Coord ();
+					FindClosestTiles(roomA, roomB, out bestTileA, out bestTileB);
+					CreatePassage (roomA, roomB, bestTileA, bestTileB, 1, 0);
+				}
+			}
+		}
+	}
 
-				if (roomA.node.connectedNodes.Contains (roomB.node)) { //if roomA is node connected to roomB
-					for (int tileIndexA = 0; tileIndexA < roomA.edgeTiles.Count; tileIndexA++) {
-						for (int tileIndexB = 0; tileIndexB < roomB.edgeTiles.Count; tileIndexB++) {
-							Coord tileA = roomA.edgeTiles [tileIndexA];
-							Coord tileB = roomB.edgeTiles [tileIndexB];
-							int distanceBetweenRooms = (int) (Mathf.Pow (tileA.tileX - tileB.tileX, 2) + Mathf.Pow (tileA.tileY - tileB.tileY, 2));
+	void FindClosestTiles(Room roomA, Room roomB, out Coord bestTileA, out Coord bestTileB){ //returns closest 2 tiles between rooms
+		int bestDistance = 0;
+		bestTileA = new Coord ();
+		bestTileB = new Coord ();
+		bool possibleConnectionFound = false;
 
-							if (distanceBetweenRooms < bestDistance || !possibleConnectionFound) { //found new best connection or not yet found a possible connection
-								bestDistance = distanceBetweenRooms;
-								possibleConnectionFound = true;
-								bestTileA = tileA;
-								bestTileB = tileB;
+		for (int tileIndexA = 0; tileIndexA < roomA.edgeTiles.Count; tileIndexA++) {
+			for (int tileIndexB = 0; tileIndexB < roomB.edgeTiles.Count; tileIndexB++) {
+				Coord tileA = roomA.edgeTiles [tileIndexA];
+				Coord tileB = roomB.edgeTiles [tileIndexB];
+				int distanceBetweenRooms = (int) (Mathf.Pow (tileA.tileX - tileB.tileX, 2) + Mathf.Pow (tileA.tileY - tileB.tileY, 2));
 
-							}
-						}
-					}
-					CreatePassage (roomA, roomB, bestTileA, bestTileB);
+				if (distanceBetweenRooms < bestDistance || !possibleConnectionFound) { //found new best connection or not yet found a possible connection
+					bestDistance = distanceBetweenRooms;
+					possibleConnectionFound = true;
+					bestTileA = tileA;
+					bestTileB = tileB;
+
 				}
 			}
 		}
 	}
 		
-	void CreatePassage(Room roomA, Room roomB, Coord tileA, Coord tileB){
+	void CreatePassage(Room roomA, Room roomB, Coord tileA, Coord tileB, int r, int tiletype){ //r = passage radius
 		Room.ConnectRooms (roomA, roomB);//let rooms know they are now physically connected
 		//Debug.DrawLine (CoordToWorldPoint (tileA), CoordToWorldPoint (tileB), Color.green, 300); //check room connections
 
 		List<Coord> line = GetLine (tileA, tileB);
 		foreach (Coord c in line) {
-			DrawCircle(c,1); //around each point in line draw a circle (3 is radius and therfore passage thickness)
+			DrawCircle(c,r,tiletype); //around each point in line draw a circle (3 is radius and therfore passage thickness)
 		}
 	}
 
-	void DrawCircle(Coord c, int r) {
+	void CreateDynamicView(List<Room> dynamicViewRooms){
+		Coord bestTileA;
+		Coord bestTileB;
+		FindClosestTiles (dynamicViewRooms [0], dynamicViewRooms [1], out bestTileA, out bestTileB);
+		CreatePassage (dynamicViewRooms [0], dynamicViewRooms [0], bestTileA, bestTileB, 10, 2);
+
+	}
+
+	void DrawCircle(Coord c, int r, int tiletype) {
 		for (int x = -r; x <= r; x++) {
 			for (int y = -r; y <= r; y++) {
 				if (x*x + y*y <= r*r) {
 					int drawX = c.tileX + x;
 					int drawY = c.tileY + y;
-					if (drawX >= 0 && drawX < width && drawY >= 0 && drawY < height) { //if inside map
-						Map[drawX,drawY] = 0;
+					if (drawX >= 2 && drawX < width && drawY >= 2 && drawY < height) { //if inside map
+						Map[drawX,drawY] = tiletype;
 					}
 				}
 			}
@@ -261,6 +285,8 @@ public class GraphToMapConverter : MonoBehaviour {
 			for (int x = 0; x < Map.GetLength(0); x ++) {
 				for (int y = 0; y < Map.GetLength(1); y ++) {
 					Gizmos.color = (Map[x,y] == 1)?Color.black:Color.white;
+					if (Map [x, y] == 2)
+						Gizmos.color = Color.blue; //for fissures
 					Vector3 pos = new Vector3(-width + x + .5f,0, -height + y + .5f);
                     Gizmos.DrawCube(pos,Vector3.one);
                 }
