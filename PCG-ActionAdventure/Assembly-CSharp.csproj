@@ -72,6 +72,7 @@
      <Compile Include="Assets\Seven Swords\Swords\Scripts\DamageCollider.cs" />
      <Compile Include="Assets\Seven Swords\Swords\Scripts\Weapon.cs" />
      <None Include="Assets\Seven Swords\Swords\Shader\ToonSwords.shader" />
+     <None Include="Assets\Objects\Models\Key\readME keys.txt" />
  <Reference Include="Unity.TextMeshPro.Editor">
  <HintPath>C:/Users/lawre/Documents/GitHub/PCGactionAdventure/PCG-ActionAdventure/Library/ScriptAssemblies/Unity.TextMeshPro.Editor.dll</HintPath>
  </Reference>
