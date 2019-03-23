@@ -13,6 +13,7 @@ public class GraphGenerator : MonoBehaviour {
 	public Sprite connectionSpr;
 	public Sprite connectionArrowSpr;
 	public Sprite connectionDramatic;
+	public Sprite connectionCollapse;
 	public Sprite enemyCircle;
 	public Sprite lockKeyCircle;
     public Sprite monsterCircle;
@@ -422,11 +423,13 @@ public class GraphGenerator : MonoBehaviour {
             else if (ACount > 3 && BCount <= 3) { //A is long, B is short
                 //HiddenShortcut(loopRouteA, loopRouteB); //add hidden shortcut to short route
 				DramaticCycle(loopRouteB);
+				//DangerousRoute (loopRouteB, loopRouteA);
 
             }
             else if (ACount <= 3 && BCount > 3){ //A is short, B is long
                // HiddenShortcut(loopRouteB, loopRouteA);
 				DramaticCycle(loopRouteA);
+				//DangerousRoute (loopRouteA, loopRouteB);
             }
             else{ //both are short, but still pass the shorter one into the shorter postion!
                 //TwoAlternativePaths(loopRouteA, loopRouteB); //alternative paths rule ???
@@ -462,6 +465,7 @@ public class GraphGenerator : MonoBehaviour {
 		return routeAunique [Random.Range (0, routeAunique.Count)].Key; //return random chosen connection
 	}
 
+	//returns random unique node from routeA, comparing to routeB
 	node getRandomUniqueNode(List<KeyValuePair<connection, node>> routeA, List<KeyValuePair<connection, node>> routeB){ //gets a random unique node from routeA by comparing to routeB
 		List<KeyValuePair<connection, node>> routeAunique = new List<KeyValuePair<connection, node>>();
 
@@ -493,14 +497,15 @@ public class GraphGenerator : MonoBehaviour {
         //add monster on routeA, trap on routeB
 		Debug.Log("run Alternate Paths rule");
 
-		node uniqueNode = getRandomUniqueNode (routeA, routeB);
-		if (uniqueNode.name == "null node") { // if no nodes unique, add to connction instead
+		DangerousRoute (routeA, routeB); //add monster to routeA (mirrors dangerous route)
+		/*node uniqueNode = getRandomUniqueNode (routeA, routeB);
+		if (uniqueNode.name == "null node") { // if no nodes unique, add to connection instead
 			//place obstacle on one route(monster)
 			getRandomUniqueConnection(routeA,routeB).AddFeatureToConnection (new token ("monster", monsterCircle)); 
 		} else {								//node is unique, so add monster
 			//place monster on a nodes
 			uniqueNode.AddFeature(new token("monster", monsterCircle)); //add a obstacle
-		}
+		}*/
 			
 		getRandomUniqueConnection(routeB, routeA).AddFeatureToConnection(new token("trap", trapCircle)); 				//add a obstacle on a connection (trap)
 	}
@@ -511,7 +516,7 @@ public class GraphGenerator : MonoBehaviour {
 	
 	}
 
-	void DramaticCycle(List<KeyValuePair<connection, node>> shortRoute){// may only need short route?
+	void DramaticCycle(List<KeyValuePair<connection, node>> shortRoute){
 		Debug.Log("dramatic cycle");
 		//Random.Range (0, routeAunique.Count)].Key
 		dramaticCycleNodes[0] = shortRoute[0].Value; 					//start of dramatic view
@@ -534,6 +539,31 @@ public class GraphGenerator : MonoBehaviour {
 		}*/
 	}
 
+	//place a danger (monster) on the short route
+	void DangerousRoute(List<KeyValuePair<connection, node>> shortRoute,List<KeyValuePair<connection, node>> longRoute){
+		Debug.Log ("run dangerousRoute rule ");
+
+		node uniqueNode = getRandomUniqueNode (shortRoute, longRoute);
+		if (uniqueNode.name == "null node") { // if no nodes unique, add to connection instead
+			//place obstacle on one route(monster)
+			getRandomUniqueConnection(shortRoute,longRoute).AddFeatureToConnection (new token ("monster", monsterCircle)); 
+		} else {
+			//node is unique, so add monster
+			uniqueNode.AddFeature(new token("monster", monsterCircle)); 
+		}
+	}
+
+	void UnknownReturn(List<KeyValuePair<connection, node>> shortRoute,List<KeyValuePair<connection, node>> longRoute){
+		Debug.Log ("run Unknown return rule ");
+
+		//get random unique connection, and add collapsing bridge type
+
+		connection con = getRandomUniqueConnection (shortRoute, longRoute);
+		con.obj.GetComponent<SpriteRenderer> ().sprite = connectionCollapse; //change sprite
+		con.type = ConType.collapsing; //change type to collapsing
+
+	}
+		
 	/*
 	void RemoveConnections (node a, node b){
 		a.connectedNodes.Remove (b);
@@ -545,8 +575,6 @@ public class GraphGenerator : MonoBehaviour {
 		}
 	}*/
 
-
-		
 
 }
 
@@ -617,6 +645,7 @@ public class token{
 }
 
 public class connection{
+	public ConType type = ConType.normal;
 	public GameObject obj;
 	private List<token> features = new List<token> ();
 
@@ -645,4 +674,8 @@ public class connection{
 		features.Add (newToken); 				//add new node to list of connection features
 	}
 		
+}
+	
+public enum ConType{
+	normal, dramatic, collapsing
 }
