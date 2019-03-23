@@ -5,12 +5,14 @@ using UnityEngine.UI;
 using System.Linq;
 
 //need to clear up/remove/merge connections, connected nodes and connectednodeforgraph
+//try to remove 'connections' keyvalues are more useful
 
 public class GraphGenerator : MonoBehaviour {
 	public GameObject TextBasePrefab;
 	public Sprite circle;
 	public Sprite connectionSpr;
 	public Sprite connectionArrowSpr;
+	public Sprite connectionDramatic;
 	public Sprite enemyCircle;
 	public Sprite lockKeyCircle;
     public Sprite monsterCircle;
@@ -42,24 +44,24 @@ public class GraphGenerator : MonoBehaviour {
 					var relativePoint = nodeArray[n].obj.transform.InverseTransformPoint(nodeArray[i].obj.transform.position);
 
 					if (relativePoint.x == -4.0 && relativePoint.y == 0) { //has left node (and not above or below)
-						nodeArray[n].connections[0] = new connection(nodeArray[n].obj.transform.position + new Vector3(-2f,0f,0f), connectionSpr, 90f); //add left connection
+						connection newCon = new connection(nodeArray[n].obj.transform.position + new Vector3(-2f,0f,0f), connectionSpr, 90f); //add left connection
 						nodeArray[n].connectedNodes.Add(nodeArray[i]);
-						nodeArray[n].connectionToNodes.Add(new KeyValuePair<connection, node>(nodeArray[n].connections[0],nodeArray[i]));
+						nodeArray[n].connectionToNodes.Add(new KeyValuePair<connection, node>(newCon ,nodeArray[i]));
 					}
 					if (relativePoint.x == 4.0 && relativePoint.y == 0) { //has right node
-						nodeArray[n].connections[2] = new connection(nodeArray[n].obj.transform.position + new Vector3(2f,0f,0f), connectionSpr, 90f); //right
+						connection newCon = new connection(nodeArray[n].obj.transform.position + new Vector3(2f,0f,0f), connectionSpr, 90f); //right
 						nodeArray[n].connectedNodes.Add(nodeArray[i]);
-						nodeArray[n].connectionToNodes.Add(new KeyValuePair<connection, node>(nodeArray[n].connections[2],nodeArray[i]));
+						nodeArray[n].connectionToNodes.Add(new KeyValuePair<connection, node>(newCon ,nodeArray[i]));
 					}
 					if (relativePoint.y == 4.0 && relativePoint.x == 0) { //has top node (and not right or left)
-						nodeArray[n].connections[1] = new connection(nodeArray[n].obj.transform.position + new Vector3(0f,2f,0f), connectionSpr, 0f); //top
+						connection newCon = new connection(nodeArray[n].obj.transform.position + new Vector3(0f,2f,0f), connectionSpr, 0f); //top
 						nodeArray[n].connectedNodes.Add(nodeArray[i]);
-						nodeArray[n].connectionToNodes.Add(new KeyValuePair<connection, node>(nodeArray[n].connections[1],nodeArray[i]));
+						nodeArray[n].connectionToNodes.Add(new KeyValuePair<connection, node>(newCon,nodeArray[i]));
 					}
 					if (relativePoint.y == -4.0 && relativePoint.x == 0) { //has bot node
-						nodeArray[n].connections[3] = new connection(nodeArray[n].obj.transform.position + new Vector3(0f,-2f,0f), connectionSpr, 0f); //bot
+						connection newCon = new connection(nodeArray[n].obj.transform.position + new Vector3(0f,-2f,0f), connectionSpr, 0f); //bot
 						nodeArray[n].connectedNodes.Add(nodeArray[i]);
-						nodeArray[n].connectionToNodes.Add(new KeyValuePair<connection, node>(nodeArray[n].connections[3],nodeArray[i]));
+						nodeArray[n].connectionToNodes.Add(new KeyValuePair<connection, node>(newCon,nodeArray[i]));
 					}
 				}
 				n++;
@@ -175,31 +177,39 @@ public class GraphGenerator : MonoBehaviour {
 			
 	}
 
-	KeyValuePair<connection, node> addConnection(node a, node b){ //create connection from A -> B and add to each other's connectedNodes
+	KeyValuePair<connection, node> addConnection(node a, node b, Sprite sprite){ //create connection from A -> B and add to each other's connectedNodes
 		var relativePoint = a.obj.transform.InverseTransformPoint(b.obj.transform.position); //for arrow direction
-		int relPoint;
-		float angle;
-		if (relativePoint.x == -4.0) {//b is to the left (0)
-			relPoint = 0;
-			angle = 270f;
-		} else if (relativePoint.x == 4.0) {//right (2)
-			relPoint = 2;
-			angle = 90f;
-		} else if (relativePoint.y == 4.0) {//above (1)
-			relPoint = 1;
-			angle = 180f;
-		} else if (relativePoint.y == -4.0) {//below (3)
-			relPoint = 3;
+		Vector2 relPoint = new Vector2(relativePoint.x, relativePoint.y);
+		float angle = 0f;
+
+		if (relPoint == new Vector2 (0f, 4f)) { //top
 			angle = 0f;
-		} else { //no connection
-			return new KeyValuePair<connection, node>(new connection(),new node());
+		} else if (relPoint == new Vector2 (4f, 4f)) { //top right
+			angle = 45f;
+		} else if (relPoint == new Vector2 (4f, 0f)) { //right
+			angle = 90f;
+		} else if (relPoint == new Vector2 (4f, -4f)) { //bottom right
+			angle = 135f;
+		} else if (relPoint == new Vector2 (0f, -4f)) { //bottom
+			angle = 180f;
+		} else if (relPoint == new Vector2 (-4f, -4f)) { //bottom left
+			angle = 225f;
+		} else if (relPoint == new Vector2 (-4f, 0f)) { //left
+			angle = 270f;
+		} else if (relPoint == new Vector2 (-4f, 4f)) { //top left
+			angle = 315f;
 		}
-			
-		connection connectionOld = a.connections[relPoint];
-		a.connections[relPoint] = new connection(connectionOld.position, connectionArrowSpr, angle);
-		KeyValuePair<connection, node> newConnectionToNode = new KeyValuePair<connection, node> (a.connections [relPoint], b);
+
+		//get old connection if there is one, to destroy it
+		connection oldCon = a.connectionToNodes.Find (x => x.Value == b).Key; 	//find connection that connects to B
+		if (oldCon != null) Destroy(oldCon.obj);
+
+		//create new one
+		connection newCon = new connection(new Vector3(relPoint.x/2, relPoint.y/2, 0f) + a.obj.transform.position, sprite, angle);
+
+		//add to connectionsToNodes
+		KeyValuePair<connection, node> newConnectionToNode = new KeyValuePair<connection, node> (newCon, b);
 		a.connectionToNodes.Add(newConnectionToNode);
-		Destroy(connectionOld.obj); 
 
 		if (!a.connectedNodes.Contains (b)) {
 			a.connectedNodes.Add (b); //make nodes adjacent, if they were not already
@@ -332,15 +342,13 @@ public class GraphGenerator : MonoBehaviour {
 	*/
 
 	void ProcessNodeArray(List<node> routeA, List<node> routeB){ //final prep processing for converting GraphToMap 
-		//destroy all connections
-		for (int i = 0; i < nodeArray.Length; i++) {  //foreach nodes
+		//destroy all connections - what was point in having them in the first place?
+		for (int i = 0; i < nodeArray.Length; i++) {  //foreach node
 			nodeArray [i].connectedNodes.Clear ();
-			nodeArray [i].connectionToNodes.Clear ();
-			for (int j = 0; j < 4; j++) {			//foreach connection
-				if (nodeArray [i].connections [j] != null) {
-					Destroy (nodeArray [i].connections [j].obj);
-				}
+			foreach (KeyValuePair<connection, node> k in nodeArray [i].connectionToNodes) {	//foreach connection
+				Destroy(k.Key.obj); //destroy connection object
 			}
+			nodeArray [i].connectionToNodes.Clear ();
 		}
 
 		//reconnect along routes
@@ -349,10 +357,10 @@ public class GraphGenerator : MonoBehaviour {
 		List<KeyValuePair<connection, node>> RouteA = new List<KeyValuePair<connection, node>> ();
 		List<KeyValuePair<connection, node>> RouteB = new List<KeyValuePair<connection, node>> ();
 		for (int i = 1; i < routeA.Count; i++) { //start from one ahead, so that we don't go out of range
-			RouteA.Add(addConnection (routeA [i - 1], routeA [i])); //add connection between nodes, and return key value pair for each to new route list
+			RouteA.Add(addConnection (routeA [i - 1], routeA [i], connectionArrowSpr)); //add connection between nodes, and return key value pair for each to new route list
 		}
 		for (int i = 1; i < routeB.Count; i++) { 
-			RouteB.Add(addConnection (routeB [i - 1], routeB [i]));
+			RouteB.Add(addConnection (routeB [i - 1], routeB [i], connectionArrowSpr));
 		}
 
 		RouteA.Insert (0, new KeyValuePair<connection, node> (new connection (), startNode)); //add start node to beginning of routes
@@ -425,25 +433,7 @@ public class GraphGenerator : MonoBehaviour {
 
             }
 
-
         }
-
-
-        /*
-        int ACount = routeA.Count;
-        int BCount = routeB.Count;
-        if (ACount > 3 && BCount > 3){ //both routes are long
-            TwoAlternativePaths(RouteA, RouteB); 
-        }else if (ACount > 3 && BCount <= 3)
-        { //A is long, B is short
-            HiddenShortcut(RouteA, RouteB); //add hidden shortcut to short route
-        }else if (ACount <= 3 && BCount > 3)
-        { //A is short, B is long
-            HiddenShortcut(RouteB, RouteA);
-        }else
-        { //both are short
-
-        }*/
 
     }
 
@@ -453,7 +443,7 @@ public class GraphGenerator : MonoBehaviour {
 		foreach (KeyValuePair<connection, node> k1 in routeA){ //get list of unique key value pairs by connection
 			bool isEqual = false;
 			foreach (KeyValuePair<connection, node> k2 in routeB){
-				if (k1.Key.position == k2.Key.position) {								//if equal, skip to next pair in routeA
+				if (k1.Key.obj.transform.position == k2.Key.obj.transform.position) {								//if equal, skip to next pair in routeA
 					isEqual = true;
 					break;
 				}
@@ -498,7 +488,7 @@ public class GraphGenerator : MonoBehaviour {
 	}
 
 
-	//pattern rules:
+	// pattern rules: //
 	void TwoAlternativePaths(List<KeyValuePair<connection, node>> routeA, List<KeyValuePair<connection, node>> routeB){ //only ran on both long paths
         //add monster on routeA, trap on routeB
 		Debug.Log("run Alternate Paths rule");
@@ -527,28 +517,46 @@ public class GraphGenerator : MonoBehaviour {
 		dramaticCycleNodes[0] = shortRoute[0].Value; 					//start of dramatic view
 		dramaticCycleNodes[1] = shortRoute[shortRoute.Count - 1].Value;	//end of dramatic view
 
+		//add dramatic cycle connection
+		addConnection (dramaticCycleNodes [0], dramaticCycleNodes [1], connectionDramatic);
+
+		//foreach node on shortRoute
+		//remove 
+
 		//remove connection to nodes on short path
 		//find some way to remove the connections in connectedNodes also
 		//foreach node in nodearray remove connections to this node? etc
+		/*
 		for(int i = 0; i < shortRoute.Count; i++){ //skip first connection
 			Debug.Log("remove: " + shortRoute[i].Value.name);
-			//Destroy (shortRoute [i].Key.obj);
+			Destroy (shortRoute [i].Key.obj);
 
-		}
+		}*/
 	}
+
+	/*
+	void RemoveConnections (node a, node b){
+		a.connectedNodes.Remove (b);
+
+		for (int i = 0; i < a.connectedNodes.Count; i++){
+			if (a.connectedNodes [i] == b) {
+				connectedNodes.Remove(b)
+			}
+		}
+	}*/
 
 
 		
 
 }
 
-//utlilty classes used for this generator and other parts of the project
+// utlilty classes used for this generator and other parts of the project //
 
 public class node{
 	public List<KeyValuePair<connection, node>> connectionToNodes = new List<KeyValuePair<connection, node>>(); //connects connections to connected nodes - might be able to just use this?
 
 	public string name;
-	public connection[] connections = new connection[4]; //array of 4 connections: left, top, right, bot - might not be needed
+	//public connection[] connections = new connection[4]; //array of 4 connections: left, top, right, bot - might not be needed
 	public GameObject obj;
 	public List<node> connectedNodes = new List<node>();
 	private List<token> features = new List<token> ();
@@ -609,21 +617,18 @@ public class token{
 }
 
 public class connection{
-	public Vector3 position;
 	public GameObject obj;
 	private List<token> features = new List<token> ();
 
 	public connection(){ //empty constructor = predictable null object
-		position = new Vector3();
 		obj = new GameObject("null connection");
 	}
 
 	public connection(Vector3 pos, Sprite i, float rot){
-		position = pos;
 
 		//create connection in world
 		obj = new GameObject("connection");	
-		obj.transform.position = position;
+		obj.transform.position = pos;
 		obj.transform.Rotate(new Vector3(0f,0f,rot));
 		SpriteRenderer ren = obj.AddComponent<SpriteRenderer>();	
 		ren.sprite = i;
@@ -631,7 +636,7 @@ public class connection{
 
 	public void AddFeatureToConnection(token newToken){ //for adding to connection
 		newToken.obj = new GameObject(newToken.type);
-		newToken.obj.transform.position = position;
+		newToken.obj.transform.position = obj.transform.position;
 		newToken.obj.transform.localScale = new Vector3(.5f,.5f,.5f);
 		newToken.obj.transform.SetParent (obj.transform); //set parent to connection
 		SpriteRenderer ren = newToken.obj.AddComponent<SpriteRenderer>();	
