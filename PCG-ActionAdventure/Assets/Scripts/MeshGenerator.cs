@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 //https://www.youtube.com/watch?v=yOgIncKp0BE
-//Sebastian Lague, Marching Squares
+//using Sebastian Lague, Marching Squares
 
 public class MeshGenerator : MonoBehaviour {
 
@@ -43,6 +43,10 @@ public class MeshGenerator : MonoBehaviour {
 
 		CreateWallMesh ();
 
+	}
+
+	void CreateFloorMesh(){ //create function that mirrors CreateWallMesh but for the floors (on a 0 it's a floor tile)
+		
 	}
 
 	void CreateWallMesh(){

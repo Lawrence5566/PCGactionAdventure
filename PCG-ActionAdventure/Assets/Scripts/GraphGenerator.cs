@@ -24,7 +24,7 @@ public class GraphGenerator : MonoBehaviour {
 	node[] nodeArray = new node[12];
 	node startNode;
 
-	int maxRouteLength = 8;
+	int maxRouteLength = 7;
 
 	node[] dramaticCycleNodes = new node[2];
 		
@@ -74,8 +74,9 @@ public class GraphGenerator : MonoBehaviour {
 
 		//pass on to map converter:
 		int[,] map = FindObjectOfType<GraphToMapConverter>().CreateMap(nodeArray, dramaticCycleNodes);
-		//generate mesh:
-		FindObjectOfType<MeshGenerator>().GenerateMesh(map,1); //squareSize of 1
+
+		//generate mesh from nodeArray:
+		FindObjectOfType<MeshGenerator>().GenerateMesh(map, 1); //squareSize of 1
 
 	}
 
@@ -120,11 +121,13 @@ public class GraphGenerator : MonoBehaviour {
 	//find loops in graph by looking through nodes connected to first past in 'curr' node
 	List<List<node>> findLoopsInGraph(node curr, node previous, List<node> path, List<node> deadEndNodes, int activeNodes, List<List<node>> loops){
 
+		//Debug.Log ("current path");
+
 		if (!path.Contains(curr)) //only if path doesn't already contain current
 			path.Add (curr);	
 
 		//recurse for next random node
-		List<node>  validNodes = new List<node> (curr.connectedNodes); //use this instead
+		List<node>  validNodes = new List<node> (curr.connectedNodes);
 
 		validNodes.Remove (previous);							//remove previous node
 		foreach(node n in deadEndNodes) validNodes.Remove(n); 	//remove dead end nodes
@@ -183,22 +186,23 @@ public class GraphGenerator : MonoBehaviour {
 		Vector2 relPoint = new Vector2(relativePoint.x, relativePoint.y);
 		float angle = 0f;
 
-		if (relPoint == new Vector2 (0f, 4f)) { //top
+		//right and left is flipped from expected
+		if (relPoint == new Vector2 (0f, 4f)) { //B is above so 0*, top 
 			angle = 0f;
 		} else if (relPoint == new Vector2 (4f, 4f)) { //top right
-			angle = 45f;
+			angle = -45f;
 		} else if (relPoint == new Vector2 (4f, 0f)) { //right
-			angle = 90f;
+			angle = -90f;
 		} else if (relPoint == new Vector2 (4f, -4f)) { //bottom right
-			angle = 135f;
+			angle = -135f;
 		} else if (relPoint == new Vector2 (0f, -4f)) { //bottom
 			angle = 180f;
 		} else if (relPoint == new Vector2 (-4f, -4f)) { //bottom left
-			angle = 225f;
+			angle = 135f;
 		} else if (relPoint == new Vector2 (-4f, 0f)) { //left
-			angle = 270f;
+			angle = 90f;
 		} else if (relPoint == new Vector2 (-4f, 4f)) { //top left
-			angle = 315f;
+			angle = 45f;
 		}
 
 		//get old connection if there is one, to destroy it
@@ -221,20 +225,7 @@ public class GraphGenerator : MonoBehaviour {
 
 		return newConnectionToNode;
 	}
-
-	int DetermineRouteType(List<node> route){
-		int maxRouteLength = nodeArray.GetLength (0);
-
-		//short route is on or below 1/4 of max route length (max number of nodes)
-		if (route.Count <= 0.25 * maxRouteLength) {
-			return 1; //1 = short
-		} else { 
-			return 2; //2 = long
-		}
-
-	}
-
-
+		
 	// graph grammer functions: 
 
 	//Dungeon > Rooms + Goal
@@ -418,21 +409,23 @@ public class GraphGenerator : MonoBehaviour {
             int BCount = loopRouteB.Count;
             
             if (ACount > 3 && BCount > 3){ //both routes are long
+				Debug.Log("Long a, Long b");
                 //TwoAlternativePaths(loopRouteA, loopRouteB); //alternative paths rule
             }
             else if (ACount > 3 && BCount <= 3) { //A is long, B is short
+				Debug.Log("Long a, Short b");
                 //HiddenShortcut(loopRouteA, loopRouteB); //add hidden shortcut to short route
-				DramaticCycle(loopRouteB);
+				//DramaticCycle(loopRouteB);
 				//DangerousRoute (loopRouteB, loopRouteA);
 
             }
             else if (ACount <= 3 && BCount > 3){ //A is short, B is long
-               // HiddenShortcut(loopRouteB, loopRouteA);
-				DramaticCycle(loopRouteA);
-				//DangerousRoute (loopRouteA, loopRouteB);
+				Debug.Log("Short a, Long b");
+				//UnknownReturn(loopRouteA,loopRouteB);
+				LockAndKey(loopRouteA,loopRouteB);
             }
             else{ //both are short, but still pass the shorter one into the shorter postion!
-                //TwoAlternativePaths(loopRouteA, loopRouteB); //alternative paths rule ???
+				Debug.Log("Short a, Short b");
 
             }
 
@@ -562,6 +555,16 @@ public class GraphGenerator : MonoBehaviour {
 		con.obj.GetComponent<SpriteRenderer> ().sprite = connectionCollapse; //change sprite
 		con.type = ConType.collapsing; //change type to collapsing
 
+	}
+
+	void LockAndKey(List<KeyValuePair<connection, node>> shortRoute,List<KeyValuePair<connection, node>> longRoute){
+		Debug.Log("Lock and Key cycle");
+
+		node endNode = shortRoute [shortRoute.Count - 1].Value; 
+		foreach (KeyValuePair<connection, node> k in endNode.connectionToNodes) {
+			if (!shortRoute.Contains (k) && !longRoute.Contains(k))  //if connection not in shortRoute or longRoute (therefore not in this loop)
+				k.Key.AddFeatureToConnection(new token("lock", lockKeyCircle));//add lock
+		}
 	}
 		
 	/*
