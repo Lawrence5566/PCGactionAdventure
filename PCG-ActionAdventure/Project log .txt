@@ -1,0 +1,17 @@
+25/03/2019
+
+to do:
+-finish dramtic cycle
+
+-create collapssing bridge or falling floor - make all passage ways bridges? (make passage ways bigger and just add a bridge, and make seperate floors for each room)
+
+-find a way to make fissures in the ground with the 2 int
+-spawn collapsing bridge where required
+-spawn traps
+-spawn enemies
+-spawn player
+-spawn blocked route
+
+-open up blocked route once player finds key, also trigger boss to 'unstone' if lock is in goal etc
+
+-add more complex patterns to the graph

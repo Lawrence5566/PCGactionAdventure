@@ -388,11 +388,14 @@ MonoBehaviour:
     type: 3}
   circle: {fileID: 21300000, guid: 141e4a6faaf101d49a474edefdc5e37f, type: 3}
   connectionSpr: {fileID: 21300000, guid: 177aa661da563104eacefe6f2aa46ee8, type: 3}
+  connectionBlockedSpr: {fileID: 21300000, guid: 9df87c66c8d77bf4b8fa4cfb5163171a,
+    type: 3}
   connectionArrowSpr: {fileID: 21300000, guid: 380ca652803997f49925a0f97bc00db1, type: 3}
   connectionDramatic: {fileID: 21300000, guid: a7fb0c651863d064596482aecc670706, type: 3}
   connectionCollapse: {fileID: 21300000, guid: 5f293b352689d4a4fbb38af27fdfadb0, type: 3}
   enemyCircle: {fileID: 21300000, guid: d18c3bd6b9b30bf44bdecafacf0702c4, type: 3}
-  lockKeyCircle: {fileID: 21300000, guid: b3a974f4fc2a6774cbf854efc8f6923d, type: 3}
+  lockCircle: {fileID: 21300000, guid: 68dbcd337f3f4d64faf6e5bb531b6979, type: 3}
+  keyCircle: {fileID: 21300000, guid: 121671e0224fff94e841556c8546b2ca, type: 3}
   monsterCircle: {fileID: 21300000, guid: 0a557a52f2251db409a6ab74493572fe, type: 3}
   trapCircle: {fileID: 21300000, guid: d18c3bd6b9b30bf44bdecafacf0702c4, type: 3}
   itemCircle: {fileID: 21300000, guid: dae3e9eeed0e83048ab8ef6bdbb5b9fd, type: 3}

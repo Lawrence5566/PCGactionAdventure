@@ -11,11 +11,13 @@ public class GraphGenerator : MonoBehaviour {
 	public GameObject TextBasePrefab;
 	public Sprite circle;
 	public Sprite connectionSpr;
+	public Sprite connectionBlockedSpr;
 	public Sprite connectionArrowSpr;
 	public Sprite connectionDramatic;
 	public Sprite connectionCollapse;
 	public Sprite enemyCircle;
-	public Sprite lockKeyCircle;
+	public Sprite lockCircle;
+	public Sprite keyCircle;
     public Sprite monsterCircle;
     public Sprite trapCircle;
 
@@ -23,8 +25,9 @@ public class GraphGenerator : MonoBehaviour {
 	public Sprite hiddenCircle;
 	node[] nodeArray = new node[12];
 	node startNode;
+	node goalNode;
 
-	int maxRouteLength = 7;
+	int maxRouteLength = 8;
 
 	node[] dramaticCycleNodes = new node[2];
 		
@@ -117,11 +120,9 @@ public class GraphGenerator : MonoBehaviour {
 		}
 		return path;
 	}
-
-	//find loops in graph by looking through nodes connected to first past in 'curr' node
+		
 	List<List<node>> findLoopsInGraph(node curr, node previous, List<node> path, List<node> deadEndNodes, int activeNodes, List<List<node>> loops){
-
-		//Debug.Log ("current path");
+		//find loops in graph by looking through nodes connected to first past in 'curr' node
 
 		if (!path.Contains(curr)) //only if path doesn't already contain current
 			path.Add (curr);	
@@ -142,18 +143,18 @@ public class GraphGenerator : MonoBehaviour {
 			if (!path.Contains (newNode)) { //if node is not visited, recur
 				loops = findLoopsInGraph (newNode, curr, path, deadEndNodes, activeNodes, loops);
 				break; 
-			} else if (newNode != previous) {
+			} else if (newNode != previous) { //visited before (since its in path, and its not the previous)
 				//found loop
 
-				int indexNewNode = path.IndexOf (newNode);
+				int indexNewNode = path.IndexOf (newNode); //find previous instance of this newNode in the path
 				//start from first branch off (first instance of newNode) and remove all nodes before
 				for (int n = indexNewNode; n >= 0; n-- ) {
 					if (path [n] == newNode) //skip the branch node
 						continue;
 					path.RemoveAt(n);
 				}
-					
-				loops.Add (new List<node>(path)); //add path to loops by copying (not reference)
+
+                loops.Add (new List<node>(path)); //add path to loops by copying (not reference)
 
 				validNodes.Remove(newNode); //remove from valid nodes so we can look for a new path
 			}
@@ -243,12 +244,12 @@ public class GraphGenerator : MonoBehaviour {
 
 	void GoalRule(){
 		//create goal location
-		GameObject goalNode;
+		//GameObject goalNode;
 		do { //keep picking different spots till you get one that isnt the start node
-			goalNode = nodeArray [Random.Range (0, 11)].obj;
-		} while (goalNode.name == "StartNode");
-		GameObject text = Instantiate(TextBasePrefab,  goalNode.transform);
-		goalNode.name = "GoalNode";
+			goalNode = nodeArray [Random.Range (0, 11)];
+		} while (goalNode.obj.name == "StartNode");
+		GameObject text = Instantiate(TextBasePrefab,  goalNode.obj.transform);
+		goalNode.obj.name = "GoalNode";
 		text.GetComponent<TextMesh>().text = "Goal";
 
 		//generate 2 paths between them
@@ -257,8 +258,9 @@ public class GraphGenerator : MonoBehaviour {
 		List<node> routeA = findAPath (startNode, new List<node> (), new List<node> ());
 		List<node> routeB = findAPath (startNode, new List<node> (), new List<node> ());
 
+		//make sure routes are not too long, and not the same
 		while (true){ 
-			if (routeA.Count > maxRouteLength) { //make sure route is not too long
+			if (routeA.Count > maxRouteLength) { 
 				routeA = findAPath (startNode, new List<node> (), new List<node> ());
 				continue;
 			} 
@@ -266,20 +268,13 @@ public class GraphGenerator : MonoBehaviour {
 				routeB = findAPath (startNode, new List<node> (), new List<node> ());
 				continue;
 			}
-			if (Enumerable.SequenceEqual (routeA, routeB)) {//make sure routes are different
+			if (Enumerable.SequenceEqual (routeA, routeB)) {
 				routeB = findAPath (startNode, new List<node> (), new List<node> ());
 				continue;
 			}
-
 			break;
 		}
-
-		
-		do { //make sure routes are different
-			routeA = findAPath (startNode, new List<node> (), new List<node> ());
-			routeB = findAPath (startNode, new List<node> (), new List<node> ());
-		} while (Enumerable.SequenceEqual(routeA, routeB));
-
+			
 		//log paths for testing:
 		string s1 = "";
 		string s2 = "";
@@ -289,8 +284,8 @@ public class GraphGenerator : MonoBehaviour {
 		foreach (node n in routeB) {
 			s2 += (n.name + ", ");
 		}
-		Debug.Log("path1: " + s1);
-		Debug.Log("path2: " + s2);
+		Debug.Log("routeA: " + s1);
+		Debug.Log("routeB: " + s2);
 
 		//do this only when passing on to map converter: (it eliminates unneccisary nodes)
 		ProcessNodeArray (routeA, routeB);
@@ -486,6 +481,7 @@ public class GraphGenerator : MonoBehaviour {
 
 
 	// pattern rules: //
+
 	void TwoAlternativePaths(List<KeyValuePair<connection, node>> routeA, List<KeyValuePair<connection, node>> routeB){ //only ran on both long paths
         //add monster on routeA, trap on routeB
 		Debug.Log("run Alternate Paths rule");
@@ -532,9 +528,9 @@ public class GraphGenerator : MonoBehaviour {
 		}*/
 	}
 
-	//place a danger (monster) on the short route
 	void DangerousRoute(List<KeyValuePair<connection, node>> shortRoute,List<KeyValuePair<connection, node>> longRoute){
-		Debug.Log ("run dangerousRoute rule ");
+		//place a danger (monster) on the short route
+		Debug.Log ("run DangerousRoute rule ");
 
 		node uniqueNode = getRandomUniqueNode (shortRoute, longRoute);
 		if (uniqueNode.name == "null node") { // if no nodes unique, add to connection instead
@@ -552,32 +548,31 @@ public class GraphGenerator : MonoBehaviour {
 		//get random unique connection, and add collapsing bridge type
 
 		connection con = getRandomUniqueConnection (shortRoute, longRoute);
-		con.obj.GetComponent<SpriteRenderer> ().sprite = connectionCollapse; //change sprite
-		con.type = ConType.collapsing; //change type to collapsing
-
+		con.ChangeType (ConType.collapsing, connectionCollapse);
 	}
 
 	void LockAndKey(List<KeyValuePair<connection, node>> shortRoute,List<KeyValuePair<connection, node>> longRoute){
 		Debug.Log("Lock and Key cycle");
 
 		node endNode = shortRoute [shortRoute.Count - 1].Value; 
+		bool foundOutwardConnections = false;
 		foreach (KeyValuePair<connection, node> k in endNode.connectionToNodes) {
-			if (!shortRoute.Contains (k) && !longRoute.Contains(k))  //if connection not in shortRoute or longRoute (therefore not in this loop)
-				k.Key.AddFeatureToConnection(new token("lock", lockKeyCircle));//add lock
-		}
-	}
-		
-	/*
-	void RemoveConnections (node a, node b){
-		a.connectedNodes.Remove (b);
-
-		for (int i = 0; i < a.connectedNodes.Count; i++){
-			if (a.connectedNodes [i] == b) {
-				connectedNodes.Remove(b)
+			if (!shortRoute.Contains (k) && !longRoute.Contains(k)){  //if connection not in shortRoute or longRoute (therefore not in this loop)
+				k.Key.AddFeatureToConnection(new token("lock", lockCircle));//add lock
+				foundOutwardConnections = true;
 			}
 		}
-	}*/
 
+		//if key on goal node, make the goal only achivable when key is collected (eg if its a monster, keep the monster in stone till key is found)
+		if (!foundOutwardConnections) { //if no connections were outside of routes, then the goal node of loop is the actually goal node!
+			goalNode.AddFeature(new token("lock", lockCircle));
+		}
+			
+
+		//place key at the first node of long route, and close long route off in that direction (so player encounters lock before seeing key)
+		longRoute[1].Value.AddFeature(new token("key", keyCircle)); //add key to the first node (exclusing start node)
+		longRoute[1].Key.ChangeType(ConType.blocked, connectionBlockedSpr);	//block connection to it
+	}
 
 }
 
@@ -676,9 +671,14 @@ public class connection{
 		ren.sortingOrder = 2;  							//set order in layer infront of parent
 		features.Add (newToken); 				//add new node to list of connection features
 	}
+
+	public void ChangeType(ConType t, Sprite spr){
+		type = t;
+		obj.GetComponent<SpriteRenderer> ().sprite = spr;
+	}
 		
 }
 	
 public enum ConType{
-	normal, dramatic, collapsing
+	normal, dramatic, collapsing, blocked
 }
