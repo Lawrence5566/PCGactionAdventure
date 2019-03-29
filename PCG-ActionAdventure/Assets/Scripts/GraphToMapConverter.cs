@@ -87,13 +87,11 @@ public class GraphToMapConverter : MonoBehaviour {
 		ConnectRooms(roomsList);
 
 		if (dramaticCycleNodes [0] != null || dramaticCycleNodes [1] != null) {
-			//get all rooms equal to dynamic view nodes (should only be 2)
-			List<Room> dynamicViewRooms = roomsList.FindAll (x => x.node == dramaticCycleNodes [0] || x.node == dramaticCycleNodes [1]);
-			Debug.Log ("dynamicview rooms size: " + dynamicViewRooms.Count );
-			if (dynamicViewRooms.Count > 1) {
-				CreateDynamicView (dynamicViewRooms);
-				Debug.Log (dynamicViewRooms[0].node.name +","+ dynamicViewRooms[1].node.name );
-				Debug.Log ("creating dynamic view");
+			//get all rooms equal to dramatic view nodes (should only be 2)
+			List<Room> dramaticViewRooms = roomsList.FindAll (x => x.node == dramaticCycleNodes [0] || x.node == dramaticCycleNodes [1]);
+
+			if (dramaticViewRooms.Count > 1) {
+				CreateDramaticView (dramaticViewRooms);
 			}
 		}
 
@@ -153,11 +151,12 @@ public class GraphToMapConverter : MonoBehaviour {
 		}
 	}
 
-	void CreateDynamicView(List<Room> dynamicViewRooms){
+	void CreateDramaticView(List<Room> dramaticViewRooms){
 		Coord bestTileA;
 		Coord bestTileB;
-		FindClosestTiles (dynamicViewRooms [0], dynamicViewRooms [1], out bestTileA, out bestTileB);
-		CreatePassage (dynamicViewRooms [0], dynamicViewRooms [0], bestTileA, bestTileB, 10, 2);
+		FindClosestTiles (dramaticViewRooms [0], dramaticViewRooms [1], out bestTileA, out bestTileB);
+		//createPassage but set nodes to '2' since this is a dramatic view
+		CreatePassage (dramaticViewRooms [0], dramaticViewRooms [0], bestTileA, bestTileB, 8, 2);
 
 	}
 

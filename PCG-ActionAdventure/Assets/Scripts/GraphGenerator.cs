@@ -79,7 +79,13 @@ public class GraphGenerator : MonoBehaviour {
 		int[,] map = FindObjectOfType<GraphToMapConverter>().CreateMap(nodeArray, dramaticCycleNodes);
 
 		//generate mesh from nodeArray:
-		FindObjectOfType<MeshGenerator>().GenerateMesh(map, 1); //squareSize of 1
+		FindObjectOfType<MeshGenerator>().GenerateMesh(map, 1, false); //squareSize of 1
+
+		//generate floor mesh - works by flipping map bits and generating like a wall but without sides
+
+		//now take any '2' bits (bits that are gunna be dramatic cycle stuff) and turn them into 1s (these will be 0 in floor mesh)
+
+		FindObjectOfType<MeshGenerator>().GenerateMesh(map, 1, true);  //generate floor mesh
 
 	}
 
@@ -410,14 +416,14 @@ public class GraphGenerator : MonoBehaviour {
             else if (ACount > 3 && BCount <= 3) { //A is long, B is short
 				Debug.Log("Long a, Short b");
                 //HiddenShortcut(loopRouteA, loopRouteB); //add hidden shortcut to short route
-				//DramaticCycle(loopRouteB);
+				DramaticCycle(loopRouteB);
 				//DangerousRoute (loopRouteB, loopRouteA);
 
             }
             else if (ACount <= 3 && BCount > 3){ //A is short, B is long
 				Debug.Log("Short a, Long b");
 				//UnknownReturn(loopRouteA,loopRouteB);
-				LockAndKey(loopRouteA,loopRouteB);
+				//LockAndKey(loopRouteA,loopRouteB);
             }
             else{ //both are short, but still pass the shorter one into the shorter postion!
 				Debug.Log("Short a, Short b");

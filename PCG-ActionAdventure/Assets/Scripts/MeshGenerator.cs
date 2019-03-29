@@ -9,6 +9,8 @@ public class MeshGenerator : MonoBehaviour {
 
 	public SquareGrid squareGrid;
 	public MeshFilter walls;
+	public MeshFilter floor;
+	public MeshFilter floorTemp;
 
 	List<Vector3> vertices;
 	List<int> triangles;
@@ -17,7 +19,19 @@ public class MeshGenerator : MonoBehaviour {
 	List<List<int>> outlines = new List<List<int>> ();
 	HashSet<int> checkedVertices = new HashSet<int> (); //make sure we dont check a vertex again, (use hashset over list as its quicker to do .contains checks)
 
-	public void GenerateMesh(int[,] map, float squareSize){
+	public void GenerateMesh(int[,] map, float squareSize, bool isFloor){
+
+		if (isFloor) {
+			for (int x = 0; x < map.GetLength (0); x++) {
+				for (int y = 0; y < map.GetLength (1); y++) {
+					if (map[x,y] == 0){
+						map [x, y] = 1;
+					} else{
+						map[x,y] = 0;
+					}
+				}
+			}
+		}
 		
 		triangleDictionary.Clear ();
 		outlines.Clear ();
@@ -35,23 +49,27 @@ public class MeshGenerator : MonoBehaviour {
 		}
 
 		Mesh mesh = new Mesh ();
-		GetComponent<MeshFilter> ().mesh = mesh;
+		if (isFloor) {
+			floor.mesh = mesh;
+		} else {
+			GetComponent<MeshFilter> ().mesh = mesh;
+		}
+
+
+		//GetComponent<MeshFilter> ().mesh = mesh;
 
 		mesh.vertices = vertices.ToArray ();
 		mesh.triangles = triangles.ToArray ();
 		mesh.RecalculateNormals (); //just in case
 
-		CreateWallMesh ();
+		CreateWallMesh (isFloor);
 
 	}
-
-	void CreateFloorMesh(){ //create function that mirrors CreateWallMesh but for the floors (on a 0 it's a floor tile)
 		
-	}
+	void CreateWallMesh(bool isFloor){
 
-	void CreateWallMesh(){
-
-		CalculateMeshOutline ();
+		if (!isFloor) //don't need outline for floor mesh
+			CalculateMeshOutline ();
 
 		List<Vector3> wallVertices = new List<Vector3> ();
 		List<int> wallTriangles = new List<int> ();
@@ -79,7 +97,12 @@ public class MeshGenerator : MonoBehaviour {
 		}
 		wallMesh.vertices = wallVertices.ToArray ();
 		wallMesh.triangles = wallTriangles.ToArray ();
-		walls.mesh = wallMesh;
+
+		if (isFloor) {
+			floorTemp.mesh = wallMesh;
+		} else {
+			walls.mesh = wallMesh;
+		}
 
 	}
 
