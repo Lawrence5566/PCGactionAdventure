@@ -1,7 +1,8 @@
 25/03/2019
 
 to do:
--finish dramatic cycle
+
+-fix dramatric cycle - remove node connections/routes in dramatic cycles way or next to it + make sure dramatic cycles doesnt count as a route
 
 -create collapssing bridge or falling floor - make all passage ways bridges? (make passage ways bigger and just add a bridge, and make seperate floors for each room)
 
@@ -15,3 +16,9 @@ to do:
 -open up blocked route once player finds key, also trigger boss to 'unstone' if lock is in goal etc
 
 -add more complex patterns to the graph
+
+-make dangerous route create a random insta kill zone or something similar - fissure, poison lake, fire pit etc. But not a trap! (like a falling rock - since traps are different)???
+
+does it do this?:
+-for lock and key cycle close off the longer route and make player walk all the way round past the door to find the key (which will be placed inside the last cycle node)
+	-upon finding the key however, you could make the closed off route open up, giving the player quicker acess to the door

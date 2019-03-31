@@ -15,6 +15,8 @@ public class GraphToMapConverter : MonoBehaviour {
 	int nodeArrayXsize = 3;
 	int nodeArrayYsize = 4;
 
+	List<Room> dramaticViewRooms = new List<Room> ();
+
 	List<Room> roList =  new List<Room>(); 							//for gizmo testing
 
 	public int[,] CreateMap(node[] nodeArray, node[] dramaticCycleNodes ){  					//takes node array, converts to rooms and combines rooms into one map
@@ -82,17 +84,16 @@ public class GraphToMapConverter : MonoBehaviour {
 
 		}
 
-		roList = roomsList; //for testing
+		if (dramaticCycleNodes [0] != null || dramaticCycleNodes [1] != null) {
+			//get all rooms equal to dramatic view nodes (should only be 2)
+			dramaticViewRooms = roomsList.FindAll (x => x.node == dramaticCycleNodes [0] || x.node == dramaticCycleNodes [1]);
+
+		}
 
 		ConnectRooms(roomsList);
 
-		if (dramaticCycleNodes [0] != null || dramaticCycleNodes [1] != null) {
-			//get all rooms equal to dramatic view nodes (should only be 2)
-			List<Room> dramaticViewRooms = roomsList.FindAll (x => x.node == dramaticCycleNodes [0] || x.node == dramaticCycleNodes [1]);
-
-			if (dramaticViewRooms.Count > 1) {
-				CreateDramaticView (dramaticViewRooms);
-			}
+		if (dramaticViewRooms.Count > 1) { //only if we have two rooms, connect them dramatically
+			CreateDramaticView (dramaticViewRooms);
 		}
 
 		return Map;
@@ -104,7 +105,7 @@ public class GraphToMapConverter : MonoBehaviour {
 
 		foreach(Room roomA in allRooms){
 			foreach (Room roomB in allRooms) {
-				if (roomA == roomB || roomA.IsConnected (roomB)) { //skip if they are the same room, or are already connected
+				if (roomA == roomB || roomA.IsConnected (roomB) || (dramaticViewRooms.Contains(roomA) && dramaticViewRooms.Contains(roomB))) { //skip if they are the same room, or are already connected, or are part of dramatic cycle
 					continue;
 				}
 
@@ -156,7 +157,7 @@ public class GraphToMapConverter : MonoBehaviour {
 		Coord bestTileB;
 		FindClosestTiles (dramaticViewRooms [0], dramaticViewRooms [1], out bestTileA, out bestTileB);
 		//createPassage but set nodes to '2' since this is a dramatic view
-		CreatePassage (dramaticViewRooms [0], dramaticViewRooms [0], bestTileA, bestTileB, 8, 2);
+		CreatePassage (dramaticViewRooms [0], dramaticViewRooms [0], bestTileA, bestTileB, 9, 2);
 
 	}
 
@@ -167,7 +168,13 @@ public class GraphToMapConverter : MonoBehaviour {
 					int drawX = c.tileX + x;
 					int drawY = c.tileY + y;
 					if (drawX >= 2 && drawX < width && drawY >= 2 && drawY < height) { //if inside map
-						Map[drawX,drawY] = tiletype;
+						if (tiletype == 2) { //make sure floor nodes are left alone
+							if (Map [drawX, drawY] == 1) //only if they are 1 do we mark wall tile as dramatic
+								Map [drawX, drawY] = tiletype;
+						} else {
+							Map[drawX,drawY] = tiletype;
+						}
+
 					}
 				}
 			}
