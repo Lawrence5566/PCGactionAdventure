@@ -31,7 +31,7 @@ public class GraphGenerator : MonoBehaviour {
 
 	node[] dramaticCycleNodes = new node[2];
 		
-	void Start () {
+	public void Init () {
 
 		int n = 0;
 		for (int x = 0; x < 3; x++) { //3 across and 4 down node array - starts bottom left in world, goes up
@@ -86,8 +86,6 @@ public class GraphGenerator : MonoBehaviour {
 		//now take any '2' bits (bits that are gunna be dramatic cycle stuff) and turn them into 1s (these will be 0 in floor mesh)
 
 		FindObjectOfType<MeshGenerator>().GenerateMesh(map, 1, true);  //generate floor mesh
-
-		FindObjectOfType<GameManager> ().PlacePlayer ();
 
 	}
 
@@ -360,9 +358,6 @@ public class GraphGenerator : MonoBehaviour {
 
 		RouteA.Insert (0, new KeyValuePair<connection, node> (new connection (), startNode)); //add start node to beginning of routes
 		RouteB.Insert (0, new KeyValuePair<connection, node> (new connection (), startNode)); //(this is for loop stuff later)
-
-		//routeA [0].AddFeature (new token("obstacle", obstacleCircle)); //test add
-		//routeA [0].AddFeature (new token("obstacle", obstacleCircle)); //test add
 
 		int activeNodes = 0;
 		foreach (node n in nodeArray) { //calculate number of nodes in graph that are active

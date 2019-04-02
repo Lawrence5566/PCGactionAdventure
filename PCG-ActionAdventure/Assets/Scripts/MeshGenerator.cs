@@ -11,6 +11,8 @@ public class MeshGenerator : MonoBehaviour {
 	public MeshFilter walls;
 	public MeshFilter floor;
 	public MeshFilter floorTemp;
+	public MeshCollider floorCollider;
+	public MeshCollider wallCollider;
 
 	List<Vector3> vertices;
 	List<int> triangles;
@@ -63,6 +65,12 @@ public class MeshGenerator : MonoBehaviour {
 		mesh.RecalculateNormals (); //just in case
 
 		CreateWallMesh (isFloor);
+
+		if (isFloor) {
+			floorCollider.sharedMesh = floor.mesh;
+		} else {
+			wallCollider.sharedMesh = walls.mesh;
+		}
 
 	}
 		

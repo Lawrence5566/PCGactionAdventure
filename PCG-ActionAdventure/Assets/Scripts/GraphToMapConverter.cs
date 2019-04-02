@@ -121,7 +121,7 @@ public class GraphToMapConverter : MonoBehaviour {
 					Coord bestTileA = new Coord ();
 					Coord bestTileB = new Coord ();
 					FindClosestTiles(roomA, roomB, out bestTileA, out bestTileB);
-					CreatePassage (roomA, roomB, bestTileA, bestTileB, 1, 0);
+					CreatePassage (roomA, roomB, bestTileA, bestTileB, 2, 0);
 				}
 			}
 		}

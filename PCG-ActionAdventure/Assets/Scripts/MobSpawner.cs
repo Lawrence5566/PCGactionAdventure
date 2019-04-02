@@ -6,6 +6,8 @@ public class MobSpawner : MonoBehaviour {
 	public GameObject DiaEnemyPrefab;
 	public Material[] DiaMaterials;
 
+	public List<GameObject> monsterStack = new List<GameObject>();
+
 	//int minPoints = 3; //must be changed manually
 
 	List<KeyValuePair<int, string>> mobOptions = new List<KeyValuePair<int, string>> (){
@@ -33,11 +35,11 @@ public class MobSpawner : MonoBehaviour {
 		new KeyValuePair<int, string> (12, "+3mdef"),
 		new KeyValuePair<int, string> (12, "+14hp")
 	};
-
+	/*
 	void Start(){ //for testing 
 		createStack(3,3,0); //create a stack of 3 points value, 3 monster tasks, no boss 
 		
-	}
+	}*/
 		
 	//levelPointsValueModifier example:
 	//if level 1: 3, 1st task = 3, 2nd task = 6, 3rd task = 9
@@ -68,7 +70,7 @@ public class MobSpawner : MonoBehaviour {
 				}
 			
 				//create new possible options list to be filtered giving it all the current possibles
-				List<KeyValuePair<int, string>> possibleOptions = mobOptions;
+				List<KeyValuePair<int, string>> possibleOptions = new List<KeyValuePair<int, string>>(mobOptions); //by copy, so original mobOptions not
 
 				if (currTaskStack.Count > 0){ 	//if stack > 0 a monster has already been selected, so allow stat options
 					possibleOptions.AddRange(statOptions);
@@ -76,7 +78,7 @@ public class MobSpawner : MonoBehaviour {
 
 				//filter options:
 				possibleOptions.RemoveAll(item => item.Key > currPointsLeft); //remove all items where key is > points left (filter out too expensive options)
-					
+
 				//now pick choice from possible options
 				if (possibleOptions.Count > 0){  //is there any options left to pick?
 					KeyValuePair<int, string> choice = possibleOptions[Random.Range(0, possibleOptions.Count)]; //get choice string by selecting randomly from options
@@ -90,10 +92,14 @@ public class MobSpawner : MonoBehaviour {
 
 			//now we are left with a set of options, that need to be translated into monsters + stat buffs and added to the game:
 			AddToStack(currTaskStack);
+
+			currTaskStack.Clear ();
 		}
+
 	}
 
 	public void AddToStack(List<KeyValuePair<int, string>> TaskStack){
+		//add monsters to 'monsterStack'
 		Debug.Log ("Task: ");
 		foreach (KeyValuePair<int, string> key in TaskStack) {
 			Debug.Log (key.Key + " : " + key.Value);
