@@ -23,8 +23,8 @@ public class GraphGenerator : MonoBehaviour {
 
     public Sprite itemCircle;
 	public Sprite hiddenCircle;
-	node[] nodeArray = new node[12];
-	node startNode;
+	public node[] nodeArray = new node[12];
+	public node startNode;
 	node goalNode;
 
 	int maxRouteLength = 8;
@@ -87,6 +87,8 @@ public class GraphGenerator : MonoBehaviour {
 
 		FindObjectOfType<MeshGenerator>().GenerateMesh(map, 1, true);  //generate floor mesh
 
+		FindObjectOfType<GameManager> ().PlacePlayer ();
+
 	}
 
 	List<node> findAPath(node curr, List<node> visited, List<node> p){ //recursivly finds a path to goal
@@ -134,7 +136,7 @@ public class GraphGenerator : MonoBehaviour {
 			path.Add (curr);	
 
 		//recurse for next random node
-		List<node>  validNodes = new List<node> (curr.connectedNodes);
+		List<node> validNodes = new List<node> (curr.connectedNodes);
 
 		validNodes.Remove (previous);							//remove previous node
 		foreach(node n in deadEndNodes) validNodes.Remove(n); 	//remove dead end nodes

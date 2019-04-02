@@ -1,10 +1,10 @@
 ﻿<Properties StartupItem="Assembly-CSharp.csproj">
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="Unity.Instance.Unity Editor" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\GraphToMapConverter.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\GameManager.cs">
     <Files>
-      <File FileName="Assets\Scripts\GraphGenerator.cs" Line="191" Column="2" />
-      <File FileName="Assets\Scripts\GraphToMapConverter.cs" Line="160" Column="87" />
-      <File FileName="Assets\Scripts\MeshGenerator.cs" Line="1" Column="1" />
+      <File FileName="Assets\Scripts\GraphGenerator.cs" Line="26" Column="41" />
+      <File FileName="Assets\Scripts\GraphToMapConverter.cs" Line="12" Column="27" />
+      <File FileName="Assets\Scripts\GameManager.cs" Line="23" Column="28" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>

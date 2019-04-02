@@ -14,12 +14,13 @@ public class GraphToMapConverter : MonoBehaviour {
 	int minRoomSize = 30;
 	int nodeArrayXsize = 3;
 	int nodeArrayYsize = 4;
+	public List<Vector3> roomCenterCoords = new List<Vector3>();
 
 	List<Room> dramaticViewRooms = new List<Room> ();
 
-	List<Room> roList =  new List<Room>(); 							//for gizmo testing
+	List<Room> roList =  new List<Room>(); 						//for gizmo testing
 
-	public int[,] CreateMap(node[] nodeArray, node[] dramaticCycleNodes ){  					//takes node array, converts to rooms and combines rooms into one map
+	public int[,] CreateMap(node[] nodeArray, node[] dramaticCycleNodes ){  			//takes node array, converts to rooms and combines rooms into one map
 
 		List<Room> roomsList = new List<Room> ();
 		RoomGenerator roomGenerator = new RoomGenerator ();
@@ -81,6 +82,13 @@ public class GraphToMapConverter : MonoBehaviour {
 			Room currRoom = new Room (newRegion, Map);  //create room out of region
 			currRoom.node = nodeArray[n];
 			roomsList.Add (currRoom);					//add to list of rooms
+
+			//find room centers
+			if (currRoom.tiles.Count > 1){
+				roomCenterCoords.Add(CoordToWorldPoint (currRoom.tiles [currRoom.tiles.Count / 2]));
+			}else{
+				roomCenterCoords.Add(Vector3.zero); //add 0,0,0 vector for the empty rooms
+			}
 
 		}
 
@@ -230,7 +238,7 @@ public class GraphToMapConverter : MonoBehaviour {
 	}
 
 	Vector3 CoordToWorldPoint(Coord tile) { //convert Coord object to a world point
-		return new Vector3 (-width + .5f + tile.tileX, 2, -height + .5f + tile.tileY);
+		return new Vector3 (-width / 2 + .5f + tile.tileX, 2, -height / 2 + .5f + tile.tileY);
 	}
 
 	struct Coord{ //use to store tile locations in the map

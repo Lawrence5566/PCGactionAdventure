@@ -64,6 +64,7 @@
      <Compile Include="Assets\Player\Scripts\InputHandler.cs" />
      <Compile Include="Assets\Player\Scripts\InventoryManager.cs" />
      <Compile Include="Assets\Player\Scripts\KeepBool.cs" />
+     <Compile Include="Assets\Scripts\GameManager.cs" />
      <Compile Include="Assets\Scripts\GraphGenerator.cs" />
      <Compile Include="Assets\Scripts\GraphToMapConverter.cs" />
      <Compile Include="Assets\Scripts\MeshGenerator.cs" />
