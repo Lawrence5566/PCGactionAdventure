@@ -57,6 +57,7 @@
      <Compile Include="Assets\Managers\EnemyManager.cs" />
      <Compile Include="Assets\Managers\StaticStrings.cs" />
      <Compile Include="Assets\Managers\WeaponManager.cs" />
+     <Compile Include="Assets\Objects\DungeonTraps\TrapActivator.cs" />
      <Compile Include="Assets\Player\Scripts\ActionManager.cs" />
      <Compile Include="Assets\Player\Scripts\AnimatorHook.cs" />
      <Compile Include="Assets\Player\Scripts\CameraManager.cs" />
@@ -73,7 +74,7 @@
      <Compile Include="Assets\Seven Swords\Swords\Scripts\DamageCollider.cs" />
      <Compile Include="Assets\Seven Swords\Swords\Scripts\Weapon.cs" />
      <None Include="Assets\Seven Swords\Swords\Shader\ToonSwords.shader" />
-     <None Include="Assets\Objects\Models\Key\readME keys.txt" />
+     <None Include="Assets\Objects\DoorsAndKeys\Key\readME keys.txt" />
  <Reference Include="Unity.TextMeshPro.Editor">
  <HintPath>C:/Users/lawre/Documents/GitHub/PCGactionAdventure/PCG-ActionAdventure/Library/ScriptAssemblies/Unity.TextMeshPro.Editor.dll</HintPath>
  </Reference>

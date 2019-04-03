@@ -1,6 +1,8 @@
-25/03/2019
 
 to do:
+
+-make sure traps hurt player in trap activator script (just need to apply damagge using oncollission enter extra parameters (passes in other collided object i belive))
+-get locations of center of routes for traps, if that connection has a trap on it (in graphToMapConverter)
 
 -fix dramatric cycle - remove node connections/routes in dramatic cycles way or next to it + make sure dramatic cycles doesnt count as a route
 
@@ -22,3 +24,4 @@ to do:
 does it do this?:
 -for lock and key cycle close off the longer route and make player walk all the way round past the door to find the key (which will be placed inside the last cycle node)
 	-upon finding the key however, you could make the closed off route open up, giving the player quicker acess to the door
+

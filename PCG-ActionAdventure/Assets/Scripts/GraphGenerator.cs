@@ -30,6 +30,8 @@ public class GraphGenerator : MonoBehaviour {
 	int maxRouteLength = 8;
 
 	node[] dramaticCycleNodes = new node[2];
+
+	List<connection> listOfConnections = new List<connection>();
 		
 	public void Init () {
 
@@ -75,8 +77,11 @@ public class GraphGenerator : MonoBehaviour {
 		//create dungeon:
 		DungeonRule();
 
+		//we only need the connections with features (like traps)
+		listOfConnections.RemoveAll(x => x.features.Count == 0);
+
 		//pass on to map converter:
-		int[,] map = FindObjectOfType<GraphToMapConverter>().CreateMap(nodeArray, dramaticCycleNodes);
+		int[,] map = FindObjectOfType<GraphToMapConverter>().CreateMap(nodeArray, dramaticCycleNodes, listOfConnections);
 
 		//generate mesh from nodeArray:
 		FindObjectOfType<MeshGenerator>().GenerateMesh(map, 1, false); //squareSize of 1
@@ -218,6 +223,9 @@ public class GraphGenerator : MonoBehaviour {
 
 		//create new one
 		connection newCon = new connection(new Vector3(relPoint.x/2, relPoint.y/2, 0f) + a.obj.transform.position, sprite, angle);
+
+		//add connection to list
+		listOfConnections.Add (newCon);
 
 		//add to connectionsToNodes
 		KeyValuePair<connection, node> newConnectionToNode = new KeyValuePair<connection, node> (newCon, b);
@@ -408,23 +416,25 @@ public class GraphGenerator : MonoBehaviour {
             
             if (ACount > 3 && BCount > 3){ //both routes are long
 				Debug.Log("Long a, Long b");
-                //TwoAlternativePaths(loopRouteA, loopRouteB); //alternative paths rule
+                TwoAlternativePaths(loopRouteA, loopRouteB); //alternative paths rule
             }
             else if (ACount > 3 && BCount <= 3) { //A is long, B is short
 				Debug.Log("Long a, Short b");
                 //HiddenShortcut(loopRouteA, loopRouteB); //add hidden shortcut to short route
-				DramaticCycle(loopRouteB);
+				//DramaticCycle(loopRouteB);
 				//DangerousRoute (loopRouteB, loopRouteA);
+				TwoAlternativePaths(loopRouteA, loopRouteB); //only for testing trap placement
 
             }
             else if (ACount <= 3 && BCount > 3){ //A is short, B is long
 				Debug.Log("Short a, Long b");
 				//UnknownReturn(loopRouteA,loopRouteB);
 				//LockAndKey(loopRouteA,loopRouteB);
+				TwoAlternativePaths(loopRouteA, loopRouteB); //only for testing trap placement
             }
-            else{ //both are short, but still pass the shorter one into the shorter postion!
+            else{ //both are short, but still pass the shorter one into the shorter postion?
 				Debug.Log("Short a, Short b");
-
+				TwoAlternativePaths(loopRouteA, loopRouteB); //only for testing trap placement
             }
 
         }
@@ -648,7 +658,7 @@ public class token{
 public class connection{
 	public ConType type = ConType.normal;
 	public GameObject obj;
-	private List<token> features = new List<token> ();
+	public List<token> features = new List<token> ();
 
 	public connection(){ //empty constructor = predictable null object
 		obj = new GameObject("null connection");
@@ -662,6 +672,7 @@ public class connection{
 		obj.transform.Rotate(new Vector3(0f,0f,rot));
 		SpriteRenderer ren = obj.AddComponent<SpriteRenderer>();	
 		ren.sprite = i;
+	
 	}
 
 	public void AddFeatureToConnection(token newToken){ //for adding to connection

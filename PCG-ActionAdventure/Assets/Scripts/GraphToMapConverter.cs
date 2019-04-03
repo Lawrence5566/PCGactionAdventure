@@ -15,12 +15,13 @@ public class GraphToMapConverter : MonoBehaviour {
 	int nodeArrayXsize = 3;
 	int nodeArrayYsize = 4;
 	public List<Vector3> roomCenterCoords = new List<Vector3>();
+	public List<Vector3> trapLocations = new List<Vector3> ();
 
 	List<Room> dramaticViewRooms = new List<Room> ();
 
 	List<Room> roList =  new List<Room>(); 						//for gizmo testing
 
-	public int[,] CreateMap(node[] nodeArray, node[] dramaticCycleNodes ){  			//takes node array, converts to rooms and combines rooms into one map
+	public int[,] CreateMap(node[] nodeArray, node[] dramaticCycleNodes, List<connection> listOfFeaturedConnections ){  			//takes node array, converts to rooms and combines rooms into one map
 
 		List<Room> roomsList = new List<Room> ();
 		RoomGenerator roomGenerator = new RoomGenerator ();
@@ -103,6 +104,11 @@ public class GraphToMapConverter : MonoBehaviour {
 		if (dramaticViewRooms.Count > 1) { //only if we have two rooms, connect them dramatically
 			CreateDramaticView (dramaticViewRooms);
 		}
+
+		//if we have traps: (check the node connections?) foreach connection? pass in list of all connections?
+		//foreach connection, get all nodes that contain it in its connection to nodes list
+		//find the closest tiles between those two nodes using findClostestTiles
+		//find mid pooint between them, that should be center of path
 
 		return Map;
 

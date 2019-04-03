@@ -85,7 +85,7 @@ public class MobSpawner : MonoBehaviour {
 					currTaskStack.Add(choice);
 					currPointsLeft = currPointsLeft - choice.Key; //subtract points from total
 				} else{
-					Debug.Log("no options - points left: " + currPointsLeft);
+					//Debug.Log("no options - points left: " + currPointsLeft);
 				}
 					
 			} while(currPointsLeft > 2); //lowest item = 3
@@ -100,10 +100,12 @@ public class MobSpawner : MonoBehaviour {
 
 	public void AddToStack(List<KeyValuePair<int, string>> TaskStack){
 		//add monsters to 'monsterStack'
-		Debug.Log ("Task: ");
+		Debug.Log ("Tasks in a level: ");
+		string x = "";
 		foreach (KeyValuePair<int, string> key in TaskStack) {
-			Debug.Log (key.Key + " : " + key.Value);
+			x = x + key.Key + " : " + key.Value + ", ";
 		}
+		Debug.Log (x);
 	}
 }
 	
