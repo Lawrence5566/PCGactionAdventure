@@ -15,7 +15,6 @@ public class GraphGenerator : MonoBehaviour {
 	public Sprite connectionArrowSpr;
 	public Sprite connectionDramatic;
 	public Sprite connectionCollapse;
-	public Sprite enemyCircle;
 	public Sprite lockCircle;
 	public Sprite keyCircle;
     public Sprite monsterCircle;

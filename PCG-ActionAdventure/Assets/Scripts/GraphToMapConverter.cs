@@ -23,7 +23,7 @@ public class GraphToMapConverter : MonoBehaviour {
 
 	public int[,] CreateMap(node[] nodeArray, node[] dramaticCycleNodes, List<connection> listOfFeaturedConnections ){  			//takes node array, converts to rooms and combines rooms into one map
 
-		List<Room> roomsList = new List<Room> ();
+		List<Room> roomsList = new List<Room> (); //needs to be at 12 
 		RoomGenerator roomGenerator = new RoomGenerator ();
 
 		width = maxRoomSize*nodeArrayXsize;
@@ -44,7 +44,7 @@ public class GraphToMapConverter : MonoBehaviour {
 				//create a room
 				currRoomMap = roomGenerator.GenerateRoom (RoomWidth, RoomHeight, 35); // we use 35 as fill percent, to get the most realistic looking cave rooms
 
-			} else{// create empty room? make this more efficent?
+			} else{// create empty room, need these to fill space in roomsList, some indexing breaks otherwise
 				currRoomMap = roomGenerator.GenerateRoom (RoomWidth, RoomHeight, 100);
 				//continue;
 			}
@@ -104,11 +104,37 @@ public class GraphToMapConverter : MonoBehaviour {
 		if (dramaticViewRooms.Count > 1) { //only if we have two rooms, connect them dramatically
 			CreateDramaticView (dramaticViewRooms);
 		}
+			
+		//deal with features on connections
+		foreach (connection c in listOfFeaturedConnections){ //foreach connection
+			foreach(token t in c.features){ //foreach token (feature)
 
-		//if we have traps: (check the node connections?) foreach connection? pass in list of all connections?
-		//foreach connection, get all nodes that contain it in its connection to nodes list
-		//find the closest tiles between those two nodes using findClostestTiles
-		//find mid pooint between them, that should be center of path
+				// traps //
+				if (t.type == "trap"){ 
+					//List<node> nodeList = new List<node>();
+					foreach (node n in nodeArray){
+						KeyValuePair<connection, node> k = n.connectionToNodes.Find (x => x.Key == c); //find if this node has this connection
+						if (k.Key == c){ // if node found
+							int node1Index = Array.IndexOf(nodeArray, n);
+							int node2Index = Array.IndexOf(nodeArray, k.Value);
+
+							//find the closest tiles between those two nodes using findClostestTiles
+							Coord bestTileA = new Coord ();
+							Coord bestTileB = new Coord ();
+							FindClosestTiles(roomsList[node1Index], roomsList[node2Index], out bestTileA, out bestTileB);
+
+							//find midpoint between world points, giving center of route to 'trapLocations'
+							Vector3 midpoint = Vector3.Lerp (CoordToWorldPoint (bestTileA), CoordToWorldPoint (bestTileB), 0.5f);
+							midpoint.y = 0.0f; //make sure trap is on the ground
+							trapLocations.Add(midpoint);
+						}
+					}
+				}
+
+
+			}
+		}
+	
 
 		return Map;
 

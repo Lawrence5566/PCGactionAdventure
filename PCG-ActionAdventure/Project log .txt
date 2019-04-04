@@ -1,8 +1,8 @@
 
 to do:
 
--make sure traps hurt player in trap activator script (just need to apply damagge using oncollission enter extra parameters (passes in other collided object i belive))
--get locations of center of routes for traps, if that connection has a trap on it (in graphToMapConverter)
+-make sure traps dont activate unless player gets close to them (will need to activate bool on animator)
+-make sure traps hurt player in trap activator script (just need to apply damagge using oncollission enter extra parameters (passes in other collided object i belive))? (think this is already done)
 
 -fix dramatric cycle - remove node connections/routes in dramatic cycles way or next to it + make sure dramatic cycles doesnt count as a route
 

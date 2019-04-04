@@ -161,6 +161,14 @@ MonoBehaviour:
   meshGenerator: {fileID: 1413561897}
   mobSpawner: {fileID: 160867087}
   playerObject: {fileID: 374776919}
+  traps:
+  - {fileID: 153170, guid: 2a6a1016b6a7de34889e991f0126ce38, type: 3}
+  - {fileID: 199370, guid: d5d36540320e5c04487d3779141d6971, type: 3}
+  - {fileID: 132090, guid: 3d0ba9093894f82429688ddeb31a11f1, type: 3}
+  - {fileID: 169414, guid: f72a59c09a71ed64381535a24991d8b6, type: 3}
+  - {fileID: 148300, guid: 04c11f75ea6385a4eb9f4f260aba0402, type: 3}
+  - {fileID: 142846, guid: 427e851e8ea40af4a9c14a042a3f35ef, type: 3}
+  - {fileID: 152550, guid: c8dc2031dea625e46a42a7c1688cf26d, type: 3}
 --- !u!114 &160867087
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -784,11 +792,10 @@ MonoBehaviour:
   connectionArrowSpr: {fileID: 21300000, guid: 380ca652803997f49925a0f97bc00db1, type: 3}
   connectionDramatic: {fileID: 21300000, guid: a7fb0c651863d064596482aecc670706, type: 3}
   connectionCollapse: {fileID: 21300000, guid: 5f293b352689d4a4fbb38af27fdfadb0, type: 3}
-  enemyCircle: {fileID: 21300000, guid: d18c3bd6b9b30bf44bdecafacf0702c4, type: 3}
   lockCircle: {fileID: 21300000, guid: 68dbcd337f3f4d64faf6e5bb531b6979, type: 3}
   keyCircle: {fileID: 21300000, guid: 121671e0224fff94e841556c8546b2ca, type: 3}
-  monsterCircle: {fileID: 21300000, guid: 0a557a52f2251db409a6ab74493572fe, type: 3}
-  trapCircle: {fileID: 21300000, guid: d18c3bd6b9b30bf44bdecafacf0702c4, type: 3}
+  monsterCircle: {fileID: 21300000, guid: d18c3bd6b9b30bf44bdecafacf0702c4, type: 3}
+  trapCircle: {fileID: 21300000, guid: 0a557a52f2251db409a6ab74493572fe, type: 3}
   itemCircle: {fileID: 21300000, guid: dae3e9eeed0e83048ab8ef6bdbb5b9fd, type: 3}
   hiddenCircle: {fileID: 21300000, guid: 3f5705492a67cd14ab3fb0e21c10a1bd, type: 3}
 --- !u!1 &1368981607
@@ -916,6 +923,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   roomCenterCoords: []
+  trapLocations: []
 --- !u!4 &1413561896
 Transform:
   m_ObjectHideFlags: 0
