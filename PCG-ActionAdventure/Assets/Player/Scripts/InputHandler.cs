@@ -32,7 +32,7 @@ public class InputHandler : MonoBehaviour {
 	public float moveSpeed = 5; 
 	public float rotateSpeed = 5;
 	public float toGround = .5f;
-	public float rollSpeed = 1; //changes roll speed velocity (heavy characters should roll slower)
+	public float rollSpeed = 1f; //changes roll speed velocity (heavy characters should roll slower) (this doesn't work atm?)
 
 	[Header("States")]
 	public bool run;

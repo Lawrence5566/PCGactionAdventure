@@ -1,4 +1,3 @@
-
 to do:
 
 -make sure traps dont activate unless player gets close to them (will need to activate bool on animator)
