@@ -1,11 +1,6 @@
 
 to do:
 
--lock and key cycles
-	-spawn keys in position, and use lock token link to identify the door its corresponding with
-		-spawn keys with keyToken
-		-make sure when player picks up key, they get itss 'key token' as this is what the doors use to open
-
 -create enenmy spawn points
 
 -create collapssing bridge or falling floor - make all passage ways bridges? (make passage ways bigger and just add a bridge, and make seperate floors for each room)

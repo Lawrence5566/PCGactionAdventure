@@ -2,16 +2,17 @@
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="Unity.Instance.Unity Editor" />
   <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\GraphGenerator.cs">
     <Files>
-      <File FileName="Assets\Scripts\GameManager.cs" Line="6" Column="2" />
-      <File FileName="Assets\Scripts\GraphGenerator.cs" Line="592" Column="4" />
-      <File FileName="Assets\Scripts\GraphToMapConverter.cs" Line="151" Column="8" />
+      <File FileName="Assets\Scripts\GameManager.cs" Line="26" Column="15" />
+      <File FileName="Assets\Scripts\GraphGenerator.cs" Line="378" Column="5" />
+      <File FileName="Assets\Scripts\GraphToMapConverter.cs" Line="101" Column="52" />
       <File FileName="Assets\Scripts\MobSpawner.cs" Line="1" Column="1" />
       <File FileName="Assets\Scripts\MeshGenerator.cs" Line="1" Column="1" />
-      <File FileName="Assets\Objects\DungeonTraps\TrapActivator.cs" Line="35" Column="3" />
+      <File FileName="Assets\Objects\DungeonTraps\TrapActivator.cs" Line="51" Column="3" />
       <File FileName="Assets\Player\Scripts\InputHandler.cs" Line="1" Column="1" />
-      <File FileName="Assets\Player\Scripts\PlayerStats.cs" Line="9" Column="5" />
+      <File FileName="Assets\Player\Scripts\PlayerStats.cs" Line="1" Column="1" />
       <File FileName="Assets\Objects\DoorsAndKeys\Door.cs" Line="14" Column="52" />
-      <File FileName="Assets\Player\Scripts\InventoryManager.cs" Line="9" Column="2" />
+      <File FileName="Assets\Player\Scripts\InventoryManager.cs" Line="8" Column="46" />
+      <File FileName="Assets\Objects\DoorsAndKeys\Key.cs" Line="16" Column="3" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>

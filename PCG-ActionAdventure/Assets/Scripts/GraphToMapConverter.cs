@@ -17,6 +17,7 @@ public class GraphToMapConverter : MonoBehaviour {
 	int nodeArrayYsize = 4;
 	public List<Vector3> roomCenterCoords = new List<Vector3>();
 	public List<Vector3> trapLocations = new List<Vector3> ();
+	public List<KeyValuePair<Vector3, token>> keyLocations = new List<KeyValuePair<Vector3, token>> ();
 	public List<KeyValuePair<Vector3[], token>> DoorLocations = new List<KeyValuePair<Vector3[], token>> (); //needs token for key spawning
 
 	List<Room> dramaticViewRooms = new List<Room> ();
@@ -86,11 +87,21 @@ public class GraphToMapConverter : MonoBehaviour {
 			currRoom.node = nodeArray[n];
 			roomsList.Add (currRoom);					//add to list of rooms
 
-			//find room centers
+			//find room center
+			Vector3 roomCenter = Vector3.zero;
 			if (currRoom.tiles.Count > 1){
-				roomCenterCoords.Add(CoordToWorldPoint (currRoom.tiles [currRoom.tiles.Count / 2]));
-			}else{
-				roomCenterCoords.Add(Vector3.zero); //add 0,0,0 vector for the empty rooms
+				roomCenter = CoordToWorldPoint (currRoom.tiles [currRoom.tiles.Count / 2]); //make room center the center of the room
+			} //else it will add zero point
+			roomCenterCoords.Add(roomCenter); 
+
+			//deal with node features
+			foreach(token t in nodeArray[n].features){
+				// keys //
+				if (t.type == "key"){
+					roomCenter.y = 0; //make sure key is on ground
+					keyLocations.Add (new KeyValuePair<Vector3, token> (roomCenter, t));
+				}
+
 			}
 
 		}
@@ -163,7 +174,6 @@ public class GraphToMapConverter : MonoBehaviour {
 
 			}
 		}
-	
 
 		return Map;
 

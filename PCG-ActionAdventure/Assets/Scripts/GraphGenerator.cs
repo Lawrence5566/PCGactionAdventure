@@ -375,6 +375,8 @@ public class GraphGenerator : MonoBehaviour {
 
 		List<List<node>> loops = findLoopsInGraph (startNode, null, new List<node> (), new List<node> (), activeNodes, new List<List<node>> ());
 
+		//loops.Distinct().ToList (); //remove duplicates (can sometimes get them)
+
         foreach (List<node> loop in loops) {
         
             List<KeyValuePair<connection, node>> loopRouteA = new List<KeyValuePair<connection, node>>();
@@ -576,7 +578,7 @@ public class GraphGenerator : MonoBehaviour {
 		node endNode = shortRoute [shortRoute.Count - 1].Value; 
 		bool foundOutwardConnections = false;
 
-		token keyToken = new token("key", keyCircle); //add key tocken to each lock
+		token keyToken = new token("key", keyCircle); //add key token to each lock
 		foreach (KeyValuePair<connection, node> k in endNode.connectionToNodes) {
 			if (!shortRoute.Contains (k) && !longRoute.Contains(k)){  //if connection not in shortRoute or longRoute (therefore not in this loop)
 				k.Key.AddFeatureToConnection(new token("lock", lockCircle, keyToken));//add lock
@@ -594,8 +596,9 @@ public class GraphGenerator : MonoBehaviour {
 		}
 
 		//place key at the first node of long route, and close long route off in that direction (so player encounters lock before seeing key)
-		longRoute[1].Value.AddFeature(new token("key", keyCircle)); //add key to the first node (excluding start node)
-		longRoute[1].Key.ChangeType(ConType.blocked, connectionBlockedSpr);	//block connection to it
+		longRoute[1].Value.AddFeature(keyToken); //add key to the first node (excluding start node)
+		//longRoute[1].Key.ChangeType(ConType.blocked, connectionBlockedSpr);	//block connection to it
+		DisconnectNodes(longRoute[0].Value, longRoute[1].Value);//for now, remove the connection instead of blocking it NEEDS CHANGING?
 	}
 
 }
@@ -609,7 +612,7 @@ public class node{
 	//public connection[] connections = new connection[4]; //array of 4 connections: left, top, right, bot - might not be needed
 	public GameObject obj;
 	public List<node> connectedNodes = new List<node>();
-	private List<token> features = new List<token> ();
+	public List<token> features = new List<token> ();
 
 	public node(){
 		name = "null node";
@@ -650,7 +653,6 @@ public class node{
 			ren.sprite = features[i].sprite;
 			ren.sortingOrder = 2;  //set order in layer infront of parent
 		}
-		features.Add (newToken);
 	}
 
 }
