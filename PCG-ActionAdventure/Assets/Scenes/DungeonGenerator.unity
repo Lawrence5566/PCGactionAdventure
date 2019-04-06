@@ -156,6 +156,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: db657e9b8049e0742a9ef0b4d0ee3d0e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  inv: {fileID: 374776920}
   graphToMapConverter: {fileID: 1413561895}
   graphGenerator: {fileID: 1223852754}
   meshGenerator: {fileID: 1413561897}
@@ -163,6 +164,8 @@ MonoBehaviour:
   playerObject: {fileID: 374776919}
   traps:
   - {fileID: 7984534088572421621, guid: 8eddf4842b9675740b36cf813926c1c6, type: 3}
+  doorPrefab: {fileID: 7885523352516218517, guid: 615d770379cc4b243853ffd47c77ab1f,
+    type: 3}
 --- !u!114 &160867087
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -345,6 +348,18 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 685458236}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &374776920 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 41152628214356934, guid: a589bb62d94273942adb9ac1856e8e4c,
+    type: 3}
+  m_PrefabInstance: {fileID: 685458236}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 374776919}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a7d4e7fb22318bb46937b6888df64dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &534669902
 GameObject:
   m_ObjectHideFlags: 0

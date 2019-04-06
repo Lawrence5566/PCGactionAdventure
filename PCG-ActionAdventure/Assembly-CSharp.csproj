@@ -57,6 +57,7 @@
      <Compile Include="Assets\Managers\EnemyManager.cs" />
      <Compile Include="Assets\Managers\StaticStrings.cs" />
      <Compile Include="Assets\Managers\WeaponManager.cs" />
+     <Compile Include="Assets\Objects\DoorsAndKeys\Door.cs" />
      <Compile Include="Assets\Objects\DungeonTraps\TrapActivator.cs" />
      <Compile Include="Assets\Player\Scripts\ActionManager.cs" />
      <Compile Include="Assets\Player\Scripts\AnimatorHook.cs" />

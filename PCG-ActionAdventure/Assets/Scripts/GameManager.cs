@@ -12,6 +12,7 @@ public class GameManager : MonoBehaviour
 	public GameObject playerObject;
 
 	public GameObject[] traps; 
+	public GameObject doorPrefab;
 
     // Start is called before the first frame update
     void Start()
@@ -20,6 +21,7 @@ public class GameManager : MonoBehaviour
 		PlacePlayer();
 		mobSpawner.createStack(3,3,0); //create a stack of 3 points value, 3 monster tasks, no boss (just for testing for now) 
 		PlaceTraps(); //place traps
+		PlaceDoors(); //place doors
     }
 
     // Update is called once per frame
@@ -42,7 +44,20 @@ public class GameManager : MonoBehaviour
 		foreach (Vector3 location in trapLocations){
 			Instantiate (traps [Random.Range (0, traps.Length - 1)], location, Quaternion.identity); //create random trap in trap location
 		}
-
-
 	}
+
+	public void PlaceDoors(){
+		List<KeyValuePair<Vector3[], token>> DoorLocations = graphToMapConverter.DoorLocations;
+
+		foreach (KeyValuePair<Vector3[], token> k in DoorLocations){
+			GameObject door = Instantiate (doorPrefab, k.Key[0], Quaternion.identity); //spawn door
+
+			door.transform.LookAt(k.Key[1]); //rotate door to face entrance
+			//remove x and z rotations
+			door.transform.eulerAngles = new Vector3(0, door.transform.eulerAngles.y, 0);
+
+			door.GetComponent<Door>().keyToken = DoorLocations [0].Value; //set key token for detecting which key opens which door
+		}
+	}
+
 }

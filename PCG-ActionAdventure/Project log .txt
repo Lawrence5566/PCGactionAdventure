@@ -1,15 +1,16 @@
+
 to do:
 
--make sure traps dont activate unless player gets close to them (will need to activate bool on animator)
--make sure traps hurt player in trap activator script (just need to apply damagge using oncollission enter extra parameters (passes in other collided object i belive))? (think this is already done)
+-lock and key cycles
+	-spawn keys in position, and use lock token link to identify the door its corresponding with
+		-spawn keys with keyToken
+		-make sure when player picks up key, they get itss 'key token' as this is what the doors use to open
 
--fix dramatric cycle - remove node connections/routes in dramatic cycles way or next to it + make sure dramatic cycles doesnt count as a route
+-create enenmy spawn points
 
 -create collapssing bridge or falling floor - make all passage ways bridges? (make passage ways bigger and just add a bridge, and make seperate floors for each room)
 
--find a way to make fissures in the ground with the 2 int
 -spawn collapsing bridge where required
--spawn traps
 -spawn enemies
 -spawn player
 -spawn blocked route

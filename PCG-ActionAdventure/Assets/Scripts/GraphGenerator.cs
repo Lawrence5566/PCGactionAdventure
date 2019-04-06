@@ -217,8 +217,9 @@ public class GraphGenerator : MonoBehaviour {
 		}
 
 		//get old connection if there is one, to destroy it
-		connection oldCon = a.connectionToNodes.Find (x => x.Value == b).Key; 	//find connection that connects to B
-		if (oldCon != null) Destroy(oldCon.obj);
+		KeyValuePair<connection,node> oldCon = a.connectionToNodes.Find (x => x.Value == b); 	//find connection that connects to B
+		if (oldCon.Key != null) Destroy(oldCon.Key.obj);
+		a.connectionToNodes.Remove (oldCon);
 
 		//create new one
 		connection newCon = new connection(new Vector3(relPoint.x/2, relPoint.y/2, 0f) + a.obj.transform.position, sprite, angle);
@@ -226,7 +227,7 @@ public class GraphGenerator : MonoBehaviour {
 		//add connection to list
 		listOfConnections.Add (newCon);
 
-		//add to connectionsToNodes
+		//add to connectionsToNodes, if it doesn't already have one?
 		KeyValuePair<connection, node> newConnectionToNode = new KeyValuePair<connection, node> (newCon, b);
 		a.connectionToNodes.Add(newConnectionToNode);
 
@@ -415,25 +416,29 @@ public class GraphGenerator : MonoBehaviour {
             
             if (ACount > 3 && BCount > 3){ //both routes are long
 				Debug.Log("Long a, Long b");
-                TwoAlternativePaths(loopRouteA, loopRouteB); //alternative paths rule
+                //TwoAlternativePaths(loopRouteA, loopRouteB); //alternative paths rule
             }
             else if (ACount > 3 && BCount <= 3) { //A is long, B is short
 				Debug.Log("Long a, Short b");
                 //HiddenShortcut(loopRouteA, loopRouteB); //add hidden shortcut to short route
 				//DramaticCycle(loopRouteB);
 				//DangerousRoute (loopRouteB, loopRouteA);
-				TwoAlternativePaths(loopRouteA, loopRouteB); //only for testing trap placement
+				//TwoAlternativePaths(loopRouteA, loopRouteB); //only for testing trap placement
+				LockAndKey(loopRouteB,loopRouteA); //for testing
 
             }
             else if (ACount <= 3 && BCount > 3){ //A is short, B is long
 				Debug.Log("Short a, Long b");
+				//DramaticCycle(loopRouteA); //just for testing
 				//UnknownReturn(loopRouteA,loopRouteB);
-				//LockAndKey(loopRouteA,loopRouteB);
-				TwoAlternativePaths(loopRouteA, loopRouteB); //only for testing trap placement
+				LockAndKey(loopRouteA,loopRouteB);
+				//TwoAlternativePaths(loopRouteA, loopRouteB); //only for testing trap placement
             }
             else{ //both are short, but still pass the shorter one into the shorter postion?
 				Debug.Log("Short a, Short b");
-				TwoAlternativePaths(loopRouteA, loopRouteB); //only for testing trap placement
+				//DramaticCycle(loopRouteB); //just fro testing
+				LockAndKey(loopRouteA,loopRouteB); //for testing
+				//TwoAlternativePaths(loopRouteA, loopRouteB); //only for testing trap placement
             }
 
         }
@@ -499,16 +504,7 @@ public class GraphGenerator : MonoBehaviour {
 		Debug.Log("run Alternate Paths rule");
 
 		DangerousRoute (routeA, routeB); //add monster to routeA (mirrors dangerous route)
-		/*node uniqueNode = getRandomUniqueNode (routeA, routeB);
-		if (uniqueNode.name == "null node") { // if no nodes unique, add to connection instead
-			//place obstacle on one route(monster)
-			getRandomUniqueConnection(routeA,routeB).AddFeatureToConnection (new token ("monster", monsterCircle)); 
-		} else {								//node is unique, so add monster
-			//place monster on a nodes
-			uniqueNode.AddFeature(new token("monster", monsterCircle)); //add a obstacle
-		}*/
-			
-		getRandomUniqueConnection(routeB, routeA).AddFeatureToConnection(new token("trap", trapCircle)); 				//add a obstacle on a connection (trap)
+		getRandomUniqueConnection(routeB, routeA).AddFeatureToConnection(new token("trap", trapCircle)); 	//add a obstacle on a connection (trap)
 	}
 
 	void HiddenShortcut(List<KeyValuePair<connection, node>> longRoute, List<KeyValuePair<connection, node>> shortRoute){
@@ -518,6 +514,7 @@ public class GraphGenerator : MonoBehaviour {
 	}
 
 	void DramaticCycle(List<KeyValuePair<connection, node>> shortRoute){
+		//only ran on short routes
 		Debug.Log("dramatic cycle");
 		//Random.Range (0, routeAunique.Count)].Key
 		dramaticCycleNodes[0] = shortRoute[0].Value; 					//start of dramatic view
@@ -526,18 +523,28 @@ public class GraphGenerator : MonoBehaviour {
 		//add dramatic cycle connection
 		addConnection (dramaticCycleNodes [0], dramaticCycleNodes [1], connectionDramatic);
 
-		//foreach node on shortRoute
-		//remove 
+		//do this foreach node on shortRoute?
+		//remove connection to first node on short route
+		if (shortRoute.Count > 1){ //should always be but just in case
+			DisconnectNodes(shortRoute[0].Value, shortRoute[1].Value);
+		}
+	}
 
-		//remove connection to nodes on short path
-		//find some way to remove the connections in connectedNodes also
-		//foreach node in nodearray remove connections to this node? etc
-		/*
-		for(int i = 0; i < shortRoute.Count; i++){ //skip first connection
-			Debug.Log("remove: " + shortRoute[i].Value.name);
-			Destroy (shortRoute [i].Key.obj);
-
-		}*/
+	void DisconnectNodes(node a, node b){
+		
+		int index = (a.connectionToNodes.FindIndex (x => x.Value == b)); //check if A contains B in connectionToNodes
+		if (index != -1) {	
+			Destroy (a.connectionToNodes [index].Key.obj); 	//destroy connection object
+			a.connectionToNodes.RemoveAt (index);			//destroy connectionTo
+		}
+		a.connectedNodes.Remove (b); //remove from connections if you find
+	
+		int index2 = (b.connectionToNodes.FindIndex (x => x.Value == a)); 
+		if (index2 != -1) {	
+			Destroy (b.connectionToNodes [index2].Key.obj); 	
+			b.connectionToNodes.RemoveAt (index2);			
+		}
+		b.connectedNodes.Remove (a); 
 	}
 
 	void DangerousRoute(List<KeyValuePair<connection, node>> shortRoute,List<KeyValuePair<connection, node>> longRoute){
@@ -568,21 +575,26 @@ public class GraphGenerator : MonoBehaviour {
 
 		node endNode = shortRoute [shortRoute.Count - 1].Value; 
 		bool foundOutwardConnections = false;
+
+		token keyToken = new token("key", keyCircle); //add key tocken to each lock
 		foreach (KeyValuePair<connection, node> k in endNode.connectionToNodes) {
 			if (!shortRoute.Contains (k) && !longRoute.Contains(k)){  //if connection not in shortRoute or longRoute (therefore not in this loop)
-				k.Key.AddFeatureToConnection(new token("lock", lockCircle));//add lock
+				k.Key.AddFeatureToConnection(new token("lock", lockCircle, keyToken));//add lock
 				foundOutwardConnections = true;
+
+				Debug.Log ("add lock to connection to " + k.Value.obj.name);
 			}
 		}
 
 		//if key on goal node, make the goal only achivable when key is collected (eg if its a monster, keep the monster in stone till key is found)
 		if (!foundOutwardConnections) { //if no connections were outside of routes, then the goal node of loop is the actually goal node!
-			goalNode.AddFeature(new token("lock", lockCircle));
+			goalNode.AddFeature(new token("lock", lockCircle, keyToken));//add lock
+
+			//longRoute[1].Key.AddFeatureToConnection(new token("lock", lockCircle, keyToken));//just for testing cus we need to see doors
 		}
-			
 
 		//place key at the first node of long route, and close long route off in that direction (so player encounters lock before seeing key)
-		longRoute[1].Value.AddFeature(new token("key", keyCircle)); //add key to the first node (exclusing start node)
+		longRoute[1].Value.AddFeature(new token("key", keyCircle)); //add key to the first node (excluding start node)
 		longRoute[1].Key.ChangeType(ConType.blocked, connectionBlockedSpr);	//block connection to it
 	}
 
@@ -647,10 +659,16 @@ public class token{
 	public string type;
 	public Sprite sprite;
 	public GameObject obj;
+	public token keyLink;
 
 	public token(string t, Sprite s){
 		type = t;
 		sprite = s;
+	}
+	public token(string t, Sprite s, token key){ //overload for connecting a key to this token
+		type = t;
+		sprite = s;
+		keyLink = key;
 	}
 }
 
@@ -682,7 +700,7 @@ public class connection{
 		SpriteRenderer ren = newToken.obj.AddComponent<SpriteRenderer>();	
 		ren.sprite = newToken.sprite;
 		ren.sortingOrder = 2;  							//set order in layer infront of parent
-		features.Add (newToken); 				//add new node to list of connection features
+		features.Add (newToken); 				//add new token to list of connection features
 	}
 
 	public void ChangeType(ConType t, Sprite spr){

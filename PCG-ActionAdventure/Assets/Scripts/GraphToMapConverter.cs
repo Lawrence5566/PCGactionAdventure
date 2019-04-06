@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using System.Linq;
 
 //converts node graph to map
 public class GraphToMapConverter : MonoBehaviour {
@@ -16,12 +17,13 @@ public class GraphToMapConverter : MonoBehaviour {
 	int nodeArrayYsize = 4;
 	public List<Vector3> roomCenterCoords = new List<Vector3>();
 	public List<Vector3> trapLocations = new List<Vector3> ();
+	public List<KeyValuePair<Vector3[], token>> DoorLocations = new List<KeyValuePair<Vector3[], token>> (); //needs token for key spawning
 
 	List<Room> dramaticViewRooms = new List<Room> ();
 
 	List<Room> roList =  new List<Room>(); 						//for gizmo testing
 
-	public int[,] CreateMap(node[] nodeArray, node[] dramaticCycleNodes, List<connection> listOfFeaturedConnections ){  			//takes node array, converts to rooms and combines rooms into one map
+	public int[,] CreateMap(node[] nodeArray, node[] dramaticCycleNodes, List<connection> listOfFeaturedConnections ){  		//takes node array, converts to rooms and combines rooms into one map
 
 		List<Room> roomsList = new List<Room> (); //needs to be at 12 
 		RoomGenerator roomGenerator = new RoomGenerator ();
@@ -105,10 +107,13 @@ public class GraphToMapConverter : MonoBehaviour {
 			CreateDramaticView (dramaticViewRooms);
 		}
 			
+		//listOfFeaturedConnections.Distinct ().ToList (); //(remove duplicates) useles?
+
 		//deal with features on connections
 		foreach (connection c in listOfFeaturedConnections){ //foreach connection
+			
 			foreach(token t in c.features){ //foreach token (feature)
-
+				
 				// traps //
 				if (t.type == "trap"){ 
 					//List<node> nodeList = new List<node>();
@@ -127,6 +132,30 @@ public class GraphToMapConverter : MonoBehaviour {
 							Vector3 midpoint = Vector3.Lerp (CoordToWorldPoint (bestTileA), CoordToWorldPoint (bestTileB), 0.5f);
 							midpoint.y = 0.0f; //make sure trap is on the ground
 							trapLocations.Add(midpoint);
+						}
+					}
+				}
+
+				// doors //
+				if (t.type == "lock"){
+					foreach (node n in nodeArray) {
+						KeyValuePair<connection, node> k = n.connectionToNodes.Find (x => x.Key == c); //find if this node has this connection
+						if (k.Key == c){ // if node found
+							int node1Index = Array.IndexOf(nodeArray, n);
+							int node2Index = Array.IndexOf(nodeArray, k.Value);
+
+							//find the closest tiles between those two nodes using findClostestTiles
+							Coord bestTileA = new Coord ();
+							Coord bestTileB = new Coord ();
+							FindClosestTiles(roomsList[node1Index], roomsList[node2Index], out bestTileA, out bestTileB);
+
+							Vector3 DoorPos = CoordToWorldPoint (bestTileA); //find entrance on first room
+							Vector3 rotPos = CoordToWorldPoint (bestTileB); //find rotation direction
+
+							DoorPos.y = 0.0f; //make sure door is on the ground
+							DoorLocations.Add(new KeyValuePair<Vector3[], token>(new Vector3[2]{DoorPos, rotPos}, t.keyLink));
+
+							break;
 						}
 					}
 				}

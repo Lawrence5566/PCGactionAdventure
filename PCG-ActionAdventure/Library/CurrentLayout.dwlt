@@ -21,7 +21,7 @@ MonoBehaviour:
   m_ShowMode: 4
   m_Title: 
   m_RootView: {fileID: 2}
-  m_MinSize: {x: 950, y: 548}
+  m_MinSize: {x: 950, y: 300}
   m_MaxSize: {x: 10000, y: 10000}
 --- !u!114 &2
 MonoBehaviour:
@@ -115,7 +115,7 @@ MonoBehaviour:
   m_MinSize: {x: 709, y: 498}
   m_MaxSize: {x: 18008, y: 14048}
   vertical: 0
-  controlID: 98
+  controlID: 11
 --- !u!114 &6
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -140,7 +140,7 @@ MonoBehaviour:
   m_MinSize: {x: 232, y: 498}
   m_MaxSize: {x: 10002, y: 14048}
   vertical: 1
-  controlID: 13
+  controlID: 124
 --- !u!114 &7
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -217,7 +217,7 @@ MonoBehaviour:
   m_MinSize: {x: 200, y: 324}
   m_MaxSize: {x: 4004, y: 8024}
   vertical: 1
-  controlID: 99
+  controlID: 12
 --- !u!114 &10
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -392,7 +392,7 @@ MonoBehaviour:
   m_PersistentViewDataDictionary: {fileID: 0}
   m_LockTracker:
     m_IsLocked: 0
-  m_LastSelectedObjectID: 26716
+  m_LastSelectedObjectID: 4048
 --- !u!114 &16
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -502,9 +502,9 @@ MonoBehaviour:
   m_SceneHierarchy:
     m_TreeViewState:
       scrollPos: {x: 0, y: 0}
-      m_SelectedIDs: 7c680000
-      m_LastClickedID: 26748
-      m_ExpandedIDs: 485bffffa4ccffff12d3ffff40d3ffffaed3ffff26d5ffff32d5ffff38d5ffff2adbffff38dbffff34f8ffff8ef8ffffd6fbffff5c6800008c680000
+      m_SelectedIDs: a093feff
+      m_LastClickedID: 0
+      m_ExpandedIDs: a893feff1496feffe499feff10bafeffd2c3feff26cdfefff886ffff5491ffff6492ffffd69effff16bbffffe2c3ffff0cc4ffff16c5ffff2ec5ffff3ac5ffffd6fbffff18100000
       m_RenameOverlay:
         m_UserAcceptedRename: 0
         m_Name: 
@@ -566,20 +566,20 @@ MonoBehaviour:
     m_ShowAllHits: 0
     m_SearchArea: 1
     m_Folders:
-    - Assets/Objects/DungeonTraps
+    - Assets/Objects/DoorsAndKeys/Doors
   m_ViewMode: 1
   m_StartGridSize: 16
   m_LastFolders:
-  - Assets/Objects/DungeonTraps
+  - Assets/Objects/DoorsAndKeys/Doors
   m_LastFoldersGridSize: 16
   m_LastProjectPath: C:\Users\lawre\Documents\GitHub\PCGactionAdventure\PCG-ActionAdventure
   m_LockTracker:
     m_IsLocked: 0
   m_FolderTreeState:
-    scrollPos: {x: 0, y: 83}
-    m_SelectedIDs: 580a0000
-    m_LastClickedID: 2648
-    m_ExpandedIDs: 00000000be090000580a0000380b0000640b0000580c00007c0c0000a40c0000e00c0000e40c0000460d0000820d0000ec0e0000740f0000760f00001a3400001c3400001e34000020340000223400002434000026340000283400002a3400002c3400002e340000
+    scrollPos: {x: 0, y: 31}
+    m_SelectedIDs: ee0c0000
+    m_LastClickedID: 3310
+    m_ExpandedIDs: 00000000c20900005c0a0000620a00003c0b00006a0b00005e0c0000820c0000aa0c0000e60c0000ea0c00004c0d0000880d0000f20e00007a0f00007c0f0000ca320000cc320000ce320000d0320000d2320000d4320000d6320000d8320000da320000dc320000de320000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -607,7 +607,7 @@ MonoBehaviour:
     scrollPos: {x: 0, y: 0}
     m_SelectedIDs: 
     m_LastClickedID: 0
-    m_ExpandedIDs: 00000000be090000580a0000380b0000640b0000580c00007c0c0000a40c0000e00c0000e40c0000460d0000820d0000ec0e0000740f0000760f00001a3400001c3400001e34000020340000223400002434000026340000283400002a3400002c3400002e340000
+    m_ExpandedIDs: 00000000c20900005c0a00003c0b00006a0b00005e0c0000820c0000aa0c0000e60c0000ea0c00004c0d0000880d0000f20e00007a0f00007c0f0000ca320000cc320000ce320000d0320000d2320000d4320000d6320000d8320000da320000dc320000de320000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -638,18 +638,18 @@ MonoBehaviour:
     m_ExpandedInstanceIDs: dc040000c21c00008a1d0000021e0000b21e0000f8290000f22b00005a270000a22e00001a2f00005a2e0000ea27000072280000a42a0000e82d000048310000422a00000000000064350000960b000074310000763b0000920c0000620b00001c0c0000840c00001e2e0000f62d0000222e0000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
-      m_Name: 
-      m_OriginalName: 
+      m_Name: DoorWithlockWithAnim
+      m_OriginalName: DoorWithlockWithAnim
       m_EditFieldRect:
         serializedVersion: 2
         x: 0
         y: 0
         width: 0
         height: 0
-      m_UserData: 0
+      m_UserData: 2780
       m_IsWaitingForDelay: 0
       m_IsRenaming: 0
-      m_OriginalEventType: 11
+      m_OriginalEventType: 0
       m_IsRenamingFilename: 1
       m_ClientGUIView: {fileID: 8}
     m_CreateAssetUtility:
@@ -693,9 +693,9 @@ MonoBehaviour:
   m_isRotationLocked: 0
   m_AudioPlay: 0
   m_Position:
-    m_Target: {x: 37.54426, y: -19.286186, z: 10.770088}
+    m_Target: {x: -4.6477737, y: 6.746685, z: 15.069403}
     speed: 2
-    m_Value: {x: 37.54426, y: -19.286186, z: 10.770088}
+    m_Value: {x: -4.6477737, y: 6.746685, z: 15.069403}
   m_RenderMode: 0
   m_CameraMode:
     drawMode: 0
@@ -723,13 +723,13 @@ MonoBehaviour:
       speed: 2
       m_Value: 0
   m_Rotation:
-    m_Target: {x: -0.32985744, y: -0.17115943, z: 0.06094002, w: -0.92638266}
+    m_Target: {x: 0.2659343, y: 0.4170719, z: -0.12904492, w: 0.8594635}
     speed: 2
-    m_Value: {x: -0.32985744, y: -0.17115943, z: 0.06094002, w: -0.92638266}
+    m_Value: {x: 0.2659343, y: 0.4170719, z: -0.12904492, w: 0.8594635}
   m_Size:
-    m_Target: 178.16162
+    m_Target: 70.68306
     speed: 2
-    m_Value: 178.16162
+    m_Value: 70.68306
   m_Ortho:
     m_Target: 0
     speed: 2
@@ -1035,10 +1035,10 @@ MonoBehaviour:
       e32: 0
       e33: 1
   m_PreviewAnimator: {fileID: 0}
-  m_AnimatorController: {fileID: 9100000, guid: 385237eb955bdce43863b311f080aed5,
+  m_AnimatorController: {fileID: 9100000, guid: 4cdaaadaffeeff843a266668ba848e37,
     type: 2}
   m_BreadCrumbs:
-  - m_Target: {fileID: 1107725525427225708, guid: 385237eb955bdce43863b311f080aed5,
+  - m_Target: {fileID: 1107781451693620042, guid: 4cdaaadaffeeff843a266668ba848e37,
       type: 2}
     m_ScrollPosition: {x: 0, y: 0}
   stateMachineGraph: {fileID: 0}
@@ -1049,9 +1049,9 @@ MonoBehaviour:
   m_MiniTool: 0
   m_LockTracker:
     m_IsLocked: 0
-  m_CurrentEditor: 0
+  m_CurrentEditor: 1
   m_LayerEditor:
-    m_SelectedLayerIndex: 5
+    m_SelectedLayerIndex: 0
 --- !u!114 &22
 MonoBehaviour:
   m_ObjectHideFlags: 52
