@@ -99,8 +99,6 @@ public class GameManager : MonoBehaviour
 			chest.GetComponent<Chest>().keyToken = goal.Value.keyLink;
 		}
 
-		//make version for enemy?
-		//if (goal.)
-
 	}
+
 }

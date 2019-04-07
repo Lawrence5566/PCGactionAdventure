@@ -6,6 +6,9 @@ public class EnemyStates : MonoBehaviour {
 
 	public float health = 100; //make health scale size of enemy?
 
+	public float startHP;
+	public healthbarController healthBar;
+
 	public float str = 1; //these need to have an impact
 	public float def = 1;
 	public float speed = 1;
@@ -28,6 +31,7 @@ public class EnemyStates : MonoBehaviour {
 
 	void Start(){
 		health += 100; //make health scale size of enemy?
+		startHP += 100;
 		//str = 1;
 		//def = 1;
 		//speed = 1;
@@ -108,6 +112,8 @@ public class EnemyStates : MonoBehaviour {
 		anim.Play ("damage_1");
 		anim.applyRootMotion = true;
 		anim.SetBool (StaticStrings.canMove, false);
+
+		healthBar.SetSize (health / startHP);
 	}
 
 	/*

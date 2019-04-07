@@ -44,8 +44,6 @@ public class MobSpawner : MonoBehaviour {
 
 		taskLocations = locations;
 
-		Debug.Log("locations length:" + taskLocations.Count);
-
 		List<int> enemyValueArray = new List<int>(); 	//each value array is points assigned for each task (first task player encounters to last)
 		for (int i = 1; i <= taskLocations.Count; i++) {
 			enemyValueArray.Add(levelPointsValueModifier * i); 			//each task gets 'levelPointsValueModifier' points multiplied by the stage in the game (early enemies are easyer)
@@ -57,9 +55,11 @@ public class MobSpawner : MonoBehaviour {
 			}
 		}
 
-		foreach (int i in enemyValueArray) {
+		/*
+		foreach (int i in enemyValueArray) { //test output
 			Debug.Log (i);
 		}
+		*/
 
 		//now generate mobs for each task
 		for (int i = 0; i < enemyValueArray.Count; i++){ 
@@ -132,6 +132,7 @@ public class MobSpawner : MonoBehaviour {
 					break;
 				case "hp":
 					enemiesInTask [i].health += o.value;
+					enemiesInTask [i].startHP += o.value;
 					break;
 				default:
 					break;
