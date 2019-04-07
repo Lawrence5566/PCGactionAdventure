@@ -1,20 +1,16 @@
 
 to do:
 
+-create different levels of enemy (lvl1,2,3,4,5)
+-create enemy AI
+
 -create enenmy spawn points
 
 -create collapssing bridge or falling floor - make all passage ways bridges? (make passage ways bigger and just add a bridge, and make seperate floors for each room)
 
 -spawn collapsing bridge where required
--spawn enemies
--spawn player
 -spawn blocked route
 
--open up blocked route once player finds key, also trigger boss to 'unstone' if lock is in goal etc
-
--add more complex patterns to the graph
-
--make dangerous route create a random insta kill zone or something similar - fissure, poison lake, fire pit etc. But not a trap! (like a falling rock - since traps are different)???
 
 does it do this?:
 -for lock and key cycle close off the longer route and make player walk all the way round past the door to find the key (which will be placed inside the last cycle node)

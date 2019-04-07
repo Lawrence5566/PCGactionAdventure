@@ -15,9 +15,11 @@ public class GraphToMapConverter : MonoBehaviour {
 	int minRoomSize = 30;
 	int nodeArrayXsize = 3;
 	int nodeArrayYsize = 4;
+	public KeyValuePair<Vector3, token> goalLocationAndType;
 	public List<Vector3> roomCenterCoords = new List<Vector3>();
 	public List<Vector3> trapLocations = new List<Vector3> ();
 	public List<Vector3> monsterLocations = new List<Vector3> ();
+	public List<KeyValuePair<Vector3, Vector3>> hiddenLocations = new List<KeyValuePair<Vector3, Vector3>>();
 	public List<KeyValuePair<Vector3, token>> keyLocations = new List<KeyValuePair<Vector3, token>> ();
 	public List<KeyValuePair<Vector3[], token>> DoorLocations = new List<KeyValuePair<Vector3[], token>> (); //needs token for key spawning
 
@@ -105,7 +107,14 @@ public class GraphToMapConverter : MonoBehaviour {
 				// monsters //
 				if (t.type == "monster")
 					monsterLocations.Add (roomCenter);
+
+				// locks on node - are locks to the chest (only on goal node)?
+				if (t.type == "lock")
+					goalLocationAndType = new KeyValuePair<Vector3, token> (roomCenter, t);
 				
+				// if boss feature
+				if (t.type == "boss")	
+					goalLocationAndType = new KeyValuePair<Vector3, token> (roomCenter, t);
 			}
 
 		}
@@ -121,17 +130,33 @@ public class GraphToMapConverter : MonoBehaviour {
 		if (dramaticViewRooms.Count > 1) { //only if we have two rooms, connect them dramatically
 			CreateDramaticView (dramaticViewRooms);
 		}
-			
-		//listOfFeaturedConnections.Distinct ().ToList (); //(remove duplicates) useles?
 
 		//deal with features on connections
 		foreach (connection c in listOfFeaturedConnections){ //foreach connection
 			
 			foreach(token t in c.features){ //foreach token (feature)
-				
+
+				// hidden path
+				if (t.type == "hidden"){
+					foreach (node n in nodeArray){
+						KeyValuePair<connection, node> k = n.connectionToNodes.Find (x => x.Key == c); //find if this node has this connection
+						if (k.Key == c){ // if node found
+							int node1Index = Array.IndexOf(nodeArray, n);
+							int node2Index = Array.IndexOf(nodeArray, k.Value);
+
+							//find the closest tiles between those two nodes using findClostestTiles
+							Coord bestTileA = new Coord ();
+							Coord bestTileB = new Coord ();
+							FindClosestTiles(roomsList[node1Index], roomsList[node2Index], out bestTileA, out bestTileB);
+
+							hiddenLocations.Add (new KeyValuePair<Vector3,Vector3> (CoordToWorldPoint (bestTileA), roomCenterCoords [node2Index]));
+
+						}
+					}
+				}
+
 				// traps or monsters //
 				if (t.type == "trap" || t.type == "monster"){ 
-					//List<node> nodeList = new List<node>();
 					foreach (node n in nodeArray){
 						KeyValuePair<connection, node> k = n.connectionToNodes.Find (x => x.Key == c); //find if this node has this connection
 						if (k.Key == c){ // if node found

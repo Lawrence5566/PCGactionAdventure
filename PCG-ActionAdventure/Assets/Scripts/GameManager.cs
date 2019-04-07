@@ -14,24 +14,33 @@ public class GameManager : MonoBehaviour
 	public GameObject[] traps; 
 	public GameObject doorPrefab;
 	public GameObject keyPrefab;
+	public GameObject teleporterPrefab;
+	public GameObject chestPrefab;
 
     // Start is called before the first frame update
     void Start()
-    {
+	{
 		graphGenerator.Init (); //initialise most of the generation
 		PlacePlayer();
 		PlaceMonsters ();
 		PlaceTraps(); //place traps
 		PlaceDoors(); //place doors
 		PlaceKeys();
-
+		PlaceHiddens ();
+		PlaceGoal ();
 		//when player wins the level, reset and spawn new one with harder enemies?
     }
 
 	public void PlaceMonsters(){
 		//get all locations
 		List<Vector3> locations = graphToMapConverter.monsterLocations;
-		mobSpawner.createStack(6,locations,0); //create a stack of 3 points value, monster tasks locations, no boss (just for testing for now) 
+
+		if (graphToMapConverter.goalLocationAndType.Value.type == "boss"){ //if goal is boss
+			locations.Add(graphToMapConverter.goalLocationAndType.Key); //add boss location
+			mobSpawner.createStack(6,locations, locations.Count-1); //create a stack of 3 points value, monster tasks locations, boss at last index
+		} else{
+			mobSpawner.createStack(6,locations, -1); //create a stack of 3 points value, monster tasks locations, no boss
+		}
 
 	}
 
@@ -74,4 +83,24 @@ public class GameManager : MonoBehaviour
 		}
 	}
 
+	public void PlaceHiddens(){
+		List<KeyValuePair<Vector3, Vector3>> locations = graphToMapConverter.hiddenLocations;
+		foreach (KeyValuePair<Vector3, Vector3> k in locations) {
+			GameObject tele = Instantiate (teleporterPrefab, k.Key, Quaternion.identity);
+			tele.GetComponent<Teleporter> ().teleLocation = k.Value;
+		}
+	}
+
+	public void PlaceGoal(){
+		KeyValuePair<Vector3, token> goal = graphToMapConverter.goalLocationAndType;
+
+		if (goal.Value.type == "lock") { //if its a lock type goal, you have to get a key for a chest
+			GameObject chest = Instantiate (chestPrefab, goal.Key, Quaternion.identity); //spawn chest
+			chest.GetComponent<Chest>().keyToken = goal.Value.keyLink;
+		}
+
+		//make version for enemy?
+		//if (goal.)
+
+	}
 }

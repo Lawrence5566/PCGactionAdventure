@@ -258,7 +258,7 @@ public class GraphGenerator : MonoBehaviour {
 
 	void GoalRule(){
 		//create goal location
-		//GameObject goalNode;
+
 		do { //keep picking different spots till you get one that isnt the start node
 			goalNode = nodeArray [Random.Range (0, 11)];
 		} while (goalNode.obj.name == "StartNode");
@@ -416,12 +416,12 @@ public class GraphGenerator : MonoBehaviour {
             int ACount = loopRouteA.Count;
             int BCount = loopRouteB.Count;
             
-            if (ACount > 3 && BCount > 3){ //both routes are long
+            if (ACount > 4 && BCount > 4){ //both routes are long
 				Debug.Log("Long a, Long b");
                 //TwoAlternativePaths(loopRouteA, loopRouteB); //alternative paths rule
-				DangerousRoute (loopRouteA, loopRouteB); //for testing
+				//DangerousRoute (loopRouteA, loopRouteB); //for testing
             }
-            else if (ACount > 3 && BCount <= 3) { //A is long, B is short
+            else if (ACount > 4 && BCount <= 4) { //A is long, B is short
 				Debug.Log("Long a, Short b");
 				//int choice = Random.Range
 
@@ -433,8 +433,9 @@ public class GraphGenerator : MonoBehaviour {
 				//LockAndKey(loopRouteB,loopRouteA); //for testing
 
             }
-            else if (ACount <= 3 && BCount > 3){ //A is short, B is long
+            else if (ACount <= 4 && BCount > 4){ //A is short, B is long
 				Debug.Log("Short a, Long b");
+				//HiddenShortcut(loopRouteA, loopRouteB); //testing
 				//DramaticCycle(loopRouteA); //just for testing
 				//UnknownReturn(loopRouteA,loopRouteB);
 				//LockAndKey(loopRouteA,loopRouteB);
@@ -443,11 +444,17 @@ public class GraphGenerator : MonoBehaviour {
             }
             else{ //both are short, but still pass the shorter one into the shorter postion?
 				Debug.Log("Short a, Short b");
+				//HiddenShortcut(loopRouteA, loopRouteB); //testing
 				//DramaticCycle(loopRouteB); //just for testing
 				//LockAndKey(loopRouteA,loopRouteB); //for testing
 				//TwoAlternativePaths(loopRouteA, loopRouteB);
 				DangerousRoute (loopRouteA, loopRouteB); //for testing
             }
+
+			if (goalNode.features.Count == 0){
+				//if goal node has no features at end of cycle, create boss
+				goalNode.AddFeature(new token ("boss", monsterCircle));
+			}
 
         }
 
@@ -517,8 +524,10 @@ public class GraphGenerator : MonoBehaviour {
 
 	void HiddenShortcut(List<KeyValuePair<connection, node>> shortRoute, List<KeyValuePair<connection, node>> longRoute){
 		Debug.Log ("run Hidden Shortcut rule");
-		getRandomUniqueConnection(shortRoute,longRoute).AddFeatureToConnection(new token("hidden", hiddenCircle)); 
-	
+		//getRandomUniqueConnection(shortRoute,longRoute).AddFeatureToConnection(new token("hidden", hiddenCircle)); 
+		shortRoute[0].Value.connectedNodes.Remove(shortRoute[1].Value); //soft disconnect so path isn't spawned
+		shortRoute[1].Value.connectedNodes.Remove(shortRoute[0].Value); //soft disconnect so path isn't spawned
+		shortRoute [1].Key.AddFeatureToConnection (new token ("hidden", hiddenCircle));
 	}
 
 	void DramaticCycle(List<KeyValuePair<connection, node>> shortRoute){
@@ -533,9 +542,14 @@ public class GraphGenerator : MonoBehaviour {
 
 		//do this foreach node on shortRoute?
 		//remove connection to first node on short route
-		if (shortRoute.Count > 1){ //should always be but just in case
-			DisconnectNodes(shortRoute[0].Value, shortRoute[1].Value);
+		if (shortRoute.Count > 1) { //should always be but just in case
+			for (int i = 1; i < shortRoute.Count; i++) { //start one ahead
+				DisconnectNodes (shortRoute [i-1].Value, shortRoute [i].Value); //disconnect previous and this
+			}
 		}
+		//if (shortRoute.Count > 1){ //should always be but just in case
+		//	DisconnectNodes(shortRoute[0].Value, shortRoute[1].Value);
+		//}
 	}
 
 	void DisconnectNodes(node a, node b){

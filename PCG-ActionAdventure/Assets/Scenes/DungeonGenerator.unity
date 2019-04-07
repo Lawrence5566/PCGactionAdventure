@@ -168,6 +168,10 @@ MonoBehaviour:
   doorPrefab: {fileID: 7885523352516218517, guid: 615d770379cc4b243853ffd47c77ab1f,
     type: 3}
   keyPrefab: {fileID: 155280, guid: 41d1cac196452694fb10f2476db79e6e, type: 3}
+  teleporterPrefab: {fileID: 8489301500732843841, guid: 2d02608feab9a7e4dafa3d0c2712c3d1,
+    type: 3}
+  chestPrefab: {fileID: 1000014188511100, guid: 5dcae5adf53292945adef517afe8041e,
+    type: 3}
 --- !u!114 &160867087
 MonoBehaviour:
   m_ObjectHideFlags: 0

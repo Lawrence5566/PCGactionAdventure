@@ -44,24 +44,30 @@ public class MobSpawner : MonoBehaviour {
 
 		taskLocations = locations;
 
+		Debug.Log("locations length:" + taskLocations.Count);
+
 		List<int> enemyValueArray = new List<int>(); 	//each value array is points assigned for each task (first task player encounters to last)
 		for (int i = 1; i <= taskLocations.Count; i++) {
 			enemyValueArray.Add(levelPointsValueModifier * i); 			//each task gets 'levelPointsValueModifier' points multiplied by the stage in the game (early enemies are easyer)
 		}
 
-		if (bossNumber != 0){ //0 = no boss
+		if (bossNumber != -1){ //-1 = no boss
 			if (enemyValueArray[bossNumber] < 30){
 				enemyValueArray [bossNumber] = 30; 		//give task number with boss at least 30 points so it can spawn a boss (boss is 30 points min to spawn)
 			}
 		}
 
+		foreach (int i in enemyValueArray) {
+			Debug.Log (i);
+		}
+
 		//now generate mobs for each task
-		for (int i = 1; i <= enemyValueArray.Count; i++){ //starts at 1 so that if boss == 0 we don't spawn a boss
-			int currPointsLeft = enemyValueArray[i-1];
+		for (int i = 0; i < enemyValueArray.Count; i++){ 
+			int currPointsLeft = enemyValueArray[i];
 			List<option> currTaskStack = new List<option>();
 
 			do { //keep selecting things for the task till we run out of points
-				if (bossNumber == i){ //this level has a boss so add one first
+				if (bossNumber == i){ //this task has a boss so add one first
 					currTaskStack.Add(mobOptions[4]);										//boss is last item in mobOptions 
 					currPointsLeft = currPointsLeft - 30;
 				}
@@ -88,7 +94,7 @@ public class MobSpawner : MonoBehaviour {
 			} while(currPointsLeft > 2); //lowest item = 3
 
 			//now we are left with a set of options, that need to be translated into monsters + stat buffs and added to the game:
-			AddToStack(currTaskStack, i-1);
+			AddToStack(currTaskStack, i);
 
 			currTaskStack.Clear ();
 		}
