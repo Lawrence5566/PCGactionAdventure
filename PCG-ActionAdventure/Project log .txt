@@ -3,6 +3,7 @@ to do:
 
 -finalise routes
 -fix/test weapon colliders?
+-enemy def needs to have an effect (or just leave it out?)
 
 
 -create collapssing bridge or falling floor - make all passage ways bridges? (make passage ways bigger and just add a bridge, and make seperate floors for each room)
