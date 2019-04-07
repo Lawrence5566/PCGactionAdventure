@@ -20,17 +20,20 @@ public class GameManager : MonoBehaviour
     {
 		graphGenerator.Init (); //initialise most of the generation
 		PlacePlayer();
-		mobSpawner.createStack(3,3,0); //create a stack of 3 points value, 3 monster tasks, no boss (just for testing for now) 
+		PlaceMonsters ();
 		PlaceTraps(); //place traps
 		PlaceDoors(); //place doors
 		PlaceKeys();
+
+		//when player wins the level, reset and spawn new one with harder enemies?
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+	public void PlaceMonsters(){
+		//get all locations
+		List<Vector3> locations = graphToMapConverter.monsterLocations;
+		mobSpawner.createStack(6,locations,0); //create a stack of 3 points value, monster tasks locations, no boss (just for testing for now) 
+
+	}
 
 	public void PlacePlayer(){
 		List<Vector3> roomCenters = graphToMapConverter.roomCenterCoords;

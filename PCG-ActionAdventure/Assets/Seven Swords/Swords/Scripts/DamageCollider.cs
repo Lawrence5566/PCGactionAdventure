@@ -3,20 +3,29 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class DamageCollider : MonoBehaviour {
+	//handles weapon dealing damage, this script is on the weapon
+
+	PlayerStats stats;
+
+	void Start(){
+		stats = GetComponentInParent<PlayerStats> ();
+	}
 
 	void OnTriggerEnter(Collider other){
-		EnemyStates eStates = other.transform.GetComponentInParent<EnemyStates> (); //get enemy script of object you hit
+		if (stats != null) { //if this is a player's weapon
+			EnemyStates eStates = other.transform.GetComponentInParent<EnemyStates> (); //get enemy script of object you hit
 
-		if (eStates == null) //didnt hit a enemy
-			return;
+			if (eStates == null) //didnt hit a enemy
+				return;
 
-		//do damage
-		float dmg = 0;
-		Weapon weapon = GetComponentInParent<Weapon>();
+			//do damage
+			float dmg = stats.str * 10;
+			Weapon weapon = GetComponentInParent<Weapon> ();
 
-		if (weapon)
-			dmg = weapon.damage;
-		
-		eStates.DoDamage(dmg);
+			if (weapon) //add weapon damage
+				dmg += weapon.damage;
+			
+			eStates.DoDamage (dmg);
+		}
 	}
 }

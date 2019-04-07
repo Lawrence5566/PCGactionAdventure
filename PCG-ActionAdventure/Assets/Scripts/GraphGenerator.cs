@@ -419,28 +419,34 @@ public class GraphGenerator : MonoBehaviour {
             if (ACount > 3 && BCount > 3){ //both routes are long
 				Debug.Log("Long a, Long b");
                 //TwoAlternativePaths(loopRouteA, loopRouteB); //alternative paths rule
+				DangerousRoute (loopRouteA, loopRouteB); //for testing
             }
             else if (ACount > 3 && BCount <= 3) { //A is long, B is short
 				Debug.Log("Long a, Short b");
-                //HiddenShortcut(loopRouteA, loopRouteB); //add hidden shortcut to short route
+				//int choice = Random.Range
+
+				//HiddenShortcut(loopRouteB, loopRouteA); //add hidden shortcut to short route
 				//DramaticCycle(loopRouteB);
-				//DangerousRoute (loopRouteB, loopRouteA);
+				DangerousRoute (loopRouteB, loopRouteA);
+
 				//TwoAlternativePaths(loopRouteA, loopRouteB); //only for testing trap placement
-				LockAndKey(loopRouteB,loopRouteA); //for testing
+				//LockAndKey(loopRouteB,loopRouteA); //for testing
 
             }
             else if (ACount <= 3 && BCount > 3){ //A is short, B is long
 				Debug.Log("Short a, Long b");
 				//DramaticCycle(loopRouteA); //just for testing
 				//UnknownReturn(loopRouteA,loopRouteB);
-				LockAndKey(loopRouteA,loopRouteB);
+				//LockAndKey(loopRouteA,loopRouteB);
 				//TwoAlternativePaths(loopRouteA, loopRouteB); //only for testing trap placement
+				DangerousRoute (loopRouteA, loopRouteB); //for testing
             }
             else{ //both are short, but still pass the shorter one into the shorter postion?
 				Debug.Log("Short a, Short b");
-				//DramaticCycle(loopRouteB); //just fro testing
-				LockAndKey(loopRouteA,loopRouteB); //for testing
-				//TwoAlternativePaths(loopRouteA, loopRouteB); //only for testing trap placement
+				//DramaticCycle(loopRouteB); //just for testing
+				//LockAndKey(loopRouteA,loopRouteB); //for testing
+				//TwoAlternativePaths(loopRouteA, loopRouteB);
+				DangerousRoute (loopRouteA, loopRouteB); //for testing
             }
 
         }
@@ -509,7 +515,7 @@ public class GraphGenerator : MonoBehaviour {
 		getRandomUniqueConnection(routeB, routeA).AddFeatureToConnection(new token("trap", trapCircle)); 	//add a obstacle on a connection (trap)
 	}
 
-	void HiddenShortcut(List<KeyValuePair<connection, node>> longRoute, List<KeyValuePair<connection, node>> shortRoute){
+	void HiddenShortcut(List<KeyValuePair<connection, node>> shortRoute, List<KeyValuePair<connection, node>> longRoute){
 		Debug.Log ("run Hidden Shortcut rule");
 		getRandomUniqueConnection(shortRoute,longRoute).AddFeatureToConnection(new token("hidden", hiddenCircle)); 
 	
@@ -555,7 +561,7 @@ public class GraphGenerator : MonoBehaviour {
 
 		node uniqueNode = getRandomUniqueNode (shortRoute, longRoute);
 		if (uniqueNode.name == "null node") { // if no nodes unique, add to connection instead
-			//place obstacle on one route(monster)
+			//place monster on one route
 			getRandomUniqueConnection(shortRoute,longRoute).AddFeatureToConnection (new token ("monster", monsterCircle)); 
 		} else {
 			//node is unique, so add monster

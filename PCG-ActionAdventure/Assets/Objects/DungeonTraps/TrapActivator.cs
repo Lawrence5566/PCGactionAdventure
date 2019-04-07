@@ -9,7 +9,7 @@ public class TrapActivator : MonoBehaviour
 
 	float time = 0;
 	float timer = 0;
-	Collider thisCollider;
+	//Collider thisCollider;
 
 	PlayerStats player;
 
@@ -22,7 +22,7 @@ public class TrapActivator : MonoBehaviour
     void Start()
     {
 		player = FindObjectOfType<PlayerStats> ();
-		thisCollider = GetComponentInChildren<Collider> ();
+		//thisCollider = GetComponentInChildren<Collider> ();
 		animationComonent = GetComponentInParent<Animation> ();
 		animationComonent.Stop (); //by default don't start animation
     }
@@ -39,7 +39,10 @@ public class TrapActivator : MonoBehaviour
     }
 
 	void OnCollisionEnter(Collision collision){
-
+		if (player.gameObject == collision.gameObject) {
+			Debug.Log ("collided");
+		}
+		
 		if (player.gameObject == collision.gameObject && time >= timer) { //if hit player and its been at least 2 seconds since last damage
 			//apply damage to player
 			player.DamagePlayer (30f, false);

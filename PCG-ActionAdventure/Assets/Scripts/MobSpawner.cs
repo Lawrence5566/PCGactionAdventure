@@ -3,52 +3,49 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class MobSpawner : MonoBehaviour {
-	public GameObject DiaEnemyPrefab;
-	public Material[] DiaMaterials;
-
-	public List<GameObject> monsterStack = new List<GameObject>();
+	//public GameObject DiaEnemyPrefab;
+	//public Material[] DiaMaterials;
 
 	//int minPoints = 3; //must be changed manually
 
-	List<KeyValuePair<int, string>> mobOptions = new List<KeyValuePair<int, string>> (){
-		new KeyValuePair<int, string> (3, "lvl1mob"),
-		new KeyValuePair<int, string> (7, "lvl2mob"),
-		new KeyValuePair<int, string> (12,"lvl3mob"),
-		new KeyValuePair<int, string> (18,"lvl4mob"),
-		new KeyValuePair<int, string> (30,"lvl5mob")
+	public GameObject[] enemyPrefabs;
+
+	List<Vector3> taskLocations = new List<Vector3>();
+
+	List<option> mobOptions = new List<option> (){
+		new option ("monster","none", 3, 1),
+		new option ("monster","none", 7, 2),
+		new option ("monster","none", 12, 3),
+		new option ("monster","none", 18, 4),
+		new option ("monster","none", 30, 5)
 	};
 
-	List<KeyValuePair<int, string>> statOptions = new List<KeyValuePair<int, string>> (){
-		new KeyValuePair<int, string> (3,  "+1str"),
-		new KeyValuePair<int, string> (3,  "+1mag"),
-		new KeyValuePair<int, string> (3,  "+1def"),
-		new KeyValuePair<int, string> (3,  "+1mdef"),
-		new KeyValuePair<int, string> (3,  "+5hp"),
-		new KeyValuePair<int, string> (7,  "+2str"),
-		new KeyValuePair<int, string> (7,  "+2mag"),
-		new KeyValuePair<int, string> (7,  "+2def"),
-		new KeyValuePair<int, string> (7,  "+2mdef"),
-		new KeyValuePair<int, string> (7,  "+10hp"),
-		new KeyValuePair<int, string> (12, "+3str"),
-		new KeyValuePair<int, string> (12, "+3mag"),
-		new KeyValuePair<int, string> (12, "+3def"),
-		new KeyValuePair<int, string> (12, "+3mdef"),
-		new KeyValuePair<int, string> (12, "+14hp")
+	List<option> statOptions = new List<option> (){
+		new option("mod", "str",    3, 1),
+		new option("mod", "def",    3, 1),
+		new option("mod", "speed",  3, 1),
+		new option("mod", "hp",     3, 15),
+		new option("mod", "str", 	7, 2),
+		new option("mod", "def", 	7, 2),
+		new option("mod", "speed", 	7, 2),
+		new option("mod", "hp",		7, 30),
+		new option("mod", "str",    12, 3),
+		new option("mod", "def",    12, 3),
+		new option("mod", "speed",  12, 3),
+		new option("mod", "hp",     12, 45)
 	};
-	/*
-	void Start(){ //for testing 
-		createStack(3,3,0); //create a stack of 3 points value, 3 monster tasks, no boss 
-		
-	}*/
 		
 	//levelPointsValueModifier example:
-	//if level 1: 3, 1st task = 3, 2nd task = 6, 3rd task = 9
+	//if value modifier is 3:
+	//1st task = 3, 2nd task = 6, 3rd task = 9
 
-	public void createStack(int levelPointsValueModifier, int taskNumber, int bossNumber){
+	public void createStack(int levelPointsValueModifier, List<Vector3> locations, int bossNumber){
 		// task is a number of enemies to overcome
 
+		taskLocations = locations;
+
 		List<int> enemyValueArray = new List<int>(); 	//each value array is points assigned for each task (first task player encounters to last)
-		for (int i = 1; i <= taskNumber; i++) {
+		for (int i = 1; i <= taskLocations.Count; i++) {
 			enemyValueArray.Add(levelPointsValueModifier * i); 			//each task gets 'levelPointsValueModifier' points multiplied by the stage in the game (early enemies are easyer)
 		}
 
@@ -61,7 +58,7 @@ public class MobSpawner : MonoBehaviour {
 		//now generate mobs for each task
 		for (int i = 1; i <= enemyValueArray.Count; i++){ //starts at 1 so that if boss == 0 we don't spawn a boss
 			int currPointsLeft = enemyValueArray[i-1];
-			List<KeyValuePair<int, string>> currTaskStack = new List<KeyValuePair<int, string>>();
+			List<option> currTaskStack = new List<option>();
 
 			do { //keep selecting things for the task till we run out of points
 				if (bossNumber == i){ //this level has a boss so add one first
@@ -70,42 +67,86 @@ public class MobSpawner : MonoBehaviour {
 				}
 			
 				//create new possible options list to be filtered giving it all the current possibles
-				List<KeyValuePair<int, string>> possibleOptions = new List<KeyValuePair<int, string>>(mobOptions); //by copy, so original mobOptions not
+				List<option> possibleOptions = new List<option>(mobOptions); //by copy, so original mobOptions not altered
 
 				if (currTaskStack.Count > 0){ 	//if stack > 0 a monster has already been selected, so allow stat options
 					possibleOptions.AddRange(statOptions);
 				}								//else continue without stats
 
 				//filter options:
-				possibleOptions.RemoveAll(item => item.Key > currPointsLeft); //remove all items where key is > points left (filter out too expensive options)
+				possibleOptions.RemoveAll(item => item.pointsCost > currPointsLeft); //remove all items where pointsCost is > points left (filter out too expensive options)
 
 				//now pick choice from possible options
 				if (possibleOptions.Count > 0){  //is there any options left to pick?
-					KeyValuePair<int, string> choice = possibleOptions[Random.Range(0, possibleOptions.Count)]; //get choice string by selecting randomly from options
+					option choice = possibleOptions[Random.Range(0, possibleOptions.Count)]; //get choice string by selecting randomly from options
 					currTaskStack.Add(choice);
-					currPointsLeft = currPointsLeft - choice.Key; //subtract points from total
+					currPointsLeft = currPointsLeft - choice.pointsCost; //subtract points from total
 				} else{
-					//Debug.Log("no options - points left: " + currPointsLeft);
+					//Debug.Log("no options, points left: " + currPointsLeft);
 				}
 					
 			} while(currPointsLeft > 2); //lowest item = 3
 
 			//now we are left with a set of options, that need to be translated into monsters + stat buffs and added to the game:
-			AddToStack(currTaskStack);
+			AddToStack(currTaskStack, i-1);
 
 			currTaskStack.Clear ();
 		}
 
 	}
 
-	public void AddToStack(List<KeyValuePair<int, string>> TaskStack){
-		//add monsters to 'monsterStack'
-		Debug.Log ("Tasks in a level: ");
-		string x = "";
-		foreach (KeyValuePair<int, string> key in TaskStack) {
-			x = x + key.Key + " : " + key.Value + ", ";
+	void AddToStack(List<option> TaskStack, int locationNo){
+		//TaskStack = a set of options to spawn at a location
+		List<EnemyStates> enemiesInTask = new List<EnemyStates>();
+
+		foreach (option o in TaskStack) {
+			//for testing:
+			Debug.Log(o.type + "," + o.modType + ", " + o.value);
+
+
+			//spawn all the enemies for the task
+			if (o.type == "monster"){
+				GameObject newEnemy = Instantiate(enemyPrefabs [Random.Range (0, enemyPrefabs.Length)], taskLocations[locationNo], Quaternion.identity);
+				enemiesInTask.Add (newEnemy.GetComponent<EnemyStates> ());
+			}
 		}
-		Debug.Log (x);
+
+		foreach (option o in TaskStack) { //add modifiers to random enemies in stack (so its ditributied randomly)
+			int i = Random.RandomRange(0, enemiesInTask.Count);
+			if (o.type == "mod") {
+				switch (o.modType){
+				case "str":
+					enemiesInTask [i].str += o.value;
+					break;
+				case "def":
+					enemiesInTask [i].def += o.value;
+					break;
+				case "speed":
+					enemiesInTask [i].speed += o.value;
+					break;
+				case "hp":
+					enemiesInTask [i].health += o.value;
+					break;
+				default:
+					break;
+
+				}
+			}
+		}
+
 	}
 }
-	
+
+class option{
+	public string type; //'monster' or 'mod'
+	public string modType; // if mod - hp,str,def,speed,
+	public int pointsCost;
+	public int value; //if its a monster its level, if its a mod, its mod value
+
+	public option(string t, string mod, int p, int v){
+		type = t;
+		modType = mod;
+		pointsCost = p;
+		value = v;
+	}
+}

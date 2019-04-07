@@ -28,7 +28,7 @@ public class WeaponManager : MonoBehaviour {
 	}
 
 	void Start(){
-		GiveWeapon (temp_Enemy, temp_Type, temp_Dmg, temp_SwordType);
+		//GiveWeapon (temp_Enemy, temp_Type, temp_Dmg, temp_SwordType); //for testing
 	}
 		
 	public void GiveWeapon(EnemyStates enemy, ElementType type, int dmg, SwordType swordType){

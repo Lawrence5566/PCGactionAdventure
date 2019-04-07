@@ -17,6 +17,7 @@ public class GraphToMapConverter : MonoBehaviour {
 	int nodeArrayYsize = 4;
 	public List<Vector3> roomCenterCoords = new List<Vector3>();
 	public List<Vector3> trapLocations = new List<Vector3> ();
+	public List<Vector3> monsterLocations = new List<Vector3> ();
 	public List<KeyValuePair<Vector3, token>> keyLocations = new List<KeyValuePair<Vector3, token>> ();
 	public List<KeyValuePair<Vector3[], token>> DoorLocations = new List<KeyValuePair<Vector3[], token>> (); //needs token for key spawning
 
@@ -95,13 +96,16 @@ public class GraphToMapConverter : MonoBehaviour {
 			roomCenterCoords.Add(roomCenter); 
 
 			//deal with node features
+			roomCenter.y = 0; //make any spawned objects are on the ground
 			foreach(token t in nodeArray[n].features){
 				// keys //
-				if (t.type == "key"){
-					roomCenter.y = 0; //make sure key is on ground
+				if (t.type == "key")
 					keyLocations.Add (new KeyValuePair<Vector3, token> (roomCenter, t));
-				}
-
+				
+				// monsters //
+				if (t.type == "monster")
+					monsterLocations.Add (roomCenter);
+				
 			}
 
 		}
@@ -125,8 +129,8 @@ public class GraphToMapConverter : MonoBehaviour {
 			
 			foreach(token t in c.features){ //foreach token (feature)
 				
-				// traps //
-				if (t.type == "trap"){ 
+				// traps or monsters //
+				if (t.type == "trap" || t.type == "monster"){ 
 					//List<node> nodeList = new List<node>();
 					foreach (node n in nodeArray){
 						KeyValuePair<connection, node> k = n.connectionToNodes.Find (x => x.Key == c); //find if this node has this connection
@@ -139,10 +143,14 @@ public class GraphToMapConverter : MonoBehaviour {
 							Coord bestTileB = new Coord ();
 							FindClosestTiles(roomsList[node1Index], roomsList[node2Index], out bestTileA, out bestTileB);
 
-							//find midpoint between world points, giving center of route to 'trapLocations'
+							//find midpoint between world points, giving center of route to 'trapLocations'  or 'monsterLocations'
 							Vector3 midpoint = Vector3.Lerp (CoordToWorldPoint (bestTileA), CoordToWorldPoint (bestTileB), 0.5f);
-							midpoint.y = 0.0f; //make sure trap is on the ground
-							trapLocations.Add(midpoint);
+							midpoint.y = 0.0f; //make sure obstacle is on the ground
+
+							if (t.type == "trap")
+								trapLocations.Add(midpoint);
+							if (t.type == "monster")
+								monsterLocations.Add (midpoint);
 						}
 					}
 				}

@@ -4,7 +4,12 @@ using UnityEngine;
 
 public class EnemyStates : MonoBehaviour {
 
-	public float health;
+	public float health = 100; //make health scale size of enemy?
+
+	public float str = 1; //these need to have an impact
+	public float def = 1;
+	public float speed = 1;
+
 	public bool isInvincible; //to stop colldier doing damage more than once
 	public bool canMove;
 	public bool isDead;
@@ -22,7 +27,10 @@ public class EnemyStates : MonoBehaviour {
 	public List<Collider> ragdollColliders = new List<Collider>();
 
 	void Start(){
-		health = 100;
+		health += 100; //make health scale size of enemy?
+		//str = 1;
+		//def = 1;
+		//speed = 1;
 
 		anim = GetComponentInChildren<Animator> ();
 

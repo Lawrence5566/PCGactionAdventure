@@ -123,6 +123,8 @@ GameObject:
   - component: {fileID: 160867085}
   - component: {fileID: 160867086}
   - component: {fileID: 160867087}
+  - component: {fileID: 160867088}
+  - component: {fileID: 160867089}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -178,9 +180,48 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 35f8cbcde1f153140bcc210e44d465f7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  DiaEnemyPrefab: {fileID: 0}
-  DiaMaterials: []
-  monsterStack: []
+  enemyPrefabs:
+  - {fileID: 8969964588722973556, guid: dd7ad621b0da36641882fc703a896c2a, type: 3}
+--- !u!114 &160867088
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 160867084}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4129fe3877ed2894cb93bedd01758ce4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enemyTargets: []
+--- !u!114 &160867089
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 160867084}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f62ce68bc3e09ac429b257738171e218, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  temp_Enemy: {fileID: 0}
+  temp_Type: 0
+  temp_Dmg: 0
+  temp_SwordType: 0
+  broadswordPrefab: {fileID: 0}
+  katanaPrefab: {fileID: 0}
+  longswordPrefab: {fileID: 0}
+  rapierPrefab: {fileID: 0}
+  sabrePrefab: {fileID: 0}
+  scimitarPrefab: {fileID: 0}
+  ulfberhtPrefab: {fileID: 0}
+  fireMat: {fileID: 0}
+  waterMat: {fileID: 0}
+  earthMat: {fileID: 0}
+  airMat: {fileID: 0}
 --- !u!1 &170076733
 GameObject:
   m_ObjectHideFlags: 0
@@ -921,6 +962,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   roomCenterCoords: []
   trapLocations: []
+  monsterLocations: []
 --- !u!4 &1413561896
 Transform:
   m_ObjectHideFlags: 0
