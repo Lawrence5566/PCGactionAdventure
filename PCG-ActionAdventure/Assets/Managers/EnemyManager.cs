@@ -4,8 +4,15 @@ using UnityEngine;
 
 public class EnemyManager : MonoBehaviour {
 	float minLockDistance = 20f;
+
+	public WeaponManager weaponManager;
 	
 	public List<EnemyStates> enemyTargets = new List<EnemyStates> (); //stores list of all enemys
+
+	void Start(){
+		//weaponManager = GetComponent<WeaponManager> ();
+
+	}
 
 	public EnemyStates GetEnemy(Vector3 from){ //get closest enemy when switching targets
 		
@@ -25,5 +32,7 @@ public class EnemyManager : MonoBehaviour {
 	public static EnemyManager singleton;
 	void Awake(){
 		singleton = this;
+
+		weaponManager = GetComponent<WeaponManager> ();
 	}
 }

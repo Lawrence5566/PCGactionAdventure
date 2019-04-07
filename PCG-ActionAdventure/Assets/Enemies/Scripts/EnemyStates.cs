@@ -13,9 +13,15 @@ public class EnemyStates : MonoBehaviour {
 	public float def = 1;
 	public float speed = 1;
 
+	public float attackSpeed = 1;
+
 	public bool isInvincible; //to stop colldier doing damage more than once
 	public bool canMove;
 	public bool isDead;
+	public bool canAttack = true;
+	float attackTimer;
+	public float attackGap = 2; //by default, enemies have a 2 second attack gap
+	public float attackRange = 2;
 
 	public ElementType type = ElementType.fire; //fire type by default
 
@@ -25,9 +31,15 @@ public class EnemyStates : MonoBehaviour {
 
 	public GameObject weapon;
 	public Transform rightHand;
+	string attackAction;
 
 	public List<Rigidbody> ragdollRigids = new List<Rigidbody>();
 	public List<Collider> ragdollColliders = new List<Collider>();
+
+	PlayerStats player;
+	Vector3 startLocation; //is this used?
+
+	public Weapon weaponScript;
 
 	void Start(){
 		health += 100; //make health scale size of enemy?
@@ -48,6 +60,14 @@ public class EnemyStates : MonoBehaviour {
 		InitRagdoll();
 
 		EnemyManager.singleton.enemyTargets.Add (this); //add enemy to manager
+
+		//give a this a weapon
+		//EnemyManager.singleton.weaponManager.GiveWeapon (this, ElementType.fire, 20, SwordType.broadsword); //for testing, give all enemys same weapon
+
+		player = FindObjectOfType<PlayerStats> ();
+		startLocation = transform.position;
+
+		weaponScript = weapon.GetComponent<Weapon> ();
 	}
 
 	void InitRagdoll(){
@@ -87,6 +107,10 @@ public class EnemyStates : MonoBehaviour {
 	void Update(){
 		canMove = anim.GetBool ("canMove");
 
+		if (Time.time > attackTimer) {
+			canAttack = true;
+		}
+
 		if (health <= 0) {
 			if (!isDead) {
 				isDead = true;
@@ -98,8 +122,60 @@ public class EnemyStates : MonoBehaviour {
 			isInvincible = !canMove;
 		}
 
-		if (canMove)
+		if (canMove) {
 			anim.applyRootMotion = false;
+
+
+			//if player is within attack range, attack him
+			if (Vector3.Distance (this.transform.position, player.transform.position) < attackRange){
+				anim.SetBool (StaticStrings.running, false); //stop running 
+				anim.SetFloat (StaticStrings.vertical, 0f, 0.4f, Time.deltaTime); //stop character
+
+				//rotate towards enemy
+				Vector3 targetDir = player.transform.position - transform.position; //target to rotate to
+
+				targetDir.y = 0; //remove Y incase we rotate upwards
+				if (targetDir == Vector3.zero)
+					targetDir = transform.forward;
+				Quaternion targetRot = Quaternion.LookRotation (targetDir);	 	//create rotation towards target
+				targetRot = Quaternion.Slerp (transform.rotation, targetRot, Time.deltaTime * speed * 2);	//slerp rotation from current rotation
+				transform.rotation = targetRot;
+
+				//attack
+				string stringAttackAnim = weaponScript.actions[Random.Range(0, weaponScript.actions.Count)].targetAnim;
+
+				if (canAttack) { //if we can, attack
+					anim.speed = attackSpeed;
+					anim.CrossFade (stringAttackAnim, 0.2f);
+					canAttack = false;
+					attackTimer = attackGap + Time.time; //reset attack timer
+
+					//turn off root motion for attack
+					anim.applyRootMotion = false;
+				}
+
+			} else if (Vector3.Distance (this.transform.position, player.transform.position) < 12) { //or follow player if he is close enough
+				Vector3 targetDir = player.transform.position - transform.position; //target to rotate to
+
+				targetDir.y = 0; //remove Y incase we rotate upwards
+				if (targetDir == Vector3.zero)
+					targetDir = transform.forward;
+				Quaternion targetRot = Quaternion.LookRotation (targetDir);	 	//create rotation towards target
+				targetRot = Quaternion.Slerp (transform.rotation, targetRot, Time.deltaTime * speed * 2);	//slerp rotation from current rotation
+				transform.rotation = targetRot;
+
+				anim.SetBool (StaticStrings.running, true); //start running 
+				anim.SetFloat (StaticStrings.vertical, speed / 10, 0.4f, Time.deltaTime); 
+
+				rigid.velocity = targetDir * speed; //speed * move amount?
+
+			} else {
+				//stop on the spot or move to start location
+				anim.SetBool (StaticStrings.running, false); //start running 
+				anim.SetFloat (StaticStrings.vertical, -0.001f, 0.4f, Time.deltaTime); //slow character down 
+			}
+
+		}
 			
 	}
 

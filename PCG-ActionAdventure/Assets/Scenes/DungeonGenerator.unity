@@ -198,6 +198,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4129fe3877ed2894cb93bedd01758ce4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  weaponManager: {fileID: 0}
   enemyTargets: []
 --- !u!114 &160867089
 MonoBehaviour:
@@ -215,17 +216,24 @@ MonoBehaviour:
   temp_Type: 0
   temp_Dmg: 0
   temp_SwordType: 0
-  broadswordPrefab: {fileID: 0}
-  katanaPrefab: {fileID: 0}
-  longswordPrefab: {fileID: 0}
-  rapierPrefab: {fileID: 0}
-  sabrePrefab: {fileID: 0}
-  scimitarPrefab: {fileID: 0}
-  ulfberhtPrefab: {fileID: 0}
-  fireMat: {fileID: 0}
-  waterMat: {fileID: 0}
-  earthMat: {fileID: 0}
-  airMat: {fileID: 0}
+  broadswordPrefab: {fileID: 1020744188431956, guid: 40642408571de44418de22ce9e1c4868,
+    type: 3}
+  katanaPrefab: {fileID: 1025256421703284, guid: af5b5a4086b49f342ac750b87fa864d4,
+    type: 3}
+  longswordPrefab: {fileID: 1079530512405334, guid: a3588178ff7c97846a6c3cdbf9cb7e4c,
+    type: 3}
+  rapierPrefab: {fileID: 1036863752799598, guid: ad966b4815fa25f468a837e7246db805,
+    type: 3}
+  sabrePrefab: {fileID: 1420259404692978, guid: 170bd630381c79f45955c308f082b822,
+    type: 3}
+  scimitarPrefab: {fileID: 1974100050759824, guid: a6c841363c6c49842a576caa513bd2b5,
+    type: 3}
+  ulfberhtPrefab: {fileID: 1965698383389824, guid: ca5471d0c890d3b4189cf0ef6b7871ca,
+    type: 3}
+  fireMat: {fileID: 2100000, guid: cb0af4ed4b33aa145865d9392376e0be, type: 2}
+  waterMat: {fileID: 2100000, guid: 92c4aca39c234f044a7abc91ad33b5a4, type: 2}
+  earthMat: {fileID: 2100000, guid: c82a58a49cbb9ea47bc9610c49b3b119, type: 2}
+  airMat: {fileID: 2100000, guid: b5683b7235a00be418f1ff1c4f31e520, type: 2}
 --- !u!1 &170076733
 GameObject:
   m_ObjectHideFlags: 0
@@ -459,6 +467,18 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 685458236}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &431752417 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 73404198519010158, guid: a589bb62d94273942adb9ac1856e8e4c,
+    type: 3}
+  m_PrefabInstance: {fileID: 685458236}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3b6b0bf820137c042ac2b2e509e9973e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &558164400
 GameObject:
   m_ObjectHideFlags: 0
@@ -618,6 +638,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 41152628214356934, guid: a589bb62d94273942adb9ac1856e8e4c,
+        type: 3}
+      propertyPath: curWeapon
+      value: 
+      objectReference: {fileID: 431752417}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a589bb62d94273942adb9ac1856e8e4c, type: 3}
 --- !u!1001 &788907358

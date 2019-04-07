@@ -1,10 +1,9 @@
 
 to do:
 
--create different levels of enemy (lvl1,2,3,4,5)
--create enemy AI
+-finalise routes
+-fix/test weapon colliders?
 
--create enenmy spawn points
 
 -create collapssing bridge or falling floor - make all passage ways bridges? (make passage ways bigger and just add a bridge, and make seperate floors for each room)
 

@@ -58,15 +58,20 @@ public class AnimatorHook : MonoBehaviour {
 	}
 
 	public void OpenDamageColliders(){ //only open colliders when we want to hit something
-		if (inputHan == null) //if you have no inputHandler
+		if (inputHan == null) { //if you have no inputHandler, then this is on an enemy
+			eStates.weaponScript.OpenDamageColliders ();
 			return;
+		}
+		
 
 		inputHan.inventoryManager.curWeapon.OpenDamageColliders();
 	}
 
 	public void CloseDamageColliders(){
-		if (inputHan == null) 
+		if (inputHan == null) {
+			eStates.weaponScript.CloseDamageColliders ();
 			return;
+		}
 		
 		inputHan.inventoryManager.curWeapon.CloseDamageColliders();
 	}

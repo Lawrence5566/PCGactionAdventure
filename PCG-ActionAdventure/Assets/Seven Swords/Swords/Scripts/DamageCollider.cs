@@ -6,9 +6,11 @@ public class DamageCollider : MonoBehaviour {
 	//handles weapon dealing damage, this script is on the weapon
 
 	PlayerStats stats;
+	EnemyStates enemy;
 
 	void Start(){
 		stats = GetComponentInParent<PlayerStats> ();
+		enemy = GetComponentInParent<EnemyStates> ();
 	}
 
 	void OnTriggerEnter(Collider other){
@@ -26,6 +28,15 @@ public class DamageCollider : MonoBehaviour {
 				dmg += weapon.damage;
 			
 			eStates.DoDamage (dmg);
+		}
+
+		if (enemy) {
+			PlayerStats player = other.transform.GetComponentInParent<PlayerStats> (); //get script of player if there is one
+
+			if (player != null) { //if hit player
+				//do damage
+				player.DamagePlayer(enemy.str * 10 + GetComponentInParent<Weapon> ().damage, false);
+			}
 		}
 	}
 }

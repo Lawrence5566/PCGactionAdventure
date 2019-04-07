@@ -28,6 +28,7 @@ public class GameManager : MonoBehaviour
 		PlaceKeys();
 		PlaceHiddens ();
 		PlaceGoal ();
+
 		//when player wins the level, reset and spawn new one with harder enemies?
     }
 
