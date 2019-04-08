@@ -61,9 +61,6 @@ public class EnemyStates : MonoBehaviour {
 
 		EnemyManager.singleton.enemyTargets.Add (this); //add enemy to manager
 
-		//give a this a weapon
-		//EnemyManager.singleton.weaponManager.GiveWeapon (this, ElementType.fire, 20, SwordType.broadsword); //for testing, give all enemys same weapon
-
 		player = FindObjectOfType<PlayerStats> ();
 		startLocation = transform.position;
 
@@ -138,7 +135,7 @@ public class EnemyStates : MonoBehaviour {
 				if (targetDir == Vector3.zero)
 					targetDir = transform.forward;
 				Quaternion targetRot = Quaternion.LookRotation (targetDir);	 	//create rotation towards target
-				targetRot = Quaternion.Slerp (transform.rotation, targetRot, Time.deltaTime * speed * 2);	//slerp rotation from current rotation
+				targetRot = Quaternion.Slerp (transform.rotation, targetRot, Time.deltaTime * speed * 20);	//slerp rotation from current rotation
 				transform.rotation = targetRot;
 
 				//attack

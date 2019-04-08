@@ -118,15 +118,20 @@ public class MobSpawner : MonoBehaviour {
 				EnemyStates enemy = newEnemy.GetComponent<EnemyStates> ();
 				enemy.attackRange = 2f + o.value / 2f; //set attack range by level (bigger enemys need more)
 
-				if (o.value >= 3) { //if larger monster, give different weapon
+				if (o.value >= 3) { //if larger monster, give different weapon, change attack speed
 					EnemyManager.singleton.weaponManager.GiveWeapon (enemy, ElementType.fire, 20, SwordType.katana);
+
+					if (o.value == 5){ //if boss
+						enemy.attackSpeed = 1.5f;
+						enemy.health += 100f;
+						enemy.startHP = enemy.health; //reset start hp
+					}
+
 				} else {
 					EnemyManager.singleton.weaponManager.GiveWeapon (enemy, ElementType.fire, 5, SwordType.broadsword); //give other enemys normals weapons
 				}
 
 				//Debug.Log(EnemyManager.singleton.weaponManager);
-
-
 
 				enemiesInTask.Add (newEnemy.GetComponent<EnemyStates> ());
 
@@ -145,7 +150,7 @@ public class MobSpawner : MonoBehaviour {
 					enemiesInTask [i].def += o.value;
 					break;
 				case "speed":
-					enemiesInTask [i].speed += o.value;
+					enemiesInTask [i].speed += o.value/2;
 					break;
 				case "hp":
 					enemiesInTask [i].health += o.value;

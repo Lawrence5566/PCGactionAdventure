@@ -73,7 +73,7 @@ public class ActionManager : MonoBehaviour {
 }
 
 public enum ActionInput{
-	x,y
+	x,y,rb
 }
 
 [System.Serializable]
