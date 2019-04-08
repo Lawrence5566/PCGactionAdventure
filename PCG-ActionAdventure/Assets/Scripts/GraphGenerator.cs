@@ -421,17 +421,28 @@ public class GraphGenerator : MonoBehaviour {
 				}
 
             }
-            else{ //both are short, so just run on a
+            else{ //both are short, so run on the shorter one
 				Debug.Log("Short a, Short b");
 
+				List<KeyValuePair<connection, node>> shorter = new List<KeyValuePair<connection, node>>();
+				List<KeyValuePair<connection, node>> longer = new List<KeyValuePair<connection, node>>();
+
+				if (loopRouteA.Count >= loopRouteB.Count) {
+					shorter = loopRouteA;
+					longer = loopRouteB;
+				} else {
+					shorter = loopRouteB;
+					longer = loopRouteA;
+				}
+					
 				if (choice == 0) {
-					HiddenShortcut(loopRouteA, loopRouteB);
+					HiddenShortcut(shorter, longer);
 				} else if (choice == 1) {
-					DramaticCycle(loopRouteA);
+					DramaticCycle(shorter);
 				} else if (choice == 2) {
-					DangerousRoute (loopRouteA, loopRouteB);
+					DangerousRoute (shorter, longer);
 				} else{
-					LockAndKey(loopRouteA,loopRouteB);
+					LockAndKey(shorter,longer);
 				}
             }
 
@@ -601,7 +612,13 @@ public class GraphGenerator : MonoBehaviour {
 
 		//place key at the first node of long route, and close long route off in that direction (so player encounters lock before seeing key)
 		longRoute[1].Value.AddFeature(keyToken); //add key to the first node (excluding start node)
-		longRoute[2].Key.AddFeatureToConnection(new token ("monster", monsterCircle)); //add enemy to guard the key
+
+		//add enemy to guard the key
+		if (longRoute.Count > 2) {
+			longRoute [2].Key.AddFeatureToConnection (new token ("monster", monsterCircle));
+		} else {
+			longRoute [1].Value.AddFeature (new token ("monster", monsterCircle));
+		}
 		//longRoute[1].Key.ChangeType(ConType.blocked, connectionBlockedSpr);	//block connection to it
 		DisconnectNodes(longRoute[0].Value, longRoute[1].Value);//for now, remove the connection instead of blocking it NEEDS CHANGING?
 	}
