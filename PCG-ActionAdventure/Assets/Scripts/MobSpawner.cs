@@ -113,7 +113,7 @@ public class MobSpawner : MonoBehaviour {
 			//spawn all the enemies for the task
 			if (o.type == "monster"){
 				GameObject newEnemy = Instantiate(enemyPrefabs [Random.Range (0, enemyPrefabs.Length)], taskLocations[locationNo], Quaternion.identity);
-				newEnemy.transform.localScale = new Vector3 (1f, 1f, 1f) * (1 + (o.value*2/10)); //use value (or level in this case) to set enemy scale
+				newEnemy.transform.localScale = new Vector3 (1f, 1f, 1f) * (1f + (o.value*2f/10f)); //use value (or level in this case) to set enemy scale
 
 				EnemyStates enemy = newEnemy.GetComponent<EnemyStates> ();
 				enemy.attackRange = 2f + o.value / 2f; //set attack range by level (bigger enemys need more)
@@ -128,7 +128,7 @@ public class MobSpawner : MonoBehaviour {
 					}
 
 				} else {
-					EnemyManager.singleton.weaponManager.GiveWeapon (enemy, ElementType.fire, 5, SwordType.broadsword); //give other enemys normals weapons
+					EnemyManager.singleton.weaponManager.GiveWeapon (enemy, ElementType.fire, 5, SwordType.broadsword); //give other enemys normal weapons
 				}
 
 				//Debug.Log(EnemyManager.singleton.weaponManager);

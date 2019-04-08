@@ -158,6 +158,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: db657e9b8049e0742a9ef0b4d0ee3d0e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  levelPointsValue: 6
   graphToMapConverter: {fileID: 1413561895}
   graphGenerator: {fileID: 1223852754}
   meshGenerator: {fileID: 1413561897}
@@ -1236,12 +1237,12 @@ PrefabInstance:
     - target: {fileID: 512044133657428340, guid: d5dbd9b755c7ff4419d486353caa99e4,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: -399
+      value: -400
       objectReference: {fileID: 0}
     - target: {fileID: 512044133657428340, guid: d5dbd9b755c7ff4419d486353caa99e4,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 344
+      value: 345
       objectReference: {fileID: 0}
     - target: {fileID: 512044133657428340, guid: d5dbd9b755c7ff4419d486353caa99e4,
         type: 3}

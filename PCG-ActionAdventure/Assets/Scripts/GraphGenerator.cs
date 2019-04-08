@@ -26,7 +26,7 @@ public class GraphGenerator : MonoBehaviour {
 	public node startNode;
 	node goalNode;
 
-	int maxRouteLength = 8;
+	int maxRouteLength = 6;
 
 	node[] dramaticCycleNodes = new node[2];
 
@@ -309,39 +309,6 @@ public class GraphGenerator : MonoBehaviour {
 
 	}
 
-	/*
-	void GrowRoute(List<KeyValuePair<connection,node>> route){ //testing
-		//rooms > rooms + room
-		//this will add a connection to a room, but not add the room to the route (so it'll be a side room?)
-		System.Random r = new System.Random();
-		foreach (int i in Enumerable.Range(1, route.Count - 1).OrderBy(x => r.Next())){ //pick random node on route that isn't start or end
-			node room = route[i].Value; 
-			List<KeyValuePair<connection,node>> posibleRooms = new List<KeyValuePair<connection,node>>();
-			foreach (KeyValuePair<connection,node> k in room.connectionToNodes){
-				if (!route.Contains (k)) { //if its not on the route, add it to posibles
-					posibleRooms.Add(k);
-				}
-			}
-			if (posibleRooms.Count == 0) {
-				continue;//try a different room
-			}
-
-			addConnection (room, posibleRooms [Random.Range (0, posibleRooms.Count)].Value); //pick a random room from posibles and add a route connection to it
-			break; //found a room we can use, stop the loop
-		}
-
-		//Rooms > Rooms + room
-		//if (room.connectedNodes.Count == 0){
-		//	return; //no free rooms to expand to
-		//} else{
-		//	addConnection (room, room.connectedNodes [Random.Range (0, room.connectedNodes.Count)]); //pick a random room and add a route connection to it
-		//}
-		//Rooms > Rooms + room + Obstacle
-		//Rooms > Rooms + room + item
-
-	}
-	*/
-
 	void ProcessNodeArray(List<node> routeA, List<node> routeB){ //final prep processing for converting GraphToMap 
 		//destroy all connections - what was point in having them in the first place?
 		for (int i = 0; i < nodeArray.Length; i++) {  //foreach node
@@ -416,39 +383,56 @@ public class GraphGenerator : MonoBehaviour {
             int ACount = loopRouteA.Count;
             int BCount = loopRouteB.Count;
             
+			int choice = Random.Range (0, 4);
+
             if (ACount > 4 && BCount > 4){ //both routes are long
 				Debug.Log("Long a, Long b");
-                //TwoAlternativePaths(loopRouteA, loopRouteB); //alternative paths rule
-				//DangerousRoute (loopRouteA, loopRouteB); //for testing
+				if (choice == 0 || choice == 1) {
+					TwoAlternativePaths (loopRouteA, loopRouteB);
+				} else {
+					TwoAlternativePaths(loopRouteB, loopRouteA); 
+				}
             }
             else if (ACount > 4 && BCount <= 4) { //A is long, B is short
 				Debug.Log("Long a, Short b");
-				//int choice = Random.Range
 
-				//HiddenShortcut(loopRouteB, loopRouteA); //add hidden shortcut to short route
-				//DramaticCycle(loopRouteB);
-				DangerousRoute (loopRouteB, loopRouteA);
-
-				//TwoAlternativePaths(loopRouteA, loopRouteB); //only for testing trap placement
-				//LockAndKey(loopRouteB,loopRouteA); //for testing
-
+				if (choice == 0) {
+					HiddenShortcut(loopRouteB, loopRouteA);
+				} else if (choice == 1) {
+					DramaticCycle(loopRouteB);
+				} else if (choice == 2) {
+					DangerousRoute (loopRouteB, loopRouteA);
+				} else{
+					LockAndKey(loopRouteB,loopRouteA);
+				}
             }
             else if (ACount <= 4 && BCount > 4){ //A is short, B is long
+				//UnknownReturn(loopRouteA,loopRouteB); //not using?
 				Debug.Log("Short a, Long b");
-				//HiddenShortcut(loopRouteA, loopRouteB); //testing
-				//DramaticCycle(loopRouteA); //just for testing
-				//UnknownReturn(loopRouteA,loopRouteB);
-				//LockAndKey(loopRouteA,loopRouteB);
-				//TwoAlternativePaths(loopRouteA, loopRouteB); //only for testing trap placement
-				DangerousRoute (loopRouteA, loopRouteB); //for testing
+
+				if (choice == 0) {
+					HiddenShortcut(loopRouteA, loopRouteB);
+				} else if (choice == 1) {
+					DramaticCycle(loopRouteA);
+				} else if (choice == 2) {
+					DangerousRoute (loopRouteA, loopRouteB);
+				} else{
+					LockAndKey(loopRouteA,loopRouteB);
+				}
+
             }
-            else{ //both are short, but still pass the shorter one into the shorter postion?
+            else{ //both are short, so just run on a
 				Debug.Log("Short a, Short b");
-				//HiddenShortcut(loopRouteA, loopRouteB); //testing
-				//DramaticCycle(loopRouteB); //just for testing
-				//LockAndKey(loopRouteA,loopRouteB); //for testing
-				//TwoAlternativePaths(loopRouteA, loopRouteB);
-				DangerousRoute (loopRouteA, loopRouteB); //for testing
+
+				if (choice == 0) {
+					HiddenShortcut(loopRouteA, loopRouteB);
+				} else if (choice == 1) {
+					DramaticCycle(loopRouteA);
+				} else if (choice == 2) {
+					DangerousRoute (loopRouteA, loopRouteB);
+				} else{
+					LockAndKey(loopRouteA,loopRouteB);
+				}
             }
 
 			if (goalNode.features.Count == 0){
@@ -617,6 +601,7 @@ public class GraphGenerator : MonoBehaviour {
 
 		//place key at the first node of long route, and close long route off in that direction (so player encounters lock before seeing key)
 		longRoute[1].Value.AddFeature(keyToken); //add key to the first node (excluding start node)
+		longRoute[2].Key.AddFeatureToConnection(new token ("monster", monsterCircle)); //add enemy to guard the key
 		//longRoute[1].Key.ChangeType(ConType.blocked, connectionBlockedSpr);	//block connection to it
 		DisconnectNodes(longRoute[0].Value, longRoute[1].Value);//for now, remove the connection instead of blocking it NEEDS CHANGING?
 	}

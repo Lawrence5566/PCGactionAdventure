@@ -4,6 +4,10 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
+	[Header("Change to change difficulty:")]
+	public int levelPointsValue = 6;
+
+	[Header("")]
 	public GraphToMapConverter graphToMapConverter;
 	public GraphGenerator graphGenerator;
 	public MeshGenerator meshGenerator;
@@ -38,9 +42,9 @@ public class GameManager : MonoBehaviour
 
 		if (graphToMapConverter.goalLocationAndType.Value.type == "boss"){ //if goal is boss
 			locations.Add(graphToMapConverter.goalLocationAndType.Key); //add boss location
-			mobSpawner.createStack(6,locations, locations.Count-1); //create a stack of 3 points value, monster tasks locations, boss at last index
+			mobSpawner.createStack(levelPointsValue,locations, locations.Count-1); //create a stack of 3 points value, monster tasks locations, boss at last index
 		} else{
-			mobSpawner.createStack(6,locations, -1); //create a stack of 3 points value, monster tasks locations, no boss
+			mobSpawner.createStack(levelPointsValue,locations, -1); //create a stack of 3 points value, monster tasks locations, no boss
 		}
 
 	}
