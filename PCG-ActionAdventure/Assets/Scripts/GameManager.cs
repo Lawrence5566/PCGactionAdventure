@@ -10,7 +10,7 @@ public class GameManager : MonoBehaviour
 	[Header("")]
 	public GraphToMapConverter graphToMapConverter;
 	public GraphGenerator graphGenerator;
-	public MeshGenerator meshGenerator;
+	//public MeshGenerator meshGenerator;
 	public MobSpawner mobSpawner;
 
 	public GameObject playerObject;

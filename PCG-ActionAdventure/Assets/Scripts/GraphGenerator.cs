@@ -76,19 +76,16 @@ public class GraphGenerator : MonoBehaviour {
 		//create dungeon:
 		DungeonRule();
 
-		//we only need the connections with features (like traps)
+		//we only need the connections with features to pass on to graph to map converter
 		listOfConnections.RemoveAll(x => x.features.Count == 0);
 
 		//pass on to map converter:
 		int[,] map = FindObjectOfType<GraphToMapConverter>().CreateMap(nodeArray, dramaticCycleNodes, listOfConnections);
 
-		//generate mesh from nodeArray:
-		FindObjectOfType<MeshGenerator>().GenerateMesh(map, 1, false); //squareSize of 1
+		//generate wall mesh from nodeArray:
+		FindObjectOfType<MeshGenerator>().GenerateMesh(map, 1, false); //generate wall mesh squareSize of 1
 
 		//generate floor mesh - works by flipping map bits and generating like a wall but without sides
-
-		//now take any '2' bits (bits that are gunna be dramatic cycle stuff) and turn them into 1s (these will be 0 in floor mesh)
-
 		FindObjectOfType<MeshGenerator>().GenerateMesh(map, 1, true);  //generate floor mesh
 
 	}
@@ -197,7 +194,7 @@ public class GraphGenerator : MonoBehaviour {
 		Vector2 relPoint = new Vector2(relativePoint.x, relativePoint.y);
 		float angle = 0f;
 
-		//right and left is flipped from expected
+		//calcualte arrow orentation for sprte - right and left is flipped from expected
 		if (relPoint == new Vector2 (0f, 4f)) { //B is above so 0*, top 
 			angle = 0f;
 		} else if (relPoint == new Vector2 (4f, 4f)) { //top right
@@ -282,7 +279,7 @@ public class GraphGenerator : MonoBehaviour {
 				routeB = findAPath (startNode, new List<node> (), new List<node> ());
 				continue;
 			}
-			if (Enumerable.SequenceEqual (routeA, routeB)) {
+			if (Enumerable.SequenceEqual (routeA, routeB)) { //if equal, generate B again
 				routeB = findAPath (startNode, new List<node> (), new List<node> ());
 				continue;
 			}
@@ -362,7 +359,7 @@ public class GraphGenerator : MonoBehaviour {
             }
 
 
-            //testing
+            //testing output
             string one = "loopPart1: ";
             string two = "loopPart2: ";
             foreach (KeyValuePair<connection, node> k in loopRouteA)
@@ -509,12 +506,12 @@ public class GraphGenerator : MonoBehaviour {
 
 	// pattern rules: //
 
-	void TwoAlternativePaths(List<KeyValuePair<connection, node>> routeA, List<KeyValuePair<connection, node>> routeB){ //only ran on both long paths
+	void TwoAlternativePaths(List<KeyValuePair<connection, node>> routeA, List<KeyValuePair<connection, node>> routeB){
         //add monster on routeA, trap on routeB
 		Debug.Log("run Alternate Paths rule");
 
-		DangerousRoute (routeA, routeB); //add monster to routeA (mirrors dangerous route)
-		getRandomUniqueConnection(routeB, routeA).AddFeatureToConnection(new token("trap", trapCircle)); 	//add a obstacle on a connection (trap)
+		DangerousRoute (routeA, routeB); 																	//add monster to routeA (mirrors dangerous route)
+		getRandomUniqueConnection(routeB, routeA).AddFeatureToConnection(new token("trap", trapCircle)); 	//add a trap to connection on route B
 	}
 
 	void HiddenShortcut(List<KeyValuePair<connection, node>> shortRoute, List<KeyValuePair<connection, node>> longRoute){
@@ -631,9 +628,8 @@ public class node{
 	public List<KeyValuePair<connection, node>> connectionToNodes = new List<KeyValuePair<connection, node>>(); //connects connections to connected nodes - might be able to just use this?
 
 	public string name;
-	//public connection[] connections = new connection[4]; //array of 4 connections: left, top, right, bot - might not be needed
 	public GameObject obj;
-	public List<node> connectedNodes = new List<node>();
+	public List<node> connectedNodes = new List<node>(); //not neccisary?
 	public List<token> features = new List<token> ();
 
 	public node(){
@@ -697,7 +693,7 @@ public class token{
 }
 
 public class connection{
-	public ConType type = ConType.normal;
+	public ConType type = ConType.normal; //not used, remove?
 	public GameObject obj;
 	public List<token> features = new List<token> ();
 
@@ -734,6 +730,7 @@ public class connection{
 		
 }
 	
+//never used in the end - remove?
 public enum ConType{
 	normal, dramatic, collapsing, blocked
 }

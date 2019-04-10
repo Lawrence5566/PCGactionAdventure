@@ -65,6 +65,7 @@ public class EnemyStates : MonoBehaviour {
 		startLocation = transform.position;
 
 		weaponScript = weapon.GetComponent<Weapon> ();
+		weaponScript.CloseDamageColliders (); //initially close damage colliders
 	}
 
 	void InitRagdoll(){

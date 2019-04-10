@@ -115,7 +115,7 @@ MonoBehaviour:
   m_MinSize: {x: 713, y: 498}
   m_MaxSize: {x: 18008, y: 14048}
   vertical: 0
-  controlID: 58
+  controlID: 65
 --- !u!114 &6
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -140,7 +140,7 @@ MonoBehaviour:
   m_MinSize: {x: 232, y: 498}
   m_MaxSize: {x: 10002, y: 14048}
   vertical: 1
-  controlID: 131
+  controlID: 109
 --- !u!114 &7
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -217,7 +217,7 @@ MonoBehaviour:
   m_MinSize: {x: 204, y: 448}
   m_MaxSize: {x: 4004, y: 8048}
   vertical: 1
-  controlID: 59
+  controlID: 66
 --- !u!114 &10
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -302,7 +302,7 @@ MonoBehaviour:
   - {fileID: 23}
   - {fileID: 24}
   m_Selected: 0
-  m_LastSelected: 2
+  m_LastSelected: 1
 --- !u!114 &13
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -392,7 +392,7 @@ MonoBehaviour:
   m_PersistentViewDataDictionary: {fileID: 0}
   m_LockTracker:
     m_IsLocked: 0
-  m_LastSelectedObjectID: 4186
+  m_LastSelectedObjectID: 4284
 --- !u!114 &16
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -502,23 +502,23 @@ MonoBehaviour:
   m_SceneHierarchy:
     m_TreeViewState:
       scrollPos: {x: 0, y: 0}
-      m_SelectedIDs: 
+      m_SelectedIDs: 12080000
       m_LastClickedID: 0
-      m_ExpandedIDs: a294ffffc094ffff0696ffff12a3ffff30d8ffffb2d8ffffbcd8ffffc6d8ffffcad8ffff52d9ffff56d9ffff5ad9ffffa2d9ffffa6d9ffffaed9ffffb8d9ffff46ddffffbefbffffbc100000
+      m_ExpandedIDs: d6fbffff
       m_RenameOverlay:
         m_UserAcceptedRename: 0
-        m_Name: katana(Clone)
-        m_OriginalName: katana(Clone)
+        m_Name: 
+        m_OriginalName: 
         m_EditFieldRect:
           serializedVersion: 2
           x: 0
           y: 0
           width: 0
           height: 0
-        m_UserData: -10192
+        m_UserData: 0
         m_IsWaitingForDelay: 0
         m_IsRenaming: 0
-        m_OriginalEventType: 0
+        m_OriginalEventType: 11
         m_IsRenamingFilename: 0
         m_ClientGUIView: {fileID: 7}
       m_SearchString: 
@@ -549,8 +549,8 @@ MonoBehaviour:
     m_Tooltip: 
   m_Pos:
     serializedVersion: 2
-    x: 0
-    y: 618
+    x: -32000
+    y: -31425
     width: 310
     height: 382
   m_PersistentViewDataDictionary: {fileID: 0}
@@ -577,9 +577,9 @@ MonoBehaviour:
     m_IsLocked: 0
   m_FolderTreeState:
     scrollPos: {x: 0, y: 0}
-    m_SelectedIDs: 0c0e0000
-    m_LastClickedID: 3596
-    m_ExpandedIDs: 00000000ea0900008a0a0000900a0000760b0000360c0000a60c0000ca0c0000d40c00003c0d0000aa0d0000ee0d0000040f00000610000008100000983500009a3500009c3500009e350000a0350000a2350000a4350000a6350000a8350000aa350000ac350000
+    m_SelectedIDs: fc0d0000
+    m_LastClickedID: 3580
+    m_ExpandedIDs: 00000000da0900007a0a0000800a0000660b0000260c0000960c0000ba0c0000c40c00002c0d00009a0d0000de0d0000f40e0000f60f0000f80f000090350000923500009435000096350000983500009a3500009c3500009e350000a0350000a2350000a4350000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -607,7 +607,7 @@ MonoBehaviour:
     scrollPos: {x: 0, y: 0}
     m_SelectedIDs: 
     m_LastClickedID: 0
-    m_ExpandedIDs: 00000000ea0900008a0a0000900a0000760b0000360c0000a60c0000ca0c0000d40c00003c0d0000aa0d0000ee0d0000040f00000610000008100000983500009a3500009c3500009e350000a0350000a2350000a4350000a6350000a8350000aa350000ac350000
+    m_ExpandedIDs: 00000000da0900007a0a0000800a0000660b0000260c0000960c0000ba0c0000c40c00002c0d00009a0d0000de0d0000f40e0000f60f0000f80f000090350000923500009435000096350000983500009a3500009c3500009e350000a0350000a2350000a4350000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -635,7 +635,7 @@ MonoBehaviour:
     m_SelectedInstanceIDs: 
     m_LastClickedInstanceID: 0
     m_HadKeyboardFocusLastEvent: 1
-    m_ExpandedInstanceIDs: dc040000c21c00008a1d0000021e0000b21e0000f8290000f22b00005a270000a22e00001a2f00005a2e0000ea27000072280000a42a0000e82d000048310000422a00000000000064350000960b000074310000763b0000920c0000620b00001c0c0000840c00001e2e0000f62d0000222e0000
+    m_ExpandedInstanceIDs: dc040000c21c00008a1d0000021e0000b21e0000f8290000f22b00005a270000a22e00001a2f00005a2e0000ea27000072280000a42a0000e82d000048310000422a000064350000960b000074310000763b0000920c0000620b00001c0c0000840c00001e2e0000f62d0000222e000000000000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -682,8 +682,8 @@ MonoBehaviour:
     m_Tooltip: 
   m_Pos:
     serializedVersion: 2
-    x: 312
-    y: 73
+    x: -31688
+    y: -31970
     width: 1147
     height: 469
   m_PersistentViewDataDictionary: {fileID: 0}
@@ -693,9 +693,9 @@ MonoBehaviour:
   m_isRotationLocked: 0
   m_AudioPlay: 0
   m_Position:
-    m_Target: {x: -20.854588, y: 24.417854, z: -1.3656044}
+    m_Target: {x: 5.135193, y: 25.723175, z: 16.007812}
     speed: 2
-    m_Value: {x: -20.854588, y: 24.417854, z: -1.3656044}
+    m_Value: {x: 5.135193, y: 25.723175, z: 16.007812}
   m_RenderMode: 0
   m_CameraMode:
     drawMode: 0
@@ -715,25 +715,25 @@ MonoBehaviour:
       speed: 2
       m_Value: 0
     yGrid:
-      m_Target: 1
+      m_Target: 0
       speed: 2
-      m_Value: 1
+      m_Value: 0
     zGrid:
       m_Target: 0
       speed: 2
       m_Value: 0
   m_Rotation:
-    m_Target: {x: 0.18766531, y: -0.054197367, z: 0.010374928, w: 0.9806818}
+    m_Target: {x: 0.012075827, y: 0.009289245, z: -0.00010865101, w: 0.99988395}
     speed: 2
-    m_Value: {x: 0.18766531, y: -0.054197367, z: 0.010374928, w: 0.9806818}
+    m_Value: {x: 0.012075827, y: 0.009289245, z: -0.00010865101, w: 0.99988395}
   m_Size:
-    m_Target: 32.371624
+    m_Target: 17.744793
     speed: 2
-    m_Value: 32.371624
+    m_Value: 17.744793
   m_Ortho:
-    m_Target: 0
+    m_Target: 1
     speed: 2
-    m_Value: 0
+    m_Value: 1
   m_ShowGlobalGrid: 1
   m_LastSceneViewRotation: {x: -0.4008374, y: 0.020599993, z: -0.009019479, w: -0.9158732}
   m_LastSceneViewOrtho: 0
@@ -1064,7 +1064,7 @@ MonoBehaviour:
   m_Script: {fileID: 12079, guid: 0000000000000000e000000000000000, type: 0}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_MinSize: {x: 300, y: 360}
+  m_MinSize: {x: 390, y: 390}
   m_MaxSize: {x: 4000, y: 4000}
   m_TitleContent:
     m_Text: Lighting
