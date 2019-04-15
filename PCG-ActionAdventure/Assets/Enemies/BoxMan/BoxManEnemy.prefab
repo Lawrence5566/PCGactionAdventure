@@ -1137,7 +1137,7 @@ SkinnedMeshRenderer:
   m_RenderingLayerMask: 4294967295
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 70ddfab23861d7b438b619c4ee9d9bcb, type: 2}
+  - {fileID: 2100000, guid: 5d92a066b114085469a75804079e16f9, type: 3}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -2418,9 +2418,13 @@ MonoBehaviour:
   str: 1
   def: 1
   speed: 1
+  attackSpeed: 1
   isInvincible: 0
   canMove: 0
   isDead: 0
+  canAttack: 1
+  attackGap: 2
+  attackRange: 2
   type: 0
   anim: {fileID: 0}
   rigid: {fileID: 0}
@@ -2428,6 +2432,7 @@ MonoBehaviour:
   rightHand: {fileID: 8966210361867428040}
   ragdollRigids: []
   ragdollColliders: []
+  weaponScript: {fileID: 0}
 --- !u!54 &8988327473814946336
 Rigidbody:
   m_ObjectHideFlags: 0

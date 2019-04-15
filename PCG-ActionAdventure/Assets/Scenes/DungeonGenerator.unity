@@ -161,7 +161,6 @@ MonoBehaviour:
   levelPointsValue: 6
   graphToMapConverter: {fileID: 1413561895}
   graphGenerator: {fileID: 1223852754}
-  meshGenerator: {fileID: 1413561897}
   mobSpawner: {fileID: 160867087}
   playerObject: {fileID: 374776919}
   traps:
