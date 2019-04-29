@@ -21,7 +21,7 @@ MonoBehaviour:
   m_ShowMode: 4
   m_Title: 
   m_RootView: {fileID: 2}
-  m_MinSize: {x: 950, y: 548}
+  m_MinSize: {x: 950, y: 524}
   m_MaxSize: {x: 10000, y: 10000}
 --- !u!114 &2
 MonoBehaviour:
@@ -45,7 +45,7 @@ MonoBehaviour:
     y: 0
     width: 1920
     height: 997
-  m_MinSize: {x: 950, y: 548}
+  m_MinSize: {x: 950, y: 524}
   m_MaxSize: {x: 10000, y: 10000}
 --- !u!114 &3
 MonoBehaviour:
@@ -112,10 +112,10 @@ MonoBehaviour:
     y: 30
     width: 1920
     height: 947
-  m_MinSize: {x: 713, y: 498}
-  m_MaxSize: {x: 18008, y: 14048}
+  m_MinSize: {x: 713, y: 474}
+  m_MaxSize: {x: 18008, y: 14024}
   vertical: 0
-  controlID: 128
+  controlID: 103
 --- !u!114 &6
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -137,10 +137,10 @@ MonoBehaviour:
     y: 0
     width: 311
     height: 947
-  m_MinSize: {x: 232, y: 498}
-  m_MaxSize: {x: 10002, y: 14048}
+  m_MinSize: {x: 232, y: 474}
+  m_MaxSize: {x: 10002, y: 14024}
   vertical: 1
-  controlID: 24
+  controlID: 54
 --- !u!114 &7
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -160,8 +160,8 @@ MonoBehaviour:
     y: 0
     width: 311
     height: 545
-  m_MinSize: {x: 202, y: 224}
-  m_MaxSize: {x: 4002, y: 4024}
+  m_MinSize: {x: 200, y: 200}
+  m_MaxSize: {x: 4000, y: 4000}
   m_ActualView: {fileID: 17}
   m_Panes:
   - {fileID: 17}
@@ -217,7 +217,7 @@ MonoBehaviour:
   m_MinSize: {x: 204, y: 448}
   m_MaxSize: {x: 4004, y: 8048}
   vertical: 1
-  controlID: 129
+  controlID: 104
 --- !u!114 &10
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -467,7 +467,7 @@ MonoBehaviour:
     m_MinimalGUI: 1
   m_defaultScale: 0.54817706
   m_TargetTexture: {fileID: 0}
-  m_CurrentColorSpace: 0
+  m_CurrentColorSpace: 1
   m_LastWindowPixelSize: {x: 1147, y: 438}
   m_ClearInEditMode: 1
   m_NoCameraWarning: 1
@@ -502,23 +502,23 @@ MonoBehaviour:
   m_SceneHierarchy:
     m_TreeViewState:
       scrollPos: {x: 0, y: 0}
-      m_SelectedIDs: 3c370000
-      m_LastClickedID: 14140
-      m_ExpandedIDs: 08b4ffff22b4ffffc0e7fffff6e7fffffae7ffff2ce8ffff30e8ffff4ee8ffffc0e8ffffcee8ffff04e9ffff14e9ffff00eeffff04eeffff08eeffff10eeffff14eeffff18eeffff20eeffff24eeffff28eeffff30eeffff34eeffff38eeffff40eeffff44eeffff48eeffff4ceeffff50eeffff54eeffff58eeffff60eeffff64eeffff6ceeffff70eeffff74eeffff7ceeffff80eeffff84eeffff8ceeffff90eeffff94eeffff9ceeffffa0eeffffa4eeffffaceeffffb0eeffffb4eeffffb8eeffffbceeffffc0eeffffc4eeffffc8eeffffcceeffffd0eeffffd8eeffffdceeffffe0eeffffe4eeffffeceefffff0eefffff4eefffff8eefffffceeffff00efffff06efffff20efffff04f5ffff0ef5ffffd6fbffff600f0000
+      m_SelectedIDs: 
+      m_LastClickedID: 0
+      m_ExpandedIDs: b44cffffbc4cffff904effff
       m_RenameOverlay:
         m_UserAcceptedRename: 0
-        m_Name: 
-        m_OriginalName: 
+        m_Name: Pivot
+        m_OriginalName: Pivot
         m_EditFieldRect:
           serializedVersion: 2
           x: 0
           y: 0
           width: 0
           height: 0
-        m_UserData: 0
+        m_UserData: -45900
         m_IsWaitingForDelay: 0
         m_IsRenaming: 0
-        m_OriginalEventType: 11
+        m_OriginalEventType: 0
         m_IsRenamingFilename: 0
         m_ClientGUIView: {fileID: 7}
       m_SearchString: 
@@ -566,20 +566,20 @@ MonoBehaviour:
     m_ShowAllHits: 0
     m_SearchArea: 1
     m_Folders:
-    - Assets/Player/Models
+    - Assets
   m_ViewMode: 1
   m_StartGridSize: 16
   m_LastFolders:
-  - Assets/Player/Models
+  - Assets
   m_LastFoldersGridSize: 16
   m_LastProjectPath: C:\Users\lawre\Documents\GitHub\PCGactionAdventure\PCG-ActionAdventure
   m_LockTracker:
     m_IsLocked: 0
   m_FolderTreeState:
-    scrollPos: {x: 0, y: 147}
-    m_SelectedIDs: fc090000
-    m_LastClickedID: 2556
-    m_ExpandedIDs: 00000000d6090000460a00004c0a00000c0b0000260b00009e0b0000020c0000200c0000260c00004c0c0000c60c0000fe0c0000dc0d0000a60e00000c3300000e33000010330000123300001433000016330000183300001a3300001c3300001e33000020330000223300002433000026330000
+    scrollPos: {x: 0, y: 31}
+    m_SelectedIDs: c8450000
+    m_LastClickedID: 17864
+    m_ExpandedIDs: 00000000c84500003e460000444600002047000040470000c24700002c4800005048000056480000864800000a49000050490000444a0000504a00002c4b000040500000425000004450000046500000485000004a5000004c5000004e50000050500000525000005450000056500000585000005a500000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -607,7 +607,7 @@ MonoBehaviour:
     scrollPos: {x: 0, y: 0}
     m_SelectedIDs: 
     m_LastClickedID: 0
-    m_ExpandedIDs: 00000000d6090000460a00004c0a00000c0b0000260b00009e0b0000020c0000200c0000260c0000c60c0000fe0c0000dc0d0000a60e00000c3300000e33000010330000123300001433000016330000183300001a3300001c3300001e33000020330000223300002433000026330000
+    m_ExpandedIDs: 00000000c84500003e460000444600002047000040470000c24700002c4800005048000056480000864800000a49000050490000444a00002c4b000040500000425000004450000046500000485000004a5000004c5000004e50000050500000525000005450000056500000585000005a500000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -638,18 +638,18 @@ MonoBehaviour:
     m_ExpandedInstanceIDs: dc040000c21c00008a1d0000021e0000b21e0000f8290000f22b00005a270000a22e00001a2f00005a2e0000ea27000072280000a42a0000e82d000048310000422a000064350000960b000074310000763b0000920c0000620b00001c0c0000840c00001e2e0000f62d0000222e000000000000ca0b0000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
-      m_Name: 
-      m_OriginalName: 
+      m_Name: Aura
+      m_OriginalName: Aura
       m_EditFieldRect:
         serializedVersion: 2
         x: 0
         y: 0
         width: 0
         height: 0
-      m_UserData: 0
+      m_UserData: 19024
       m_IsWaitingForDelay: 0
       m_IsRenaming: 0
-      m_OriginalEventType: 11
+      m_OriginalEventType: 0
       m_IsRenamingFilename: 1
       m_ClientGUIView: {fileID: 8}
     m_CreateAssetUtility:
