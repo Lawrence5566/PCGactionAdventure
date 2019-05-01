@@ -6,15 +6,11 @@ public class Key : MonoBehaviour
 {
 	public token keyToken;
 
-	InventoryManager playerInv;
-
-	void Start(){
-		playerInv = FindObjectOfType<InventoryManager> ();
-	}
-
 	void OnCollisionEnter(Collision collision){
 
-		if (playerInv.gameObject == collision.gameObject) { //if hit player
+		InventoryManager playerInv = collision.gameObject.GetComponent<InventoryManager> ();
+
+		if (playerInv){ //if hit player
 			playerInv.keys.Add(keyToken); 	//give player the key
 			gameObject.SetActive(false); 	//turn off object
 		}

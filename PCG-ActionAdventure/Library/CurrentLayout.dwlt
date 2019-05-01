@@ -21,7 +21,7 @@ MonoBehaviour:
   m_ShowMode: 4
   m_Title: 
   m_RootView: {fileID: 2}
-  m_MinSize: {x: 950, y: 524}
+  m_MinSize: {x: 950, y: 300}
   m_MaxSize: {x: 10000, y: 10000}
 --- !u!114 &2
 MonoBehaviour:
@@ -45,7 +45,7 @@ MonoBehaviour:
     y: 0
     width: 1920
     height: 997
-  m_MinSize: {x: 950, y: 524}
+  m_MinSize: {x: 950, y: 300}
   m_MaxSize: {x: 10000, y: 10000}
 --- !u!114 &3
 MonoBehaviour:
@@ -112,10 +112,10 @@ MonoBehaviour:
     y: 30
     width: 1920
     height: 947
-  m_MinSize: {x: 713, y: 474}
-  m_MaxSize: {x: 18008, y: 14024}
+  m_MinSize: {x: 713, y: 498}
+  m_MaxSize: {x: 18008, y: 14048}
   vertical: 0
-  controlID: 103
+  controlID: 40
 --- !u!114 &6
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -137,10 +137,10 @@ MonoBehaviour:
     y: 0
     width: 311
     height: 947
-  m_MinSize: {x: 232, y: 474}
-  m_MaxSize: {x: 10002, y: 14024}
+  m_MinSize: {x: 232, y: 498}
+  m_MaxSize: {x: 10002, y: 14048}
   vertical: 1
-  controlID: 54
+  controlID: 64
 --- !u!114 &7
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -160,8 +160,8 @@ MonoBehaviour:
     y: 0
     width: 311
     height: 545
-  m_MinSize: {x: 200, y: 200}
-  m_MaxSize: {x: 4000, y: 4000}
+  m_MinSize: {x: 202, y: 224}
+  m_MaxSize: {x: 4002, y: 4024}
   m_ActualView: {fileID: 17}
   m_Panes:
   - {fileID: 17}
@@ -217,7 +217,7 @@ MonoBehaviour:
   m_MinSize: {x: 204, y: 448}
   m_MaxSize: {x: 4004, y: 8048}
   vertical: 1
-  controlID: 104
+  controlID: 41
 --- !u!114 &10
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -392,7 +392,7 @@ MonoBehaviour:
   m_PersistentViewDataDictionary: {fileID: 0}
   m_LockTracker:
     m_IsLocked: 0
-  m_LastSelectedObjectID: 4284
+  m_LastSelectedObjectID: -1552
 --- !u!114 &16
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -502,20 +502,20 @@ MonoBehaviour:
   m_SceneHierarchy:
     m_TreeViewState:
       scrollPos: {x: 0, y: 0}
-      m_SelectedIDs: 
-      m_LastClickedID: 0
-      m_ExpandedIDs: b44cffffbc4cffff904effff
+      m_SelectedIDs: 02faffff
+      m_LastClickedID: -1534
+      m_ExpandedIDs: d6fbffff680f0000
       m_RenameOverlay:
         m_UserAcceptedRename: 0
-        m_Name: Pivot
-        m_OriginalName: Pivot
+        m_Name: Canvas
+        m_OriginalName: Canvas
         m_EditFieldRect:
           serializedVersion: 2
           x: 0
           y: 0
           width: 0
           height: 0
-        m_UserData: -45900
+        m_UserData: 3944
         m_IsWaitingForDelay: 0
         m_IsRenaming: 0
         m_OriginalEventType: 0
@@ -566,20 +566,20 @@ MonoBehaviour:
     m_ShowAllHits: 0
     m_SearchArea: 1
     m_Folders:
-    - Assets
+    - Assets/Scripts
   m_ViewMode: 1
   m_StartGridSize: 16
   m_LastFolders:
-  - Assets
+  - Assets/Scripts
   m_LastFoldersGridSize: 16
   m_LastProjectPath: C:\Users\lawre\Documents\GitHub\PCGactionAdventure\PCG-ActionAdventure
   m_LockTracker:
     m_IsLocked: 0
   m_FolderTreeState:
-    scrollPos: {x: 0, y: 31}
-    m_SelectedIDs: c8450000
-    m_LastClickedID: 17864
-    m_ExpandedIDs: 00000000c84500003e460000444600002047000040470000c24700002c4800005048000056480000864800000a49000050490000444a0000504a00002c4b000040500000425000004450000046500000485000004a5000004c5000004e50000050500000525000005450000056500000585000005a500000
+    scrollPos: {x: 0, y: 195}
+    m_SelectedIDs: 2a0d0000
+    m_LastClickedID: 3370
+    m_ExpandedIDs: 00000000f2090000640a00006a0a00002e0b0000480b0000c00b0000240c0000420c0000480c00006e0c0000e80c0000200d0000060e0000d20e000036330000383300003a3300003c3300003e33000040330000423300004433000046330000483300004a3300004c3300004e3300005033000052330000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -607,7 +607,7 @@ MonoBehaviour:
     scrollPos: {x: 0, y: 0}
     m_SelectedIDs: 
     m_LastClickedID: 0
-    m_ExpandedIDs: 00000000c84500003e460000444600002047000040470000c24700002c4800005048000056480000864800000a49000050490000444a00002c4b000040500000425000004450000046500000485000004a5000004c5000004e50000050500000525000005450000056500000585000005a500000
+    m_ExpandedIDs: 00000000f2090000640a00006a0a00002e0b0000480b0000c00b0000240c0000420c0000480c00006e0c0000e80c0000200d0000060e0000d20e000036330000383300003a3300003c3300003e33000040330000423300004433000046330000483300004a3300004c3300004e3300005033000052330000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -635,21 +635,21 @@ MonoBehaviour:
     m_SelectedInstanceIDs: 
     m_LastClickedInstanceID: 0
     m_HadKeyboardFocusLastEvent: 1
-    m_ExpandedInstanceIDs: dc040000c21c00008a1d0000021e0000b21e0000f8290000f22b00005a270000a22e00001a2f00005a2e0000ea27000072280000a42a0000e82d000048310000422a000064350000960b000074310000763b0000920c0000620b00001c0c0000840c00001e2e0000f62d0000222e000000000000ca0b0000
+    m_ExpandedInstanceIDs: dc040000c21c00008a1d0000021e0000b21e0000f8290000f22b00005a270000a22e00001a2f00005a2e0000ea27000072280000a42a0000e82d000048310000422a000064350000960b000074310000763b0000920c0000620b00001c0c0000840c00001e2e0000f62d0000222e0000ca0b000000000000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
-      m_Name: Aura
-      m_OriginalName: Aura
+      m_Name: 
+      m_OriginalName: 
       m_EditFieldRect:
         serializedVersion: 2
         x: 0
         y: 0
         width: 0
         height: 0
-      m_UserData: 19024
+      m_UserData: 0
       m_IsWaitingForDelay: 0
       m_IsRenaming: 0
-      m_OriginalEventType: 0
+      m_OriginalEventType: 11
       m_IsRenamingFilename: 1
       m_ClientGUIView: {fileID: 8}
     m_CreateAssetUtility:
@@ -693,9 +693,9 @@ MonoBehaviour:
   m_isRotationLocked: 0
   m_AudioPlay: 0
   m_Position:
-    m_Target: {x: 0.00033569336, y: 0.0012207031, z: -0.0063476562}
+    m_Target: {x: 6.819774, y: 35.727364, z: -29.40483}
     speed: 2
-    m_Value: {x: 0.00033569336, y: 0.0012207031, z: -0.0063476562}
+    m_Value: {x: 6.819774, y: 35.727364, z: -29.40483}
   m_RenderMode: 0
   m_CameraMode:
     drawMode: 0
@@ -723,17 +723,17 @@ MonoBehaviour:
       speed: 2
       m_Value: 0
   m_Rotation:
-    m_Target: {x: 0.26884955, y: -0.07619423, z: 0.021343654, w: 0.9599265}
+    m_Target: {x: 0.18500477, y: 0.00028568495, z: -0.000050161136, w: 0.9827376}
     speed: 2
-    m_Value: {x: 0.26884955, y: -0.07619423, z: 0.021343654, w: 0.9599265}
+    m_Value: {x: 0.18500477, y: 0.00028568495, z: -0.000050161136, w: 0.9827376}
   m_Size:
-    m_Target: 7.6834183e-10
+    m_Target: 1.101696
     speed: 2
-    m_Value: 7.6834183e-10
+    m_Value: 1.101696
   m_Ortho:
-    m_Target: 1
+    m_Target: 0
     speed: 2
-    m_Value: 1
+    m_Value: 0
   m_ShowGlobalGrid: 1
   m_LastSceneViewRotation: {x: -0.4008374, y: 0.020599993, z: -0.009019479, w: -0.9158732}
   m_LastSceneViewOrtho: 0

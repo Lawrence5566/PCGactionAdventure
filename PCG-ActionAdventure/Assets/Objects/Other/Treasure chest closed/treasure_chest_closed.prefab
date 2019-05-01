@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 33000012272195956}
   - component: {fileID: 23000013091242084}
   - component: {fileID: 586605599713539114}
+  - component: {fileID: 2226475761118322666}
   m_Layer: 0
   m_Name: treasure_chest_closed
   m_TagString: Untagged
@@ -90,3 +91,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1f0b8ebec54460d4c96734dc931878f7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!65 &2226475761118322666
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1000014188511100}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1.0340912, y: 0.6928241, z: 0.64796686}
+  m_Center: {x: -0.000000059604645, y: 0.346412, z: -0.008713961}

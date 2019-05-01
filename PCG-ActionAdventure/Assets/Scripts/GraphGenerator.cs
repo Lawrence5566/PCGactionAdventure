@@ -259,6 +259,7 @@ public class GraphGenerator : MonoBehaviour {
 		do { //keep picking different spots till you get one that isnt the start node
 			goalNode = nodeArray [Random.Range (0, 11)];
 		} while (goalNode.obj.name == "StartNode");
+
 		GameObject text = Instantiate(TextBasePrefab,  goalNode.obj.transform);
 		goalNode.obj.name = "GoalNode";
 		text.GetComponent<TextMesh>().text = "Goal";
@@ -327,9 +328,9 @@ public class GraphGenerator : MonoBehaviour {
 		for (int i = 1; i < routeB.Count; i++) { 
 			RouteB.Add(addConnection (routeB [i - 1], routeB [i], connectionArrowSpr));
 		}
-
-		RouteA.Insert (0, new KeyValuePair<connection, node> (new connection (), startNode)); //add start node to beginning of routes
-		RouteB.Insert (0, new KeyValuePair<connection, node> (new connection (), startNode)); //(this is for loop stuff later)
+		//add start node to beginning of routes (this is for loop stuff later)
+		RouteA.Insert (0, new KeyValuePair<connection, node> (new connection (), startNode));
+		RouteB.Insert (0, new KeyValuePair<connection, node> (new connection (), startNode));
 
 		int activeNodes = 0;
 		foreach (node n in nodeArray) { //calculate number of nodes in graph that are active
@@ -339,7 +340,7 @@ public class GraphGenerator : MonoBehaviour {
 
 		List<List<node>> loops = findLoopsInGraph (startNode, null, new List<node> (), new List<node> (), activeNodes, new List<List<node>> ());
 
-		//loops.Distinct().ToList (); //remove duplicates (can sometimes get them)
+		//loops.Distinct().ToList (); //remove duplicates (can sometimes get them)?
 
         foreach (List<node> loop in loops) {
         
@@ -352,9 +353,9 @@ public class GraphGenerator : MonoBehaviour {
                 }
             }
 
-            foreach (KeyValuePair<connection, node> k in RouteB) {  //foreach connection in RouteA
-                if (loop.Contains(k.Value)){                        //if loop contains node
-                    loopRouteB.Add(k);                              //add to route connection
+            foreach (KeyValuePair<connection, node> k in RouteB) {  //foreach connection in RouteB, may have duplicates from A this way, remove them here?
+                if (loop.Contains(k.Value)){                       
+                    loopRouteB.Add(k);                              
                 }
             }
 
@@ -382,7 +383,7 @@ public class GraphGenerator : MonoBehaviour {
             
 			int choice = Random.Range (0, 4);
 
-            if (ACount > 4 && BCount > 4){ //both routes are long
+            if (ACount > 4 && BCount > 4){ //both routes are long 
 				Debug.Log("Long a, Long b");
 				if (choice == 0 || choice == 1) {
 					TwoAlternativePaths (loopRouteA, loopRouteB);
@@ -424,12 +425,12 @@ public class GraphGenerator : MonoBehaviour {
 				List<KeyValuePair<connection, node>> shorter = new List<KeyValuePair<connection, node>>();
 				List<KeyValuePair<connection, node>> longer = new List<KeyValuePair<connection, node>>();
 
-				if (loopRouteA.Count >= loopRouteB.Count) {
-					shorter = loopRouteA;
-					longer = loopRouteB;
-				} else {
+				if (ACount >= BCount) {
 					shorter = loopRouteB;
 					longer = loopRouteA;
+				} else {
+					shorter = loopRouteA;
+					longer = loopRouteB;
 				}
 					
 				if (choice == 0) {
@@ -444,7 +445,7 @@ public class GraphGenerator : MonoBehaviour {
             }
 
 			if (goalNode.features.Count == 0){
-				//if goal node has no features at end of cycle, create boss
+				//if goal node has no features at end of cycle, (no objectives) create boss
 				goalNode.AddFeature(new token ("boss", monsterCircle));
 			}
 
@@ -529,19 +530,16 @@ public class GraphGenerator : MonoBehaviour {
 		dramaticCycleNodes[0] = shortRoute[0].Value; 					//start of dramatic view
 		dramaticCycleNodes[1] = shortRoute[shortRoute.Count - 1].Value;	//end of dramatic view
 
-		//add dramatic cycle connection
-		addConnection (dramaticCycleNodes [0], dramaticCycleNodes [1], connectionDramatic);
-
-		//do this foreach node on shortRoute?
+		//foreach node on shortRoute, dissconnect
 		//remove connection to first node on short route
 		if (shortRoute.Count > 1) { //should always be but just in case
 			for (int i = 1; i < shortRoute.Count; i++) { //start one ahead
 				DisconnectNodes (shortRoute [i-1].Value, shortRoute [i].Value); //disconnect previous and this
 			}
 		}
-		//if (shortRoute.Count > 1){ //should always be but just in case
-		//	DisconnectNodes(shortRoute[0].Value, shortRoute[1].Value);
-		//}
+
+		//add dramatic cycle connection
+		addConnection (dramaticCycleNodes [0], dramaticCycleNodes [1], connectionDramatic);
 	}
 
 	void DisconnectNodes(node a, node b){
@@ -588,23 +586,23 @@ public class GraphGenerator : MonoBehaviour {
 		Debug.Log("Lock and Key cycle");
 
 		node endNode = shortRoute [shortRoute.Count - 1].Value; 
-		bool foundOutwardConnections = false;
+		bool foundOutwardConnections = false; //checking if any outward connections are found to get out of this loop
 
-		token keyToken = new token("key", keyCircle); //add key token to each lock
+		token keyToken = new token("key", keyCircle); 
+
+		//add key token to each lock it unlocks
 		foreach (KeyValuePair<connection, node> k in endNode.connectionToNodes) {
-			if (!shortRoute.Contains (k) && !longRoute.Contains(k)){  //if connection not in shortRoute or longRoute (therefore not in this loop)
+			if (!shortRoute.Contains (k) && !longRoute.Contains(k)){  //if connection not in shortRoute or longRoute, lock it (stoping player advance through this route)
 				k.Key.AddFeatureToConnection(new token("lock", lockCircle, keyToken));//add lock
 				foundOutwardConnections = true;
 
 				Debug.Log ("add lock to connection to " + k.Value.obj.name);
 			}
 		}
-
-		//if key on goal node, make the goal only achivable when key is collected (eg if its a monster, keep the monster in stone till key is found)
-		if (!foundOutwardConnections) { //if no connections were outside of routes, then the goal node of loop is the actually goal node!
-			goalNode.AddFeature(new token("lock", lockCircle, keyToken));//add lock
-
-			//longRoute[1].Key.AddFeatureToConnection(new token("lock", lockCircle, keyToken));//just for testing cus we need to see doors
+			
+		//if no connections were outside of routes, then the goal node is also goal of loop, so make the goal only achivable when key is collected (eg if its a monster, keep the monster in stone till key is found)
+		if (!foundOutwardConnections) {
+			goalNode.AddFeature(new token("lock", lockCircle, keyToken));	//add lock onto node
 		}
 
 		//place key at the first node of long route, and close long route off in that direction (so player encounters lock before seeing key)
@@ -616,8 +614,9 @@ public class GraphGenerator : MonoBehaviour {
 		} else {
 			longRoute [1].Value.AddFeature (new token ("monster", monsterCircle));
 		}
+
 		//longRoute[1].Key.ChangeType(ConType.blocked, connectionBlockedSpr);	//block connection to it
-		DisconnectNodes(longRoute[0].Value, longRoute[1].Value);//for now, remove the connection instead of blocking it NEEDS CHANGING?
+		DisconnectNodes(longRoute[0].Value, longRoute[1].Value);//for now, remove the connection instead of blocking it - NEEDS CHANGING?
 	}
 
 }
@@ -629,7 +628,7 @@ public class node{
 
 	public string name;
 	public GameObject obj;
-	public List<node> connectedNodes = new List<node>(); //not neccisary?
+	public List<node> connectedNodes = new List<node>(); //not necessary?
 	public List<token> features = new List<token> ();
 
 	public node(){

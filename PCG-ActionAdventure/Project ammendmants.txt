@@ -1,0 +1,10 @@
+(also on github pushes)
+
+01/05/2019
++ammending some code comments
++fixing dramatic cycle route, was dissconnecting all nodes after creating the cycle, should be other way round
+-removed skybox
++added 'the void' a terrrain under the level that restarts the game when player lands on it (falls though holes)
++made sure key checks if collision object has playInv to check if its the player, instead of keep a inv link
++lock and key cycle edits
++fixed dramatic cycle bug (with 2 short routes the wrong route was set as shorter than the other)
