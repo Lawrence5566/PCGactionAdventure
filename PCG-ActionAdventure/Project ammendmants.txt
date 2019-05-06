@@ -1,5 +1,14 @@
 (also on github pushes)
 
+06/05/2019
+made sure boss room only ever has boss token or lock in it
+adding monsters to every room in a dangerous route (on the short route)
+added traps to every connection in short route in a alternative trap route
+added UI to show monsters stats when locked on
+cleared up some errors including:
+	changed restart level to use non-obsolete sceneManager
+made str & def impactful (actually does something now)
+
 01/05/2019
 +ammending some code comments
 +fixing dramatic cycle route, was dissconnecting all nodes after creating the cycle, should be other way round
