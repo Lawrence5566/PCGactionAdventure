@@ -44,7 +44,6 @@ public class TrapActivator : MonoBehaviour
 			player.DamagePlayer (30f, false);
 
 			timer = time + 2;	//reset timer to 2 seconds in the future
-			Debug.Log ("apply damage on " + this.gameObject.name);
 		}
 
 	}

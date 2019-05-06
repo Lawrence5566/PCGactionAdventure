@@ -55,11 +55,10 @@ public class MobSpawner : MonoBehaviour {
 			}
 		}
 
-		/*
-		foreach (int i in enemyValueArray) { //test output
-			Debug.Log (i);
+		string output = "";
+		foreach (int i in enemyValueArray) {
+			output += i + ",";
 		}
-		*/
 
 		//now generate mobs for each task
 		for (int i = 0; i < enemyValueArray.Count; i++){ 
@@ -106,9 +105,8 @@ public class MobSpawner : MonoBehaviour {
 		List<EnemyStates> enemiesInTask = new List<EnemyStates>();
 
 		foreach (option o in TaskStack) {
-			//for testing:
+			
 			Debug.Log(o.type + "," + o.modType + ", " + o.value);
-
 
 			//spawn all the enemies for the task
 			if (o.type == "monster"){
@@ -123,15 +121,15 @@ public class MobSpawner : MonoBehaviour {
 
 					if (o.value == 5){ //if boss
 						enemy.attackSpeed = 1.5f;
-						enemy.health += 100f;
-						enemy.startHP = enemy.health; //reset start hp
+						enemy.startHP = 300.0f; //increase starthp
 					}
 
 				} else {
 					EnemyManager.singleton.weaponManager.GiveWeapon (enemy, ElementType.fire, 5, SwordType.broadsword); //give other enemys normal weapons
 				}
-
-				//Debug.Log(EnemyManager.singleton.weaponManager);
+					
+				//newEnemy.transform.localScale = new Vector3 (1f, 1f, 1f) * (1f * (enemy.startHP / 100f)); //use health to set enemy scale (100 is base)?
+				enemy.level = o.value;
 
 				enemiesInTask.Add (newEnemy.GetComponent<EnemyStates> ());
 
@@ -140,7 +138,7 @@ public class MobSpawner : MonoBehaviour {
 		}
 
 		foreach (option o in TaskStack) { //add modifiers to random enemies in stack (so its ditributied randomly)
-			int i = Random.RandomRange(0, enemiesInTask.Count);
+			int i = Random.Range(0, enemiesInTask.Count);
 			if (o.type == "mod") {
 				switch (o.modType){
 				case "str":
@@ -153,7 +151,6 @@ public class MobSpawner : MonoBehaviour {
 					enemiesInTask [i].speed += o.value/2;
 					break;
 				case "hp":
-					enemiesInTask [i].health += o.value;
 					enemiesInTask [i].startHP += o.value;
 					break;
 				default:

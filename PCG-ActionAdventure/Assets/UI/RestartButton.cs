@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 [RequireComponent(typeof(Button))]
 public class RestartButton : MonoBehaviour {
@@ -14,6 +15,7 @@ public class RestartButton : MonoBehaviour {
 	}
 
 	void TaskOnClick() {
-		Application.LoadLevel(Application.loadedLevel);
+		//Application.LoadLevel(Application.loadedLevel);
+		SceneManager.LoadScene(StaticStrings.mainSceneName); //restartLevel
 	}
 }

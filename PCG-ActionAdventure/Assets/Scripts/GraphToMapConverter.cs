@@ -25,7 +25,7 @@ public class GraphToMapConverter : MonoBehaviour {
 
 	List<Room> dramaticViewRooms = new List<Room> ();
 
-	List<Room> roList =  new List<Room>(); 						//for gizmo testing
+	//List<Room> roList =  new List<Room>(); 						//for gizmo testing
 
 	public int[,] CreateMap(node[] nodeArray, node[] dramaticCycleNodes, List<connection> listOfFeaturedConnections ){  		//takes node array, converts to rooms and combines rooms into one map
 
@@ -113,7 +113,7 @@ public class GraphToMapConverter : MonoBehaviour {
 					goalLocationAndType = new KeyValuePair<Vector3, token> (roomCenter, t);
 				
 				// if boss feature
-				if (t.type == "boss")	
+				if (t.type == "boss")
 					goalLocationAndType = new KeyValuePair<Vector3, token> (roomCenter, t);
 			}
 

@@ -5,7 +5,7 @@ using UnityEngine;
 public class GameManager : MonoBehaviour
 {
 	[Header("Change to change difficulty:")]
-	public int levelPointsValue = 6;
+	public int levelPointsValue = 3;
 
 	[Header("")]
 	public GraphToMapConverter graphToMapConverter;

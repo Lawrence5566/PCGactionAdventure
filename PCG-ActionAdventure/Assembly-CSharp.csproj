@@ -74,6 +74,7 @@
      <Compile Include="Assets\Scripts\GameManager.cs" />
      <Compile Include="Assets\Scripts\GraphGenerator.cs" />
      <Compile Include="Assets\Scripts\GraphToMapConverter.cs" />
+     <Compile Include="Assets\Scripts\LockedEnemyAnalyser.cs" />
      <Compile Include="Assets\Scripts\MeshGenerator.cs" />
      <Compile Include="Assets\Scripts\MobSpawner.cs" />
      <Compile Include="Assets\Scripts\RoomGenerator.cs" />
@@ -83,6 +84,7 @@
      <Compile Include="Assets\UI\healthbarController.cs" />
      <Compile Include="Assets\UI\RestartButton.cs" />
      <None Include="Assets\Seven Swords\Swords\Shader\ToonSwords.shader" />
+     <None Include="Assets\Fonts\VoniquePersonalUseOnly.txt" />
  <Reference Include="Unity.TextMeshPro.Editor">
  <HintPath>C:/Users/lawre/Documents/GitHub/PCGactionAdventure/PCG-ActionAdventure/Library/ScriptAssemblies/Unity.TextMeshPro.Editor.dll</HintPath>
  </Reference>

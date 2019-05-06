@@ -444,10 +444,19 @@ public class GraphGenerator : MonoBehaviour {
 				}
             }
 
-			if (goalNode.features.Count == 0){
-				//if goal node has no features at end of cycle, (no objectives) create boss
+			if (goalNode.features.Count == 0) { //if goal node has no features, add a boss
 				goalNode.AddFeature(new token ("boss", monsterCircle));
 			}
+
+			/* //for if we add other monsters to goal node:
+			if (goalNode.features.Any(x => x.type == "monster") && !goalNode.features.Any(x => x.type == "lock")){
+				//if goal node has any monsters featured at end of cycle and no lock, add boss
+
+				//remove monsters
+				goalNode.features.RemoveAll(x => x.type == "monster");
+				//add boss
+				goalNode.AddFeature(new token ("boss", monsterCircle));
+			}*/
 
         }
 
@@ -512,7 +521,12 @@ public class GraphGenerator : MonoBehaviour {
 		Debug.Log("run Alternate Paths rule");
 
 		DangerousRoute (routeA, routeB); 																	//add monster to routeA (mirrors dangerous route)
-		getRandomUniqueConnection(routeB, routeA).AddFeatureToConnection(new token("trap", trapCircle)); 	//add a trap to connection on route B
+
+		for (int i = 1; i < routeB.Count - 1; i++) { //add traps to each connection except first and last
+			routeB [i].Key.AddFeatureToConnection (new token ("trap", trapCircle));
+		}
+
+		//getRandomUniqueConnection(routeB, routeA).AddFeatureToConnection(new token("trap", trapCircle)); 	//add a trap to connection on route B
 	}
 
 	void HiddenShortcut(List<KeyValuePair<connection, node>> shortRoute, List<KeyValuePair<connection, node>> longRoute){
@@ -562,7 +576,7 @@ public class GraphGenerator : MonoBehaviour {
 	void DangerousRoute(List<KeyValuePair<connection, node>> shortRoute,List<KeyValuePair<connection, node>> longRoute){
 		//place a danger (monster) on the short route
 		Debug.Log ("run DangerousRoute rule ");
-
+		/* //original:
 		node uniqueNode = getRandomUniqueNode (shortRoute, longRoute);
 		if (uniqueNode.name == "null node") { // if no nodes unique, add to connection instead
 			//place monster on one route
@@ -570,7 +584,21 @@ public class GraphGenerator : MonoBehaviour {
 		} else {
 			//node is unique, so add monster
 			uniqueNode.AddFeature(new token("monster", monsterCircle)); 
+		}*/
+
+		//add to every node on short route:
+		bool addedMonster = false;
+		for (int i = 1; i < shortRoute.Count-1; i++){ //(skip first and last as they are part of other routes)
+			shortRoute[i].Value.AddFeature(new token("monster", monsterCircle)); 
+			addedMonster = true;
 		}
+
+		//add to connection as route was too short
+		if (addedMonster == false) getRandomUniqueConnection(shortRoute,longRoute).AddFeatureToConnection (new token ("monster", monsterCircle)); 
+
+		//foreach (KeyValuePair<connection, node> k in shortRoute){
+		//	k.Value.AddFeature(new token("monster", monsterCircle)); 
+		//}
 	}
 
 	void UnknownReturn(List<KeyValuePair<connection, node>> shortRoute,List<KeyValuePair<connection, node>> longRoute){

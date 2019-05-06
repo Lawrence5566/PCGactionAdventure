@@ -26,5 +26,8 @@ public static class StaticStrings {
 	public static string horizontal = "horizontal";
 	public static string running = "running";
 
+	//others
+	public static string mainSceneName = "DungeonGenerator";
+
 
 }

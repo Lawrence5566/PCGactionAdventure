@@ -4,14 +4,14 @@ using UnityEngine;
 
 public class EnemyStates : MonoBehaviour {
 
-	public float health = 100; //make health scale size of enemy?
-
-	public float startHP;
+	public float startHP = 100; //set this in mobspawner
+	public float hp;
 	public healthbarController healthBar;
 
 	public float str = 1; //these need to have an impact
 	public float def = 1;
 	public float speed = 1;
+	public int level = 1;
 
 	public float attackSpeed = 1;
 
@@ -37,17 +37,12 @@ public class EnemyStates : MonoBehaviour {
 	public List<Collider> ragdollColliders = new List<Collider>();
 
 	PlayerStats player;
-	Vector3 startLocation; //is this used?
+	//Vector3 startLocation; //is this used?
 
 	public Weapon weaponScript;
 
 	void Start(){
-		health += 100; //make health scale size of enemy?
-		startHP += 100;
-		//str = 1;
-		//def = 1;
-		//speed = 1;
-
+		hp = startHP;
 		anim = GetComponentInChildren<Animator> ();
 
 		rigid = GetComponent<Rigidbody> (); //must be called before animator hook
@@ -62,7 +57,7 @@ public class EnemyStates : MonoBehaviour {
 		EnemyManager.singleton.enemyTargets.Add (this); //add enemy to manager
 
 		player = FindObjectOfType<PlayerStats> ();
-		startLocation = transform.position;
+		//startLocation = transform.position; //not used?
 
 		weaponScript = weapon.GetComponent<Weapon> ();
 		weaponScript.CloseDamageColliders (); //initially close damage colliders
@@ -109,7 +104,7 @@ public class EnemyStates : MonoBehaviour {
 			canAttack = true;
 		}
 
-		if (health <= 0) {
+		if (hp <= 0) {
 			if (!isDead) {
 				isDead = true;
 				EnableRagdoll ();
@@ -181,13 +176,13 @@ public class EnemyStates : MonoBehaviour {
 		if (isInvincible)
 			return;
 
-		health -= v;
+		hp -= v;
 		isInvincible = true;
 		anim.Play ("damage_1");
 		anim.applyRootMotion = true;
 		anim.SetBool (StaticStrings.canMove, false);
 
-		healthBar.SetSize (health / startHP);
+		healthBar.SetSize (hp / startHP);
 	}
 
 	/*
