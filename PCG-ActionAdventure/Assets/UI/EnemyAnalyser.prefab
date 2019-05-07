@@ -783,6 +783,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerInput: {fileID: 0}
+  crosshair: {fileID: 0}
   level: {fileID: 1277759372756797477}
   hp: {fileID: 7832129658845490839}
   str: {fileID: 7832129660060081590}
