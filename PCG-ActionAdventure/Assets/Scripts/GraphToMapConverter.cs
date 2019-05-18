@@ -90,12 +90,25 @@ public class GraphToMapConverter : MonoBehaviour {
 			currRoom.node = nodeArray[n];
 			roomsList.Add (currRoom);					//add to list of rooms
 
-			//find room center
+			// find room center //
 			Vector3 roomCenter = Vector3.zero;
 			if (currRoom.tiles.Count > 1){
-				roomCenter = CoordToWorldPoint (currRoom.tiles [currRoom.tiles.Count / 2]); //make room center the center of the room
+				
+				//tiles are already sorted by x, so just pick the middle x value:
+				int middleValue = currRoom.tiles[currRoom.tiles.Count/2].tileX;
+
+				//get all values with that x
+				List<Coord> sortedTempTiles = currRoom.tiles.FindAll(x => x.tileX == middleValue);
+
+				//sort by y
+				sortedTempTiles.OrderBy(l => l.tileY);
+
+				//get middle value (which is the center of the room)
+				roomCenter = CoordToWorldPoint (sortedTempTiles[sortedTempTiles.Count/2]);
+
 			} //else it will add zero point
-			roomCenterCoords.Add(roomCenter); 
+
+			roomCenterCoords.Add(roomCenter); //add room center if there is one or not (ensuring empty rooms will have 0,0,0 placeholder )
 
 			//deal with node features
 			roomCenter.y = 0; //make any spawned objects are on the ground
