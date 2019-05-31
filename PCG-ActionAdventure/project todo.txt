@@ -1,8 +1,4 @@
 
--make enemys in definate center of room? (at the moment you just get middle room value)
-
--> better yet, find way to pick location in the room :D
-
 -make hidden route more obvious (with blurry effect)
 -think about if 2 keys are generated 
 -make sure 2 lock and keys work together
@@ -49,4 +45,4 @@ patrolling AI?
 Inventory?
 
 
-ambient sounds/sounds?
+ambient sounds/sound fx?
