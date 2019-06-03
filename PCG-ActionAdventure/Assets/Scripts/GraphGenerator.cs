@@ -21,6 +21,7 @@ public class GraphGenerator : MonoBehaviour {
     public Sprite trapCircle;
 
     public Sprite itemCircle;
+    public Sprite healItem;
 	public Sprite hiddenCircle;
 	public node[] nodeArray = new node[12];
 	public node startNode;
@@ -321,6 +322,30 @@ public class GraphGenerator : MonoBehaviour {
         b.connectedNodes.Remove(a);
     }
 
+    string checkForAdjacency(node a, node b) {
+
+        var relativePoint = a.obj.transform.InverseTransformPoint(b.obj.transform.position);
+
+        if (relativePoint.x == -4.0 && relativePoint.y == 0)
+        { //b is left of a (and not above or below)
+            return "left";
+        }
+        if (relativePoint.x == 4.0 && relativePoint.y == 0)
+        {
+            return "right";
+        }
+        if (relativePoint.y == 4.0 && relativePoint.x == 0)
+        {
+            return "top";
+        }
+        if (relativePoint.y == -4.0 && relativePoint.x == 0)
+        { //has bot node
+            return "bot";
+        }
+
+        return null;
+    }
+
     // graph grammer functions: //
 
     //Dungeon > Rooms + Goal
@@ -423,22 +448,27 @@ public class GraphGenerator : MonoBehaviour {
 
 		List<List<node>> loops = findLoopsInGraph (startNode, null, new List<node> (), new List<node> (), activeNodes, new List<List<node>> ());
 
-		//loops.Distinct().ToList (); //remove duplicates (can sometimes get them)?
+        //loops.Distinct().ToList (); //remove duplicates (can sometimes get them)?
 
-        foreach (List<node> loop in loops) {
-        
+        foreach (List<node> loop in loops)
+        {
+
             List<KeyValuePair<connection, node>> loopRouteA = new List<KeyValuePair<connection, node>>();
             List<KeyValuePair<connection, node>> loopRouteB = new List<KeyValuePair<connection, node>>();
 
-            foreach (KeyValuePair<connection, node> k in RouteA) {  //foreach connection in RouteA
-                if (loop.Contains(k.Value)){                        //if loop contains node from that connection
+            foreach (KeyValuePair<connection, node> k in RouteA)
+            {  //foreach connection in RouteA
+                if (loop.Contains(k.Value))
+                {                        //if loop contains node from that connection
                     loopRouteA.Add(k);                              //add to connection to RouteA half of loop
                 }
             }
 
-            foreach (KeyValuePair<connection, node> k in RouteB) {  //foreach connection in RouteB, may have duplicates from A this way, remove them here?
-                if (loop.Contains(k.Value)){                       
-                    loopRouteB.Add(k);                              
+            foreach (KeyValuePair<connection, node> k in RouteB)
+            {  //foreach connection in RouteB, may have duplicates from A this way, remove them here?
+                if (loop.Contains(k.Value))
+                {
+                    loopRouteB.Add(k);
                 }
             }
 
@@ -461,91 +491,208 @@ public class GraphGenerator : MonoBehaviour {
             //now perform patterns on the two halfs of the route
             //make sure when doing patterns not to put obstacles on the node in both loop parts (both loop parts contain the node that joins them)
 
+            //condense these down? switch statements?
+
             int ACount = loopRouteA.Count;
             int BCount = loopRouteB.Count;
-            
-			int choice = Random.Range (0, 4);
 
-            if (ACount > 4 && BCount > 4){ //both routes are long 
-				Debug.Log("Long a, Long b");
-				if (choice == 0 || choice == 1) {
-					TwoAlternativePaths (loopRouteA, loopRouteB);
-				} else {
-					TwoAlternativePaths(loopRouteB, loopRouteA); 
-				}
+            int choice = Random.Range(0, 4);
+
+            if (ACount > 4 && BCount > 4)
+            { //both routes are long 
+                Debug.Log("Long a, Long b");
+                if (choice == 0 || choice == 1)
+                {
+                    TwoAlternativePaths(loopRouteA, loopRouteB);
+                }
+                else
+                {
+                    TwoAlternativePaths(loopRouteB, loopRouteA);
+                }
             }
-            else if (ACount > 4 && BCount <= 4) { //A is long, B is short
-				Debug.Log("Long a, Short b");
+            else if (ACount > 4 && BCount <= 4)
+            { //A is long, B is short
+                Debug.Log("Long a, Short b");
 
-				if (choice == 0) {
-					HiddenShortcut(loopRouteB, loopRouteA);
-				} else if (choice == 1) {
-					DramaticCycle(loopRouteB);
-				} else if (choice == 2) {
-					DangerousRoute (loopRouteB, loopRouteA);
-				} else{
-					LockAndKey(loopRouteB,loopRouteA);
-				}
+                if (choice == 0)
+                {
+                    HiddenShortcut(loopRouteB, loopRouteA);
+                }
+                else if (choice == 1)
+                {
+                    DramaticCycle(loopRouteB);
+                }
+                else if (choice == 2)
+                {
+                    DangerousRoute(loopRouteB, loopRouteA);
+                }
+                else
+                {
+                    LockAndKey(loopRouteB, loopRouteA);
+                }
             }
-            else if (ACount <= 4 && BCount > 4){ //A is short, B is long
-				//UnknownReturn(loopRouteA,loopRouteB); //not using?
-				Debug.Log("Short a, Long b");
+            else if (ACount <= 4 && BCount > 4)
+            { //A is short, B is long
+              //UnknownReturn(loopRouteA,loopRouteB); //not using?
+                Debug.Log("Short a, Long b");
 
-				if (choice == 0) {
-					HiddenShortcut(loopRouteA, loopRouteB);
-				} else if (choice == 1) {
-					DramaticCycle(loopRouteA);
-				} else if (choice == 2) {
-					DangerousRoute (loopRouteA, loopRouteB);
-				} else{
-					LockAndKey(loopRouteA,loopRouteB);
-				}
+                if (choice == 0)
+                {
+                    HiddenShortcut(loopRouteA, loopRouteB);
+                }
+                else if (choice == 1)
+                {
+                    DramaticCycle(loopRouteA);
+                }
+                else if (choice == 2)
+                {
+                    DangerousRoute(loopRouteA, loopRouteB);
+                }
+                else
+                {
+                    LockAndKey(loopRouteA, loopRouteB);
+                }
 
             }
-            else{ //both are short, so run on the shorter one
-				Debug.Log("Short a, Short b");
+            else
+            { //both are short, so run on the shorter one
+                Debug.Log("Short a, Short b");
 
-				List<KeyValuePair<connection, node>> shorter = new List<KeyValuePair<connection, node>>();
-				List<KeyValuePair<connection, node>> longer = new List<KeyValuePair<connection, node>>();
+                List<KeyValuePair<connection, node>> shorter = new List<KeyValuePair<connection, node>>();
+                List<KeyValuePair<connection, node>> longer = new List<KeyValuePair<connection, node>>();
 
-				if (ACount >= BCount) {
-					shorter = loopRouteB;
-					longer = loopRouteA;
-				} else {
-					shorter = loopRouteA;
-					longer = loopRouteB;
-				}
-					
-				if (choice == 0) {
-					HiddenShortcut(shorter, longer);
-				} else if (choice == 1) {
-					DramaticCycle(shorter);
-				} else if (choice == 2) {
-					DangerousRoute (shorter, longer);
-				} else{
-					LockAndKey(shorter,longer);
-				}
+                if (ACount >= BCount)
+                {
+                    shorter = loopRouteB;
+                    longer = loopRouteA;
+                }
+                else
+                {
+                    shorter = loopRouteA;
+                    longer = loopRouteB;
+                }
+
+                if (choice == 0)
+                {
+                    HiddenShortcut(shorter, longer);
+                }
+                else if (choice == 1)
+                {
+                    DramaticCycle(shorter);
+                }
+                else if (choice == 2)
+                {
+                    DangerousRoute(shorter, longer);
+                }
+                else
+                {
+                    LockAndKey(shorter, longer);
+                }
             }
 
-			if (goalNode.features.Count == 0) { //if goal node has no features, add a boss
-				goalNode.AddFeature(new token ("boss", monsterCircle));
-			}
+            // TreasureRoom route
+            if (ACount >= BCount) { //A is longer
+                TreasureRoom(loopRouteA);
+            }
+            else { //B is longer
+                TreasureRoom(loopRouteB);
+            }
 
-			/* //for if we add other monsters to goal node:
-			if (goalNode.features.Any(x => x.type == "monster") && !goalNode.features.Any(x => x.type == "lock")){
-				//if goal node has any monsters featured at end of cycle and no lock, add boss
+            //TwoEmptyRooms
+            TwoEmptyRooms(loopRouteA);
+            TwoEmptyRooms(loopRouteB);
 
-				//remove monsters
-				goalNode.features.RemoveAll(x => x.type == "monster");
-				//add boss
-				goalNode.AddFeature(new token ("boss", monsterCircle));
-			}*/
+
+            if (goalNode.features.Count == 0)
+            { //if goal node has no features, add a boss
+                goalNode.AddFeature(new token("boss", monsterCircle));
+
+                BossPrepHPpattern(loopRouteA); //if any enemies or traps present in the routes, will add hp right before the boss
+                BossPrepHPpattern(loopRouteB);
+
+            }
 
         }
+                
+
+        /* //for if we add other monsters to goal node:
+		if (goalNode.features.Any(x => x.type == "monster") && !goalNode.features.Any(x => x.type == "lock")){
+			//if goal node has any monsters featured at end of cycle and no lock, add boss
+
+			//remove monsters
+			goalNode.features.RemoveAll(x => x.type == "monster");
+			//add boss
+			goalNode.AddFeature(new token ("boss", monsterCircle));
+		}*/
+
+        
 
     }
 
     // pattern rules: //
+
+    void TwoEmptyRooms(List<KeyValuePair<connection, node>> route) {
+        bool emptyRoom = false;
+        for (int i = 0; i < route.Count; i++) { 
+            if (route[i].Value.features.Count == 0 && route[i].Value != startNode && route[i].Value != goalNode) { //if room is empty and not start or goal node
+                if (emptyRoom) {//if previous room was empty, therefore two empty rooms!
+                    route[i].Value.AddFeature(new token("monster", monsterCircle));    //add monster in the second room
+                    break;
+                }
+
+                emptyRoom = true;
+            }
+        }
+        Debug.Log("TwoEmptyRooms");
+    }
+
+    void TreasureRoom(List<KeyValuePair<connection, node>> longRoute) {
+        List<node> monsterRooms = new List<node>();
+        foreach (KeyValuePair<connection, node> k in longRoute) {
+            if (k.Value.features.Exists(x => x.type == "monster")) { //if room contains an enenmy
+                monsterRooms.Add(k.Value);
+            }
+        }
+
+        List<int> indexes = Enumerable.Range(0, monsterRooms.Count()).ToList();
+
+        for (int i = 0; i < monsterRooms.Count(); i++) { //pick from all possible enemy rooms
+            int currIndex = indexes[Random.Range(0, indexes.Count())]; //pick random index in indexes
+
+            bool foundEmptyAdjacentRoom = false;
+
+            foreach (node n in nodeArray) {  // try to add treasure room by looking at all nodes for a surrounding node
+                string pos = checkForAdjacency(monsterRooms[currIndex], n);
+                if (pos != null) { //found an adjacent room!
+                    if (n.connectionToNodes.Count == 0 && n != startNode && n != goalNode) { //if room is not part of a route, and is not goal or start node
+                        addConnection(n, monsterRooms[currIndex], connectionArrowSpr); //create connection 
+                        n.AddFeature(new token("item", itemCircle));                   //and add an item
+                        foundEmptyAdjacentRoom = true;
+                        break;
+                    }
+                }
+            }
+
+            if (foundEmptyAdjacentRoom) //break from loop since we found a room for the treasure room
+                break;
+
+            indexes.RemoveAt(currIndex);  //remove index as we didnt find an empty room
+        }
+
+    }
+
+    void BossPrepHPpattern(List<KeyValuePair<connection, node>> route) {
+        //if player encountered an enemy or trap before boss, add HP item
+        bool enemyFound = false;
+        foreach (KeyValuePair<connection, node> k in route) {
+            if (k.Value.features.Exists(x => x.type == "trap" || x.type == "monster"))
+                enemyFound = true;
+        }
+
+        if (enemyFound) //found enemy on this route, so add hp to room one before end
+            route[route.Count - 2].Value.AddFeature(new token("healing", healItem));
+
+    }
 
     void TwoAlternativePaths(List<KeyValuePair<connection, node>> routeA, List<KeyValuePair<connection, node>> routeB){
         //add monster on routeA, trap on routeB

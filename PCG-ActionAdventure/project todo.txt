@@ -1,14 +1,20 @@
 
+recent changelog:
++ Added BossPrepHP pattern
++ Added TreasureRoom pattern
++ Added TwoEmptyRooms pattern
++ Added HP node icon sprite
+
 To do list:
--Make PCG into more of a game:
-	-weapon/item patterns (eg. hp)
-	-weapon pickups
-	-weapon of different types doing different damage mechanics
-	-weapons type VFX
-	-"if empty room" patterns - add something interesting!
-	-inventory / item pickup system
--needs at least 3 enemy spawns?
- (and make sure enemys are distributed properly (level2 means nothing atm (get rid of level? (scale off hp instead))))
+-make hp pickups prefab and add a gameManager function to check for them in the graph and add them to the game
+-do the same for items
+-weapon pickups - make script to decide what type of item to drop player
+-make weapon pickups work
+-weapon of different types doing different damage mechanics
+-weapons type VFX
+-"if empty room" patterns - add something interesting!
+-inventory / item pickup system
+-make sure enemys are distributed properly - (level2 means nothing atm (get rid of level? (scale off hp instead))))
 -basic fog + SUN?
 -patrolling AI? (+ patrolling pattern)
 -make hidden route more obvious (with blurry effect)

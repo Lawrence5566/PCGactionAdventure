@@ -15,7 +15,7 @@ public class GraphToMapConverter : MonoBehaviour {
 	int minRoomSize = 30;
 	int nodeArrayXsize = 3;
 	int nodeArrayYsize = 4;
-	public KeyValuePair<Vector3, token> goalLocationAndType;
+	public KeyValuePair<Vector3, token> goalLocationAndType = new KeyValuePair<Vector3, token>();
 	public List<Vector3> roomCenterCoords = new List<Vector3>();
 	public List<Vector3> trapLocations = new List<Vector3> ();
 	public List<Vector3> monsterLocations = new List<Vector3> ();
