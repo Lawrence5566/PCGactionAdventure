@@ -109,11 +109,11 @@ public class GraphToMapConverter : MonoBehaviour {
 
 			roomCenterCoords.Add(roomCenter); //add room center if there is one or not (ensuring empty rooms will have 0,0,0 placeholder )
 
-			//deal with node features
+			// deal with node features //
 			roomCenter.y = 0; //make any spawned objects are on the ground
 			foreach(token t in nodeArray[n].features){
-				// keys //
-				if (t.type == "key")
+				// keys & items //
+				if (t.type == "key" || t.type == "item" || t.type == "healing")
 					ItemLocations.Add (new KeyValuePair<Vector3, token> (roomCenter, t));
 				
 				// monsters & traps //

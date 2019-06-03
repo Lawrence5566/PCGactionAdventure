@@ -21,7 +21,7 @@ public class GraphGenerator : MonoBehaviour {
     public Sprite trapCircle;
 
     public Sprite itemCircle;
-    public Sprite healItem;
+    public Sprite healItemCircle;
 	public Sprite hiddenCircle;
 	public node[] nodeArray = new node[12];
 	public node startNode;
@@ -690,7 +690,7 @@ public class GraphGenerator : MonoBehaviour {
         }
 
         if (enemyFound) //found enemy on this route, so add hp to room one before end
-            route[route.Count - 2].Value.AddFeature(new token("healing", healItem));
+            route[route.Count - 2].Value.AddFeature(new token("healing", healItemCircle));
 
     }
 
