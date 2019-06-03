@@ -160,7 +160,6 @@ C:\Users\lawre\Documents\Unity Projects\PCG-ActionAdventure\Temp\bin\Debug\Unity
 C:\Users\lawre\Documents\Unity Projects\PCG-ActionAdventure\obj\Debug\Assembly-CSharp.csprojResolveAssemblyReference.cache
 C:\Users\lawre\Documents\Unity Projects\PCG-ActionAdventure\obj\Debug\Assembly-CSharp.dll
 C:\Users\lawre\Documents\Unity Projects\PCG-ActionAdventure\obj\Debug\Assembly-CSharp.pdb
-C:\Users\lawre\Documents\GitHub\PCGactionAdventure\PCG-ActionAdventure\obj\Debug\Assembly-CSharp.csprojResolveAssemblyReference.cache
 C:\Users\lawre\Documents\GitHub\PCGactionAdventure\PCG-ActionAdventure\obj\Debug\Assembly-CSharp.dll
 C:\Users\lawre\Documents\GitHub\PCGactionAdventure\PCG-ActionAdventure\Temp\bin\Debug\Assembly-CSharp.dll
 C:\Users\lawre\Documents\GitHub\PCGactionAdventure\PCG-ActionAdventure\Temp\bin\Debug\Assembly-CSharp.pdb
@@ -505,3 +504,11 @@ C:\Users\lawre\Documents\GitHub\PCGactionAdventure\PCG-ActionAdventure\Temp\bin\
 C:\Users\lawre\Documents\GitHub\PCGactionAdventure\PCG-ActionAdventure\Temp\bin\Debug\UnityEngine.VFXModule.xml
 C:\Users\lawre\Documents\GitHub\PCGactionAdventure\PCG-ActionAdventure\Temp\bin\Debug\UnityEngine.TestRunner.xml
 C:\Users\lawre\Documents\GitHub\PCGactionAdventure\PCG-ActionAdventure\Temp\bin\Debug\nunit.framework.xml
+C:\Users\lawre\Documents\GitHub\PCGactionAdventure\PCG-ActionAdventure\Temp\bin\Debug\System.Core.dll
+C:\Users\lawre\Documents\GitHub\PCGactionAdventure\PCG-ActionAdventure\Temp\bin\Debug\System.dll
+C:\Users\lawre\Documents\GitHub\PCGactionAdventure\PCG-ActionAdventure\Temp\bin\Debug\System.Runtime.Serialization.dll
+C:\Users\lawre\Documents\GitHub\PCGactionAdventure\PCG-ActionAdventure\Temp\bin\Debug\System.Xml.dll
+C:\Users\lawre\Documents\GitHub\PCGactionAdventure\PCG-ActionAdventure\Temp\bin\Debug\System.Xml.Linq.dll
+C:\Users\lawre\Documents\GitHub\PCGactionAdventure\PCG-ActionAdventure\obj\Debug\Assembly-CSharp.csprojAssemblyReference.cache
+C:\Users\lawre\Documents\GitHub\PCGactionAdventure\PCG-ActionAdventure\obj\Debug\Assembly-CSharp.csproj.CoreCompileInputs.cache
+C:\Users\lawre\Documents\GitHub\PCGactionAdventure\PCG-ActionAdventure\obj\Debug\Assembly-CSharp.csproj.CopyComplete

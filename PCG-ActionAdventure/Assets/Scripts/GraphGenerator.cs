@@ -90,6 +90,8 @@ public class GraphGenerator : MonoBehaviour {
 
 	}
 
+    // graph manipulation functions: // 
+
 	List<node> findAPath(node curr, List<node> visited, List<node> p){ //recursivly finds a path to goal
 		List<node> path = p;
 		visited.Add (curr); //mark current node as visited
@@ -237,11 +239,92 @@ public class GraphGenerator : MonoBehaviour {
 
 		return newConnectionToNode;
 	}
-		
-	// graph grammer functions: 
 
-	//Dungeon > Rooms + Goal
-	void DungeonRule(){
+    connection getRandomUniqueConnection(List<KeyValuePair<connection, node>> routeA, List<KeyValuePair<connection, node>> routeB)
+    { //gets a random unique connection from routeA by comparing to routeB
+        List<KeyValuePair<connection, node>> routeAunique = new List<KeyValuePair<connection, node>>();
+        foreach (KeyValuePair<connection, node> k1 in routeA)
+        { //get list of unique key value pairs by connection
+            bool isEqual = false;
+            foreach (KeyValuePair<connection, node> k2 in routeB)
+            {
+                if (k1.Key.obj.transform.position == k2.Key.obj.transform.position)
+                {                               //if equal, skip to next pair in routeA
+                    isEqual = true;
+                    break;
+                }
+            }
+            //got to the end, check if it was equal
+            if (!routeAunique.Contains(k1) && !isEqual)
+            {               //if not already in unique list, and not equal to any
+                routeAunique.Add(k1);
+            }
+        }
+
+        if (routeAunique.Count == 0)
+        {
+            Debug.Log("no unique connection found");
+            return new connection();//if empty, return null object
+        }
+
+        return routeAunique[Random.Range(0, routeAunique.Count)].Key; //return random chosen connection
+    }
+
+    node getRandomUniqueNode(List<KeyValuePair<connection, node>> routeA, List<KeyValuePair<connection, node>> routeB)
+    { //gets a random unique node from routeA by comparing to routeB
+        List<KeyValuePair<connection, node>> routeAunique = new List<KeyValuePair<connection, node>>();
+
+        foreach (KeyValuePair<connection, node> k1 in routeA)
+        { //get list of unique key value pairs by node
+            bool isEqual = false;
+            foreach (KeyValuePair<connection, node> k2 in routeB)
+            {
+                if (k1.Value == k2.Value)
+                {                               //if equal, skip to next pair in routeA
+                    isEqual = true;
+                    break;
+                }
+            }
+            //got to the end, check if it was equal
+            if (!routeAunique.Contains(k1) && !isEqual)
+            {               //if not already in unique list, and not equal to any
+                routeAunique.Add(k1);
+            }
+        }
+
+        if (routeAunique.Count == 0)
+        {
+            Debug.Log("no unique node found");
+            return new node();//if empty, return null object
+        }
+
+        return routeAunique[Random.Range(0, routeAunique.Count)].Value; //return random chosen node
+    }
+
+    void DisconnectNodes(node a, node b)
+    {
+
+        int index = (a.connectionToNodes.FindIndex(x => x.Value == b)); //check if A contains B in connectionToNodes
+        if (index != -1)
+        {
+            Destroy(a.connectionToNodes[index].Key.obj);    //destroy connection object
+            a.connectionToNodes.RemoveAt(index);            //destroy connectionTo
+        }
+        a.connectedNodes.Remove(b); //remove from connections if you find
+
+        int index2 = (b.connectionToNodes.FindIndex(x => x.Value == a));
+        if (index2 != -1)
+        {
+            Destroy(b.connectionToNodes[index2].Key.obj);
+            b.connectionToNodes.RemoveAt(index2);
+        }
+        b.connectedNodes.Remove(a);
+    }
+
+    // graph grammer functions: //
+
+    //Dungeon > Rooms + Goal
+    void DungeonRule(){
 		//set start symbol - picks random location
 		startNode = nodeArray[Random.Range(0,11)];
 		GameObject text = Instantiate(TextBasePrefab,  startNode.obj.transform);
@@ -462,61 +545,9 @@ public class GraphGenerator : MonoBehaviour {
 
     }
 
-	//may not be needed now we are using loops?
-	connection getRandomUniqueConnection(List<KeyValuePair<connection, node>> routeA, List<KeyValuePair<connection, node>> routeB){ //gets a random unique connection from routeA by comparing to routeB
-		List<KeyValuePair<connection, node>> routeAunique = new List<KeyValuePair<connection, node>>();
-		foreach (KeyValuePair<connection, node> k1 in routeA){ //get list of unique key value pairs by connection
-			bool isEqual = false;
-			foreach (KeyValuePair<connection, node> k2 in routeB){
-				if (k1.Key.obj.transform.position == k2.Key.obj.transform.position) {								//if equal, skip to next pair in routeA
-					isEqual = true;
-					break;
-				}
-			}
-			//got to the end, check if it was equal
-			if (!routeAunique.Contains (k1) && !isEqual) {				//if not already in unique list, and not equal to any
-				routeAunique.Add (k1);
-			}
-		}
-			
-		if (routeAunique.Count == 0){
-			Debug.Log("no unique connection found");
-			return new connection ();//if empty, return null object
-		}
+    // pattern rules: //
 
-		return routeAunique [Random.Range (0, routeAunique.Count)].Key; //return random chosen connection
-	}
-
-	//returns random unique node from routeA, comparing to routeB
-	node getRandomUniqueNode(List<KeyValuePair<connection, node>> routeA, List<KeyValuePair<connection, node>> routeB){ //gets a random unique node from routeA by comparing to routeB
-		List<KeyValuePair<connection, node>> routeAunique = new List<KeyValuePair<connection, node>>();
-
-		foreach (KeyValuePair<connection, node> k1 in routeA){ //get list of unique key value pairs by node
-			bool isEqual = false;
-			foreach (KeyValuePair<connection, node> k2 in routeB){
-				if (k1.Value == k2.Value) {								//if equal, skip to next pair in routeA
-					isEqual = true;
-					break;
-				}
-			}
-			//got to the end, check if it was equal
-			if (!routeAunique.Contains (k1) && !isEqual) {				//if not already in unique list, and not equal to any
-				routeAunique.Add (k1);
-			}
-		}
-
-		if (routeAunique.Count == 0){
-			Debug.Log("no unique node found");
-			return new node ();//if empty, return null object
-		}
-
-		return routeAunique [Random.Range (0, routeAunique.Count)].Value; //return random chosen node
-	}
-
-
-	// pattern rules: //
-
-	void TwoAlternativePaths(List<KeyValuePair<connection, node>> routeA, List<KeyValuePair<connection, node>> routeB){
+    void TwoAlternativePaths(List<KeyValuePair<connection, node>> routeA, List<KeyValuePair<connection, node>> routeB){
         //add monster on routeA, trap on routeB
 		Debug.Log("run Alternate Paths rule");
 
@@ -556,49 +587,21 @@ public class GraphGenerator : MonoBehaviour {
 		addConnection (dramaticCycleNodes [0], dramaticCycleNodes [1], connectionDramatic);
 	}
 
-	void DisconnectNodes(node a, node b){
-		
-		int index = (a.connectionToNodes.FindIndex (x => x.Value == b)); //check if A contains B in connectionToNodes
-		if (index != -1) {	
-			Destroy (a.connectionToNodes [index].Key.obj); 	//destroy connection object
-			a.connectionToNodes.RemoveAt (index);			//destroy connectionTo
-		}
-		a.connectedNodes.Remove (b); //remove from connections if you find
-	
-		int index2 = (b.connectionToNodes.FindIndex (x => x.Value == a)); 
-		if (index2 != -1) {	
-			Destroy (b.connectionToNodes [index2].Key.obj); 	
-			b.connectionToNodes.RemoveAt (index2);			
-		}
-		b.connectedNodes.Remove (a); 
-	}
-
 	void DangerousRoute(List<KeyValuePair<connection, node>> shortRoute,List<KeyValuePair<connection, node>> longRoute){
 		//place a danger (monster) on the short route
 		Debug.Log ("run DangerousRoute rule ");
-		/* //original:
-		node uniqueNode = getRandomUniqueNode (shortRoute, longRoute);
-		if (uniqueNode.name == "null node") { // if no nodes unique, add to connection instead
-			//place monster on one route
-			getRandomUniqueConnection(shortRoute,longRoute).AddFeatureToConnection (new token ("monster", monsterCircle)); 
-		} else {
-			//node is unique, so add monster
-			uniqueNode.AddFeature(new token("monster", monsterCircle)); 
-		}*/
 
-		//add to every node on short route:
+		//add to every node on short route (ends up usually being just one since short routes are 3 long):
 		bool addedMonster = false;
 		for (int i = 1; i < shortRoute.Count-1; i++){ //(skip first and last as they are part of other routes)
 			shortRoute[i].Value.AddFeature(new token("monster", monsterCircle)); 
 			addedMonster = true;
 		}
 
-		//add to connection as route was too short
-		if (addedMonster == false) getRandomUniqueConnection(shortRoute,longRoute).AddFeatureToConnection (new token ("monster", monsterCircle)); 
-
-		//foreach (KeyValuePair<connection, node> k in shortRoute){
-		//	k.Value.AddFeature(new token("monster", monsterCircle)); 
-		//}
+        //add to first proper connection as route was too short
+        if (addedMonster == false)
+            shortRoute[1].Key.AddFeatureToConnection(new token("monster", monsterCircle));
+        
 	}
 
 	void UnknownReturn(List<KeyValuePair<connection, node>> shortRoute,List<KeyValuePair<connection, node>> longRoute){
@@ -704,6 +707,7 @@ public class node{
 
 public class token{
 	public string type;
+    public ElementType Etype;
 	public Sprite sprite;
 	public GameObject obj;
 	public token keyLink;
@@ -717,6 +721,11 @@ public class token{
 		sprite = s;
 		keyLink = key;
 	}
+    public token(string t, Sprite s, ElementType ELtype) {
+        type = t;
+        sprite = s;
+        Etype = ELtype;
+    }
 }
 
 public class connection{
