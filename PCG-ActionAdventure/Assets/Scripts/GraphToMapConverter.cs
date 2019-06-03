@@ -15,17 +15,16 @@ public class GraphToMapConverter : MonoBehaviour {
 	int minRoomSize = 30;
 	int nodeArrayXsize = 3;
 	int nodeArrayYsize = 4;
+
+    //you could combine these later if you need to
 	public KeyValuePair<Vector3, token> goalLocationAndType = new KeyValuePair<Vector3, token>();
 	public List<Vector3> roomCenterCoords = new List<Vector3>();
-	public List<Vector3> trapLocations = new List<Vector3> ();
-	public List<Vector3> monsterLocations = new List<Vector3> ();
-	public List<KeyValuePair<Vector3, Vector3>> hiddenLocations = new List<KeyValuePair<Vector3, Vector3>>();
-	public List<KeyValuePair<Vector3, token>> keyLocations = new List<KeyValuePair<Vector3, token>> ();
+	public List<KeyValuePair<Vector3, token>> monsterAndTrapLocations = new List<KeyValuePair<Vector3, token>> ();
+    public List<KeyValuePair<Vector3, Vector3>> hiddenLocations = new List<KeyValuePair<Vector3, Vector3>>();
+	public List<KeyValuePair<Vector3, token>> ItemLocations = new List<KeyValuePair<Vector3, token>> ();
 	public List<KeyValuePair<Vector3[], token>> DoorLocations = new List<KeyValuePair<Vector3[], token>> (); //needs token for key spawning
 
 	List<Room> dramaticViewRooms = new List<Room> ();
-
-	//List<Room> roList =  new List<Room>(); 						//for gizmo testing
 
 	public int[,] CreateMap(node[] nodeArray, node[] dramaticCycleNodes, List<connection> listOfFeaturedConnections ){  		//takes node array, converts to rooms and combines rooms into one map
 
@@ -115,19 +114,16 @@ public class GraphToMapConverter : MonoBehaviour {
 			foreach(token t in nodeArray[n].features){
 				// keys //
 				if (t.type == "key")
-					keyLocations.Add (new KeyValuePair<Vector3, token> (roomCenter, t));
+					ItemLocations.Add (new KeyValuePair<Vector3, token> (roomCenter, t));
 				
-				// monsters //
-				if (t.type == "monster")
-					monsterLocations.Add (roomCenter);
+				// monsters & traps //
+				if (t.type == "monster" || t.type == "trap")
+					monsterAndTrapLocations.Add (new KeyValuePair<Vector3, token>(roomCenter, t));
 
-				// locks on node - are locks to the chest (only on goal node)?
-				if (t.type == "lock")
+				// goal location - locks on node are chest, boss is boss
+				if (t.type == "lock" || t.type == "boss")
 					goalLocationAndType = new KeyValuePair<Vector3, token> (roomCenter, t);
-				
-				// if boss feature
-				if (t.type == "boss")
-					goalLocationAndType = new KeyValuePair<Vector3, token> (roomCenter, t);
+		
 			}
 
 		}
@@ -185,10 +181,8 @@ public class GraphToMapConverter : MonoBehaviour {
 							Vector3 midpoint = Vector3.Lerp (CoordToWorldPoint (bestTileA), CoordToWorldPoint (bestTileB), 0.5f);
 							midpoint.y = 0.0f; //make sure obstacle is on the ground
 
-							if (t.type == "trap")
-								trapLocations.Add(midpoint);
-							if (t.type == "monster")
-								monsterLocations.Add (midpoint);
+							monsterAndTrapLocations.Add(new KeyValuePair<Vector3, token>(midpoint, t));
+							
 						}
 					}
 				}

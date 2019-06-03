@@ -6,7 +6,7 @@ recent changelog:
 + Added HP node icon sprite
 
 To do list:
--make hp pickups prefab and add a gameManager function to check for them in the graph and add them to the game
+-make hp pickups prefab
 -do the same for items
 -weapon pickups - make script to decide what type of item to drop player
 -make weapon pickups work

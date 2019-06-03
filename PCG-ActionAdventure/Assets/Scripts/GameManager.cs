@@ -31,16 +31,22 @@ public class GameManager : MonoBehaviour
 		PlaceDoors(); //place doors
 		PlaceKeys();
 		PlaceHiddens ();
+        PlaceItems();
 		PlaceGoal ();
 
 		//when player wins the level, reset and spawn new one with harder enemies?
     }
 
 	public void PlaceMonsters(){
-		//get all locations
-		List<Vector3> locations = graphToMapConverter.monsterLocations;
+        List<Vector3> locations = new List<Vector3>();
 
-		if (graphToMapConverter.goalLocationAndType.Value.type == "boss"){ //if goal is boss
+        //get all locations
+        foreach (KeyValuePair<Vector3, token> k in graphToMapConverter.monsterAndTrapLocations) {
+            if (k.Value.type == "monster")
+                locations.Add(k.Key);
+        }
+
+        if (graphToMapConverter.goalLocationAndType.Value.type == "boss"){ //if goal is boss
 			locations.Add(graphToMapConverter.goalLocationAndType.Key); //add boss location
 			mobSpawner.createStack(levelPointsValue,locations, locations.Count-1); //create a stack of 3 points value, monster tasks locations, boss at last index
 		} else{
@@ -58,10 +64,10 @@ public class GameManager : MonoBehaviour
 	}
 
 	public void PlaceTraps(){
-		List<Vector3> trapLocations = graphToMapConverter.trapLocations;
+        List<KeyValuePair<Vector3, token>> trapLocations = graphToMapConverter.monsterAndTrapLocations.FindAll(x => x.Value.type == "trap");
 		//pick random trap from trap array, place on entrances (get entrances locations from graph to map coords?)
-		foreach (Vector3 location in trapLocations){
-			Instantiate (traps [Random.Range (0, traps.Length - 1)], location, Quaternion.identity); //create random trap in trap location
+		foreach (KeyValuePair < Vector3, token > location in trapLocations){
+			Instantiate (traps [Random.Range (0, traps.Length - 1)], location.Key, Quaternion.identity); //create random trap in trap location
 		}
 	}
 
@@ -80,7 +86,7 @@ public class GameManager : MonoBehaviour
 	}
 
 	public void PlaceKeys(){
-		List<KeyValuePair<Vector3, token>> keyLocations = graphToMapConverter.keyLocations;
+		List<KeyValuePair<Vector3, token>> keyLocations = graphToMapConverter.ItemLocations.FindAll(x => x.Value.type == "key"); //get all key locations from itemLocations list
 
 		foreach (KeyValuePair<Vector3, token> k in keyLocations){
 			GameObject key = Instantiate (keyPrefab, k.Key, Quaternion.identity); 	//spawn key
@@ -106,4 +112,9 @@ public class GameManager : MonoBehaviour
 
 	}
 
+    public void PlaceItems() {
+        List<KeyValuePair<Vector3, token>> items = graphToMapConverter.ItemLocations.FindAll(x => x.Value.type != "key"); //get all non-key locations from itemLocations list
+
+
+    }
 }
