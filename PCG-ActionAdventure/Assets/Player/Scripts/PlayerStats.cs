@@ -15,6 +15,15 @@ public class PlayerStats : MonoBehaviour
 	void Start(){
 		startHp = hp;
 	}
+
+    public void GiveHealth(float amount) {
+        hp += amount;
+
+        if (hp > 100) //make sure health never goes over 100
+            hp = 100;
+
+        healthBar.SetSize(hp / startHp); //set health bar
+    }
     
 	public void DamagePlayer(float amount, bool isPercentage){
 		if (Time.time < damageTimer) //don't damage if the player has just been damaged
@@ -27,7 +36,7 @@ public class PlayerStats : MonoBehaviour
 			hp -= amount;
 		}
 
-		healthBar.SetSize (hp / startHp);
+		healthBar.SetSize (hp / startHp); //set health bar
 
 		if (hp <= 0) {
 			//player dies, this is basic atm

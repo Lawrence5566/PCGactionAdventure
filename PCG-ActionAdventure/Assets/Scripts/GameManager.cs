@@ -7,7 +7,7 @@ public class GameManager : MonoBehaviour
 	[Header("Change to change difficulty:")]
 	public int levelPointsValue = 3;
 
-	[Header("")]
+	[Header("Scripts")]
 	public GraphToMapConverter graphToMapConverter;
 	public GraphGenerator graphGenerator;
 	//public MeshGenerator meshGenerator;
@@ -15,11 +15,13 @@ public class GameManager : MonoBehaviour
 
 	public GameObject playerObject;
 
-	public GameObject[] traps; 
+    [Header("GameObjects")]
+    public GameObject[] traps; 
 	public GameObject doorPrefab;
 	public GameObject keyPrefab;
 	public GameObject teleporterPrefab;
 	public GameObject chestPrefab;
+    public GameObject pickupHP;
 
     // Start is called before the first frame update
     void Start()

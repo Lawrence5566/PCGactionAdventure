@@ -1,13 +1,10 @@
 
 recent changelog:
-+ Added BossPrepHP pattern
-+ Added TreasureRoom pattern
-+ Added TwoEmptyRooms pattern
-+ Added HP node icon sprite
++ Added hp pickup prefab
++ Created pickup script for items and health pickups (merge with with key script?)
 
 To do list:
--make hp pickups prefab
--do the same for items
+-make prefabs for a weapon pickup (spinning sword that uses script to pick sword and type etc?)
 -weapon pickups - make script to decide what type of item to drop player
 -make weapon pickups work
 -weapon of different types doing different damage mechanics
