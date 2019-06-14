@@ -117,7 +117,7 @@ public class MobSpawner : MonoBehaviour {
 				enemy.attackRange = 2f + o.value / 2f; //set attack range by level (bigger enemys need more)
 
 				if (o.value >= 3) { //if larger monster, give different weapon, change attack speed
-					EnemyManager.singleton.weaponManager.GiveWeapon (enemy, ElementType.fire, 20, SwordType.katana);
+					EnemyManager.singleton.weaponManager.GiveWeapon (enemy, ElementType.none, 20, SwordType.katana);
 
 					if (o.value == 5){ //if boss
 						enemy.attackSpeed = 1.5f;
@@ -125,7 +125,7 @@ public class MobSpawner : MonoBehaviour {
 					}
 
 				} else {
-					EnemyManager.singleton.weaponManager.GiveWeapon (enemy, ElementType.fire, 5, SwordType.broadsword); //give other enemys normal weapons
+					EnemyManager.singleton.weaponManager.GiveWeapon (enemy, ElementType.none, 5, SwordType.broadsword); //give other enemys normal weapons
 				}
 					
 				//newEnemy.transform.localScale = new Vector3 (1f, 1f, 1f) * (1f * (enemy.startHP / 100f)); //use health to set enemy scale (100 is base)?

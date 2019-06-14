@@ -32,9 +32,11 @@ public class InputHandler : MonoBehaviour {
 	public float moveSpeed = 5; 
 	public float rotateSpeed = 5;
 	public float toGround = .5f;
-	public float rollSpeed = 1f; //changes roll speed velocity (heavy characters should roll slower) (this doesn't work atm?)
+	public float rollDistance = 1f; //changes roll speed velocity/distance (increasing this makes character lurch further forward)
+    public float rollSpeed = 1f; //changes roll speed (heavy characters should roll slower)
+    public float runMulti = 1.6f;
 
-	[Header("States")]
+    [Header("States")]
 	public bool run;
 	public bool onGround; 
 	public bool lockon;
@@ -168,6 +170,15 @@ public class InputHandler : MonoBehaviour {
 		//update states
 		Vector3 v = vertical * camManager.transform.forward;
 		Vector3 h = horizontal * camManager.transform.right;
+
+        if (lockon) {
+            if (horizontal > 0.85f) //clamp horizontal("lock-on sidestep") if locked on so player can't run around enemies
+                horizontal = 0.85f;
+            if (horizontal < -0.85f)
+                horizontal = -0.85f;
+        }
+
+
 		moveDir = (v + h).normalized;
 		moveAmount = Mathf.Clamp01(Mathf.Abs (horizontal) + Mathf.Abs (vertical));
 
@@ -252,16 +263,16 @@ public class InputHandler : MonoBehaviour {
 		}
 
 		if (run)
-			targetSpeed = moveSpeed * 1.5f;
+			targetSpeed = moveSpeed * runMulti;
 
-		if (onGround)
+        if (onGround)
 			rigid.velocity = moveDir * (targetSpeed * moveAmount);
 
-		if (run) //if running, unlock
-			lockon = false;
+        if (run)
+            lockon = false;//if running, unlock
 
 
-		Vector3 targetDir = (lockon == false)? moveDir 
+        Vector3 targetDir = (lockon == false)? moveDir 
 			: lockOnTarget.transform.position - transform.position; //decide what to rotate towards
 	
 		targetDir.y = 0; //remove Y incase we rotate upwards
@@ -341,18 +352,20 @@ public class InputHandler : MonoBehaviour {
 				v = 0;
 			if (Mathf.Abs (h) < 0.3f)
 				h = 0;
-		} 
+		}
 
-		/*
+        /*
 		v = (moveAmount > 0.3f)? 1 : 0; //no blend tree rolling version (char turns and looks in direction to roll)
 		h = 0;
 		if (v != 0)
 			if (moveDir == Vector3.zero)
 				moveDir = transform.forward;
 			Quaternion targetRot = Quaternion.LookRotation (moveDir);
-			transform.rotation = targetRot; */
+			transform.rotation = targetRot; 
+        */
 
-		a_hook.rm_multi = rollSpeed;
+        a_hook.rm_multi = rollDistance;
+        a_hook.rollSpeed = rollSpeed;
 
 		anim.SetFloat (StaticStrings.vertical, v);
 		anim.SetFloat (StaticStrings.horizontal, h);

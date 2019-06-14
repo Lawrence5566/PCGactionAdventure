@@ -1,15 +1,19 @@
-
+ 
 recent changelog:
-+ Added hp pickup prefab
-+ Created pickup script for items and health pickups (merge with with key script?)
++ Faster rotate speed for player
++ Faster run speed for player
++ Roll speed and roll distance now properly editable
++ Horizontal move speed when lock-on clamped at 0.85 (to stop player side stepping as fast as they move forward)
++ Increased BoxManEnemy's mass to 100 while not in ragdoll mode so player can't push them around
++ Added/Modified animation events for gs_oh_attack_1, gs_th_attack_1, th_attack_1, th_attack2
++ Gave all weapon prefabs their default material (element type of 'none')
 
 To do list:
--fix character lock-on and move clunky ness 
-	-character should snap to enemy when locking on
-	-moving the stick should 'snap move' in the direction (for quick menuvering)
-	-keep character facing the lock on direction when they roll
 -make prefabs for a weapon pickup (spinning sword that uses script to pick sword and type etc?)
 -slow wind-up but bigger (definatly hitting) boss attacks
+-fix colliders for hitting player in rolling (change collider size or make player invunrable while rolling?) (latter is more true to dark souls)
+-fix boss colliders/attacks to hit the player when he's standing still (might need the attacks to visibly aim at the player? or just collider issue)
+	-for this we want colliders of weapons to be the right size, just change how boss aims instead? 
 -weapon pickups - make script to decide what type of item to drop player
 -make weapon pickups work
 -weapon of different types doing different damage mechanics

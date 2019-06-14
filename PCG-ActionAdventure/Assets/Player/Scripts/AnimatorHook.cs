@@ -10,6 +10,7 @@ public class AnimatorHook : MonoBehaviour {
 	Rigidbody rigid;
 
 	public float rm_multi; //root motion multiplier
+    public float rollSpeed; //roll speed multiplier
 
 	public void Init(InputHandler ih, EnemyStates eSt){
 		inputHan = ih;
@@ -55,6 +56,10 @@ public class AnimatorHook : MonoBehaviour {
 		delta.y = 0;
 		Vector3 v = (delta * rm_multi) / Time.deltaTime;
 		rigid.velocity = v;
+
+        //set roll speed (set it here incase it changes (slowing effects etc))
+        anim.SetFloat("rollSpeed", rollSpeed);
+
 	}
 
 	public void OpenDamageColliders(){ //only open colliders when we want to hit something
