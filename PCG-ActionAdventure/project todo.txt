@@ -4,7 +4,12 @@ recent changelog:
 + Created pickup script for items and health pickups (merge with with key script?)
 
 To do list:
+-fix character lock-on and move clunky ness 
+	-character should snap to enemy when locking on
+	-moving the stick should 'snap move' in the direction (for quick menuvering)
+	-keep character facing the lock on direction when they roll
 -make prefabs for a weapon pickup (spinning sword that uses script to pick sword and type etc?)
+-slow wind-up but bigger (definatly hitting) boss attacks
 -weapon pickups - make script to decide what type of item to drop player
 -make weapon pickups work
 -weapon of different types doing different damage mechanics
@@ -30,4 +35,4 @@ To do list:
 -make sure that the room that dramatic cycle looks at has something interesting in (or just make sure it only works if it connects to the goal)
 -second iteration patterns (create mini patterns within routes?)
 
--ambient sounds/sound fx?
+-ambient sounds/sound fx
