@@ -20,9 +20,12 @@ The 'App' folder contains the latest build, but you can open the whole project i
 ## Usage:
 The game is made to be played with controller, but keyboard and mouse works too. The controls are as following:
 
-Left-Stick/WASD - move character
-Right-Stick/Mouse - move camera
-X/Left-Click - attack
-B/Left-Shift - HOLD to sprint, TAP to roll in left-stick direction
-Right-Stick-Down/Tab  - Lock-on to nearest front target
+- Left-Stick/WASD - move character
+- Right-Stick/Mouse - move camera
+- X/Left-Click - attack
+- B/Left-Shift - HOLD to sprint, TAP to roll in left-stick direction
+- Right-Stick-Down/Tab  - Lock-on to nearest front target
+
+
+Thanks for viewing! - *Lawrence Taylor*
 
