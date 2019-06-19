@@ -8,35 +8,33 @@ recent changelog:
 + Added/Modified animation events for gs_oh_attack_1, gs_th_attack_1, th_attack_1, th_attack2
 + Gave all weapon prefabs their default material (element type of 'none')
 
-To do list:
+To do list (must):
+-make enemy weapons part of points select (and randomly select certain types etc) (and add this as a feature to readme)
 -make prefabs for a weapon pickup (spinning sword that uses script to pick sword and type etc?)
+-weapon pickups - make script and patterns to decide what type of item to drop player
 -slow wind-up but bigger (definatly hitting) boss attacks
 -fix colliders for hitting player in rolling (change collider size or make player invunrable while rolling?) (latter is more true to dark souls)
 -fix boss colliders/attacks to hit the player when he's standing still (might need the attacks to visibly aim at the player? or just collider issue)
 	-for this we want colliders of weapons to be the right size, just change how boss aims instead? 
--weapon pickups - make script to decide what type of item to drop player
--make weapon pickups work
+-make sure enemys are distributed properly - (level2 means nothing atm (get rid of level? (scale off hp instead))))
+-make hidden route more obvious (with blurry effect)
+-think about if 2 keys are generated 
+-remove that flask action button?
+-finalise crosshair mechanics & sprite
+-make sure that the room that dramatic cycle looks at has something interesting in (or just make sure it only works if it connects to the goal (mayube check and add something interesting?))
+-sound fx (hidden wall sounds?, fight sounds, etc)
+-ambient sounds/background noise? (might not need)
+
+To do list (could):
 -weapon of different types doing different damage mechanics
 -weapons type VFX
 -"if empty room" patterns - add something interesting!
--inventory / item pickup system
--make sure enemys are distributed properly - (level2 means nothing atm (get rid of level? (scale off hp instead))))
+-inventory / multiple weapon pickup system
+-switch weapons system (inventory UI and weapon UI)
 -basic fog + SUN?
 -patrolling AI? (+ patrolling pattern)
--make hidden route more obvious (with blurry effect)
--think about if 2 keys are generated 
 -make sure 2 lock and keys work together
 -visualise monster changes/mods
 -lock on to enemys cursor
-
--remove that flask action button?
-
--scale monsters with health?
-
-
--finalise crosshair mechanics (not sprite just how it works)
--weapon pickups (just spawn some weapons and make them pickupable for now (spawn one randomly in an empty room?))
--make sure that the room that dramatic cycle looks at has something interesting in (or just make sure it only works if it connects to the goal)
 -second iteration patterns (create mini patterns within routes?)
 
--ambient sounds/sound fx
