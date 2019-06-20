@@ -158,7 +158,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: db657e9b8049e0742a9ef0b4d0ee3d0e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  levelPointsValue: 3
+  levelPointsValue: 1
   graphToMapConverter: {fileID: 1413561895}
   graphGenerator: {fileID: 1223852754}
   mobSpawner: {fileID: 160867087}

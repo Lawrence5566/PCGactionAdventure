@@ -5,9 +5,14 @@ recent changelog:
 + Enemies now have acceleration
 + Enemy size now scales with bonus health (.1 scale per 20hp)
 + Def now effects enemies
++ Enemy weapon decide on by modifier (modifiers required for each weapon are in code comments)
++ Rework of scaling distribution points values and points value modifiers using new formula
 
 To do list (must ("decent state")):
--make enemy weapons given depending on modifiers, eg, increased strength gives broadsword etc (and add this as a feature to readme)
+-make the order of locations enemys are spawned corelate to number player encounters them (line 51 of GameManager)
+-add this as a feature to readme - make enemy weapons given depending on modifiers, eg, increased strength gives broadsword etc
+-make all movesets for each weapon
+-make on-boxman prefabs for each weapon the right rotation?
 -make prefabs for a weapon pickup (spinning sword that uses script to pick sword and type etc?)
 -weapon pickups - make script and patterns to decide what type of item to drop player
 -slow wind-up but bigger (definatly hitting) boss attacks

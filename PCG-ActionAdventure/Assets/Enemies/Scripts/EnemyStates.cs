@@ -119,7 +119,7 @@ public class EnemyStates : MonoBehaviour {
 		if (canMove) {
 			anim.applyRootMotion = false;
 
-            float maxSpeed = 0.65f + speed / 8.0f;
+            float maxSpeed = 0.65f + speed / 10.0f;
 
             if (currSpeed < maxSpeed)
                 currSpeed += accelerationAmount; // increase speed by each frame (acceleration)

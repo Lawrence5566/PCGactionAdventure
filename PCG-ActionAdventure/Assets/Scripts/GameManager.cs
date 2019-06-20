@@ -5,7 +5,7 @@ using UnityEngine;
 public class GameManager : MonoBehaviour
 {
 	[Header("Change to change difficulty:")]
-	public int levelPointsValue = 3;
+	public int levelPointsValue = 1;
 
 	[Header("Scripts")]
 	public GraphToMapConverter graphToMapConverter;
@@ -48,9 +48,11 @@ public class GameManager : MonoBehaviour
                 locations.Add(k.Key);
         }
 
+        //reorder locations by order player is meant to encounter them here? (remember to add boss only after you do this)
+
         if (graphToMapConverter.goalLocationAndType.Value.type == "boss"){ //if goal is boss
-			locations.Add(graphToMapConverter.goalLocationAndType.Key); //add boss location
-			mobSpawner.createStack(levelPointsValue,locations, locations.Count-1); //create a stack of 3 points value, monster tasks locations, boss at last index
+			locations.Add(graphToMapConverter.goalLocationAndType.Key); //add boss location to the end of locations
+			mobSpawner.createStack(levelPointsValue,locations, locations.Count-1); //create a stack with boss at last index
 		} else{
 			mobSpawner.createStack(levelPointsValue,locations, -1); //create a stack of 3 points value, monster tasks locations, no boss
 		}
