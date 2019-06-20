@@ -2272,6 +2272,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rm_multi: 0
+  rollSpeed: 0
 --- !u!1 &41152628214356928
 GameObject:
   m_ObjectHideFlags: 0
@@ -2386,8 +2387,9 @@ MonoBehaviour:
   moveSpeed: 5
   rotateSpeed: 8
   toGround: 0.5
+  rollDistance: 1
   rollSpeed: 1
-  runMulti: 2
+  runMulti: 1.6
   run: 0
   onGround: 1
   lockon: 0

@@ -8,7 +8,7 @@ public class EnemyStates : MonoBehaviour {
 	public float hp;
 	public healthbarController healthBar;
 
-	public float str = 1; //these need to have an impact
+	public float str = 1;
 	public float def = 1;
 	public float speed = 1;
 	public int level = 1;
@@ -22,8 +22,10 @@ public class EnemyStates : MonoBehaviour {
 	float attackTimer;
 	public float attackGap = 2; //by default, enemies have a 2 second attack gap
 	public float attackRange = 2;
+    private float currSpeed = 0; //value between 0-maxSpeed that increase each frame (modeling acceleration)
+    public float accelerationAmount = 0.05f;
 
-	public ElementType type = ElementType.fire; //fire type by default
+    public ElementType type = ElementType.fire; //fire type by default
 
 	public Animator anim;
 	AnimatorHook a_hook;
@@ -37,7 +39,6 @@ public class EnemyStates : MonoBehaviour {
 	public List<Collider> ragdollColliders = new List<Collider>();
 
 	PlayerStats player;
-	//Vector3 startLocation; //is this used?
 
 	public Weapon weaponScript;
 
@@ -118,11 +119,16 @@ public class EnemyStates : MonoBehaviour {
 		if (canMove) {
 			anim.applyRootMotion = false;
 
+            float maxSpeed = 0.65f + speed / 8.0f;
 
-			//if player is within attack range, attack him
-			if (Vector3.Distance (this.transform.position, player.transform.position) < attackRange){
+            if (currSpeed < maxSpeed)
+                currSpeed += accelerationAmount; // increase speed by each frame (acceleration)
+
+            //if player is within attack range, attack him
+            if (Vector3.Distance (this.transform.position, player.transform.position) < attackRange){
 				anim.SetBool (StaticStrings.running, false); //stop running 
 				anim.SetFloat (StaticStrings.vertical, 0f, 0.4f, Time.deltaTime); //stop character
+                currSpeed = 0; //stop acceleration when attacking
 
 				//rotate towards enemy
 				Vector3 targetDir = player.transform.position - transform.position; //target to rotate to
@@ -131,7 +137,7 @@ public class EnemyStates : MonoBehaviour {
 				if (targetDir == Vector3.zero)
 					targetDir = transform.forward;
 				Quaternion targetRot = Quaternion.LookRotation (targetDir);	 	//create rotation towards target
-				targetRot = Quaternion.Slerp (transform.rotation, targetRot, Time.deltaTime * speed * 20);	//slerp rotation from current rotation
+				targetRot = Quaternion.Slerp (transform.rotation, targetRot, Time.deltaTime * 15);  //when aiming, "snap" towards player (use * 15 so no lost time turning around) 
 				transform.rotation = targetRot;
 
 				//attack
@@ -154,19 +160,23 @@ public class EnemyStates : MonoBehaviour {
 				if (targetDir == Vector3.zero)
 					targetDir = transform.forward;
 				Quaternion targetRot = Quaternion.LookRotation (targetDir);	 	//create rotation towards target
-				targetRot = Quaternion.Slerp (transform.rotation, targetRot, Time.deltaTime * speed * 2);	//slerp rotation from current rotation
+				targetRot = Quaternion.Slerp (transform.rotation, targetRot, Time.deltaTime * currSpeed * 15);	//slerp rotation from current rotation
 				transform.rotation = targetRot;
 
-				anim.SetBool (StaticStrings.running, true); //start running 
-				anim.SetFloat (StaticStrings.vertical, speed / 10, 0.4f, Time.deltaTime); 
+                if (currSpeed > 1)
+                    anim.SetBool (StaticStrings.running, true); //start running if vertical goes above 1 (only enemies that can run this fast run)
 
-				rigid.velocity = targetDir * speed; //speed * move amount?
+				anim.SetFloat (StaticStrings.vertical, currSpeed + 0.2f, 0.4f, Time.deltaTime); //set locomotion blend tree
+
+                rigid.velocity = targetDir * (maxSpeed * currSpeed); //accelerate towards target 
 
 			} else {
 				//stop on the spot or move to start location
-				anim.SetBool (StaticStrings.running, false); //start running 
-				anim.SetFloat (StaticStrings.vertical, -0.001f, 0.4f, Time.deltaTime); //slow character down 
-			}
+				anim.SetBool (StaticStrings.running, false); //stop running if we are
+				anim.SetFloat (StaticStrings.vertical, -0.01f, 0.4f, Time.deltaTime); //slow character down over time
+                currSpeed = currSpeed - 0.01f; //declccelerate
+                //rigid.velocity = rigid.velocity - 1.0f; //declccelerate?
+            }
 
 		}
 			
@@ -176,7 +186,11 @@ public class EnemyStates : MonoBehaviour {
 		if (isInvincible)
 			return;
 
-		hp -= v;
+		hp -= v * 1/def; //incoming damage modified by 1/def
+        // 100 incoming at 1 def = 100 * 1/1 = 100
+        // 100 incoming at 2 def = 100 * 1/2 = 50
+        // 100 incoming at 3 def = 100 * 1/3 = 33
+    
 		isInvincible = true;
 		anim.Play ("damage_1");
 		anim.applyRootMotion = true;

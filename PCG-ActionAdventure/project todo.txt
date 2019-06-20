@@ -1,22 +1,20 @@
- 
-recent changelog:
-+ Faster rotate speed for player
-+ Faster run speed for player
-+ Roll speed and roll distance now properly editable
-+ Horizontal move speed when lock-on clamped at 0.85 (to stop player side stepping as fast as they move forward)
-+ Increased BoxManEnemy's mass to 100 while not in ragdoll mode so player can't push them around
-+ Added/Modified animation events for gs_oh_attack_1, gs_th_attack_1, th_attack_1, th_attack2
-+ Gave all weapon prefabs their default material (element type of 'none')
 
-To do list (must):
--make enemy weapons part of points select (and randomly select certain types etc) (and add this as a feature to readme)
+recent changelog:
++ Enemy Level scales all stats
++ Modified def and speed to actually effect enemies
++ Enemies now have acceleration
++ Enemy size now scales with bonus health (.1 scale per 20hp)
++ Def now effects enemies
+
+To do list (must ("decent state")):
+-make enemy weapons given depending on modifiers, eg, increased strength gives broadsword etc (and add this as a feature to readme)
 -make prefabs for a weapon pickup (spinning sword that uses script to pick sword and type etc?)
 -weapon pickups - make script and patterns to decide what type of item to drop player
 -slow wind-up but bigger (definatly hitting) boss attacks
 -fix colliders for hitting player in rolling (change collider size or make player invunrable while rolling?) (latter is more true to dark souls)
 -fix boss colliders/attacks to hit the player when he's standing still (might need the attacks to visibly aim at the player? or just collider issue)
 	-for this we want colliders of weapons to be the right size, just change how boss aims instead? 
--make sure enemys are distributed properly - (level2 means nothing atm (get rid of level? (scale off hp instead))))
+-balancing of weapons and enemies etc
 -make hidden route more obvious (with blurry effect)
 -think about if 2 keys are generated 
 -remove that flask action button?
@@ -25,7 +23,7 @@ To do list (must):
 -sound fx (hidden wall sounds?, fight sounds, etc)
 -ambient sounds/background noise? (might not need)
 
-To do list (could):
+To do list (could/ none portfolio stuff (after applying to jobs or for fun)):
 -weapon of different types doing different damage mechanics
 -weapons type VFX
 -"if empty room" patterns - add something interesting!

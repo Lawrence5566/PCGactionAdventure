@@ -111,27 +111,34 @@ public class MobSpawner : MonoBehaviour {
 			//spawn all the enemies for the task
 			if (o.type == "monster"){
 				GameObject newEnemy = Instantiate(enemyPrefabs [Random.Range (0, enemyPrefabs.Length)], taskLocations[locationNo], Quaternion.identity);
-				newEnemy.transform.localScale = new Vector3 (1f, 1f, 1f) * (1f + (o.value*2f/10f)); //use value (or level in this case) to set enemy scale
+                //newEnemy.transform.localScale = new Vector3(1f, 1f, 1f) * (1f + (o.value * 2f / 10f)); //use level to set enemy scale
 
-				EnemyStates enemy = newEnemy.GetComponent<EnemyStates> ();
+                //set new enemy stats:
+                EnemyStates enemy = newEnemy.GetComponent<EnemyStates> ();
 				enemy.attackRange = 2f + o.value / 2f; //set attack range by level (bigger enemys need more)
+                enemy.str = o.value; //starting stats = enemy level
+                enemy.def = o.value;
+                enemy.speed = o.value;
+                enemy.startHP = 80 + (o.value * 20);
+                enemy.level = o.value;
 
-				if (o.value >= 3) { //if larger monster, give different weapon, change attack speed
+                // give weapon:
+                if (o.value >= 3) { //if lvl 3 or above
 					EnemyManager.singleton.weaponManager.GiveWeapon (enemy, ElementType.none, 20, SwordType.katana);
 
 					if (o.value == 5){ //if boss
 						enemy.attackSpeed = 1.5f;
-						enemy.startHP = 300.0f; //increase starthp
+						enemy.startHP = 300.0f; //manual set starthp for bosses
 					}
 
 				} else {
-					EnemyManager.singleton.weaponManager.GiveWeapon (enemy, ElementType.none, 5, SwordType.broadsword); //give other enemys normal weapons
+					EnemyManager.singleton.weaponManager.GiveWeapon (enemy, ElementType.none, 5, SwordType.broadsword); //else give other enemys normal weapons
 				}
-					
-				//newEnemy.transform.localScale = new Vector3 (1f, 1f, 1f) * (1f * (enemy.startHP / 100f)); //use health to set enemy scale (100 is base)?
-				enemy.level = o.value;
 
-				enemiesInTask.Add (newEnemy.GetComponent<EnemyStates> ());
+                float bonusHealth = enemy.startHP - 100;
+                newEnemy.transform.localScale = new Vector3(1f, 1f, 1f) * (1 + ( bonusHealth / 200)); //use bonus health (health over 100) to scale size
+
+                enemiesInTask.Add (newEnemy.GetComponent<EnemyStates> ());
 
 
 			}

@@ -30,7 +30,7 @@ public class InputHandler : MonoBehaviour {
 
 	[Header("Stats")]
 	public float moveSpeed = 5; 
-	public float rotateSpeed = 5;
+	public float rotateSpeed = 8;
 	public float toGround = .5f;
 	public float rollDistance = 1f; //changes roll speed velocity/distance (increasing this makes character lurch further forward)
     public float rollSpeed = 1f; //changes roll speed (heavy characters should roll slower)
@@ -241,8 +241,6 @@ public class InputHandler : MonoBehaviour {
 			camManager.lockon = lockon;
 
 		}
-			
-		//souls like tutorial 'UpdateStates' ends here
 
 		canMove = anim.GetBool (StaticStrings.canMove);
 		if (!canMove) { //skip function if character can't move
