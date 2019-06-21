@@ -16,19 +16,18 @@ public class GraphToMapConverter : MonoBehaviour {
 	int nodeArrayXsize = 3;
 	int nodeArrayYsize = 4;
 
-    //you could combine these later if you need to
-	public KeyValuePair<Vector3, token> goalLocationAndType = new KeyValuePair<Vector3, token>();
-	public List<Vector3> roomCenterCoords = new List<Vector3>();
-	public List<KeyValuePair<Vector3, token>> monsterAndTrapLocations = new List<KeyValuePair<Vector3, token>> ();
+    //you could combine some of these these later if you need to
+    List<Room> roomsList = new List<Room>(); //MUST correspond to node of the same index in node array
+    public KeyValuePair<Vector3, token> goalLocationAndType = new KeyValuePair<Vector3, token>(Vector3.zero, new token());
+    public List<KeyValuePair<Vector3, token>> monsterAndTrapLocations = new List<KeyValuePair<Vector3, token>> ();
     public List<KeyValuePair<Vector3, Vector3>> hiddenLocations = new List<KeyValuePair<Vector3, Vector3>>();
 	public List<KeyValuePair<Vector3, token>> ItemLocations = new List<KeyValuePair<Vector3, token>> ();
 	public List<KeyValuePair<Vector3[], token>> DoorLocations = new List<KeyValuePair<Vector3[], token>> (); //needs token for key spawning
 
 	List<Room> dramaticViewRooms = new List<Room> ();
 
-	public int[,] CreateMap(node[] nodeArray, node[] dramaticCycleNodes, List<connection> listOfFeaturedConnections ){  		//takes node array, converts to rooms and combines rooms into one map
+	public int[,] CreateMap(node[] nodeArray, node[] dramaticCycleNodes, Dictionary<connection, node> orderedEncounters ){  		//takes node array, converts to rooms and combines rooms into one map
 
-		List<Room> roomsList = new List<Room> (); //needs to be at 12 
 		RoomGenerator roomGenerator = new RoomGenerator ();
 
 		width = maxRoomSize*nodeArrayXsize;
@@ -107,11 +106,11 @@ public class GraphToMapConverter : MonoBehaviour {
 
 			} //else it will add zero point
 
-			roomCenterCoords.Add(roomCenter); //add room center if there is one or not (ensuring empty rooms will have 0,0,0 placeholder )
+            roomCenter.y = 0; //make any spawned objects are on the ground
+            currRoom.center = roomCenter; //add room center if there is one or not (ensuring empty rooms will have 0,0,0 placeholder )
 
 			// deal with node features //
-			roomCenter.y = 0; //make any spawned objects are on the ground
-			foreach(token t in nodeArray[n].features){
+			/*foreach(token t in nodeArray[n].features){
 				// keys & items //
 				if (t.type == "key" || t.type == "item" || t.type == "healing")
 					ItemLocations.Add (new KeyValuePair<Vector3, token> (roomCenter, t));
@@ -124,11 +123,11 @@ public class GraphToMapConverter : MonoBehaviour {
 				if (t.type == "lock" || t.type == "boss")
 					goalLocationAndType = new KeyValuePair<Vector3, token> (roomCenter, t);
 		
-			}
+			}*/
 
 		}
 
-		if (dramaticCycleNodes [0] != null || dramaticCycleNodes [1] != null) {
+        if (dramaticCycleNodes [0] != null || dramaticCycleNodes [1] != null) {
 			//get all rooms equal to dramatic view nodes (should only be 2)
 			dramaticViewRooms = roomsList.FindAll (x => x.node == dramaticCycleNodes [0] || x.node == dramaticCycleNodes [1]);
 
@@ -140,82 +139,63 @@ public class GraphToMapConverter : MonoBehaviour {
 			CreateDramaticView (dramaticViewRooms);
 		}
 
-		//deal with features on connections
-		foreach (connection c in listOfFeaturedConnections){ //foreach connection
-			
-			foreach(token t in c.features){ //foreach token (feature)
+        foreach (KeyValuePair<connection, node> k in orderedEncounters) {
+            Room currNodeRoom = roomsList[Array.IndexOf(nodeArray, k.Value)];
 
-				// hidden path
-				if (t.type == "hidden"){
-					foreach (node n in nodeArray){
-						KeyValuePair<connection, node> k = n.connectionToNodes.Find (x => x.Key == c); //find if this node has this connection
-						if (k.Key == c){ // if node found
-							int node1Index = Array.IndexOf(nodeArray, n);
-							int node2Index = Array.IndexOf(nodeArray, k.Value);
+            // deal with node features //
+            foreach (token t in k.Value.features) {
+                // keys & items //
+                if (t.type == "key" || t.type == "item" || t.type == "healing")
+                    ItemLocations.Add(new KeyValuePair<Vector3, token>(currNodeRoom.center, t));
 
-							//find the closest tiles between those two nodes using findClostestTiles
-							Coord bestTileA = new Coord ();
-							Coord bestTileB = new Coord ();
-							FindClosestTiles(roomsList[node1Index], roomsList[node2Index], out bestTileA, out bestTileB);
+                // monsters & traps //
+                if (t.type == "monster" || t.type == "trap")
+                    monsterAndTrapLocations.Add(new KeyValuePair<Vector3, token>(currNodeRoom.center, t));
 
-							hiddenLocations.Add (new KeyValuePair<Vector3,Vector3> (CoordToWorldPoint (bestTileA), roomCenterCoords [node2Index]));
+                // goal location - locks on node are chest, boss is boss
+                if (t.type == "lock" || t.type == "boss")
+                    goalLocationAndType = new KeyValuePair<Vector3, token>(currNodeRoom.center, t);
+            }
 
-						}
-					}
-				}
+            // deal with connection features //
+            foreach (token t in k.Key.features) {
+                foreach (node n in nodeArray) { //look through all nodes in node array
+                    bool found = n.connectionToNodes.Contains(k); //if this node has this connectionToNode
+                    if (found) {  //now we have this graph segment: n -> k.Key -> k.Value (node, connection, node)
+                        int node1Index = Array.IndexOf(nodeArray, n);
+                        int node2Index = Array.IndexOf(nodeArray, k.Value);
 
-				// traps or monsters //
-				if (t.type == "trap" || t.type == "monster"){ 
-					foreach (node n in nodeArray){
-						KeyValuePair<connection, node> k = n.connectionToNodes.Find (x => x.Key == c); //find if this node has this connection
-						if (k.Key == c){ // if node found
-							int node1Index = Array.IndexOf(nodeArray, n);
-							int node2Index = Array.IndexOf(nodeArray, k.Value);
+                        //find the closest tiles between those two nodes using findClostestTiles
+                        Coord bestTileA = new Coord();
+                        Coord bestTileB = new Coord();
+                        FindClosestTiles(roomsList[node1Index], roomsList[node2Index], out bestTileA, out bestTileB);
 
-							//find the closest tiles between those two nodes using findClostestTiles
-							Coord bestTileA = new Coord ();
-							Coord bestTileB = new Coord ();
-							FindClosestTiles(roomsList[node1Index], roomsList[node2Index], out bestTileA, out bestTileB);
+                        if (t.type == "hidden")
+                            hiddenLocations.Add(new KeyValuePair<Vector3, Vector3>(CoordToWorldPoint(bestTileA), roomsList[node2Index].center));
 
-							//find midpoint between world points, giving center of route to 'trapLocations'  or 'monsterLocations'
-							Vector3 midpoint = Vector3.Lerp (CoordToWorldPoint (bestTileA), CoordToWorldPoint (bestTileB), 0.5f);
-							midpoint.y = 0.0f; //make sure obstacle is on the ground
+                        if (t.type == "trap" || t.type == "monster") {
+                            //find midpoint between world points, giving center of route to 'trapLocations'  or 'monsterLocations'
+                            Vector3 midpoint = Vector3.Lerp(CoordToWorldPoint(bestTileA), CoordToWorldPoint(bestTileB), 0.5f);
+                            midpoint.y = 0.0f; //make sure obstacle is on the ground
 
-							monsterAndTrapLocations.Add(new KeyValuePair<Vector3, token>(midpoint, t));
-							
-						}
-					}
-				}
+                            monsterAndTrapLocations.Add(new KeyValuePair<Vector3, token>(midpoint, t));
+                        }
 
-				// doors //
-				if (t.type == "lock"){
-					foreach (node n in nodeArray) {
-						KeyValuePair<connection, node> k = n.connectionToNodes.Find (x => x.Key == c); //find if this node has this connection
-						if (k.Key == c){ // if node found
-							int node1Index = Array.IndexOf(nodeArray, n);
-							int node2Index = Array.IndexOf(nodeArray, k.Value);
+                        if (t.type == "lock") {
+                            Vector3 DoorPos = CoordToWorldPoint(bestTileA); //find entrance on first room
+                            Vector3 rotPos = CoordToWorldPoint(bestTileB); //find rotation direction
 
-							//find the closest tiles between those two nodes using findClostestTiles
-							Coord bestTileA = new Coord ();
-							Coord bestTileB = new Coord ();
-							FindClosestTiles(roomsList[node1Index], roomsList[node2Index], out bestTileA, out bestTileB);
+                            DoorPos.y = 0.0f; //make sure door is on the ground
+                            DoorLocations.Add(new KeyValuePair<Vector3[], token>(new Vector3[2] { DoorPos, rotPos }, t.keyLink));
 
-							Vector3 DoorPos = CoordToWorldPoint (bestTileA); //find entrance on first room
-							Vector3 rotPos = CoordToWorldPoint (bestTileB); //find rotation direction
+                            // break;
+                        }
+                    }
+                }
+            }
+        }
 
-							DoorPos.y = 0.0f; //make sure door is on the ground
-							DoorLocations.Add(new KeyValuePair<Vector3[], token>(new Vector3[2]{DoorPos, rotPos}, t.keyLink));
-
-							break;
-						}
-					}
-				}
-
-
-			}
-		}
-
-		return Map;
+        return Map;
 
 	}
 
@@ -369,6 +349,7 @@ public class GraphToMapConverter : MonoBehaviour {
 		public List<Room> connectedRooms;
 		public node node;
 		public int roomSize;
+        public Vector3 center;
 
 		public Room() {
 		}
@@ -403,6 +384,10 @@ public class GraphToMapConverter : MonoBehaviour {
 			return connectedRooms.Contains(otherRoom);
 		}
 	}
+
+    public Vector3 getRoomCenter(int nodeIndex) { //gets room center coords from room index
+        return (roomsList[nodeIndex].center);
+    }
 		
 	/*
 	void OnDrawGizmos() { //for testing

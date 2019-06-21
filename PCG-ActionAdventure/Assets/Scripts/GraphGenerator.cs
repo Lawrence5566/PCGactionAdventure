@@ -30,8 +30,6 @@ public class GraphGenerator : MonoBehaviour {
 	int maxRouteLength = 6;
 
 	node[] dramaticCycleNodes = new node[2];
-
-	List<connection> listOfConnections = new List<connection>();
 		
 	public void Init () {
 
@@ -77,11 +75,8 @@ public class GraphGenerator : MonoBehaviour {
 		//create dungeon:
 		DungeonRule();
 
-		//we only need the connections with features to pass on to graph to map converter
-		listOfConnections.RemoveAll(x => x.features.Count == 0);
-
 		//pass on to map converter:
-		int[,] map = FindObjectOfType<GraphToMapConverter>().CreateMap(nodeArray, dramaticCycleNodes, listOfConnections);
+		int[,] map = FindObjectOfType<GraphToMapConverter>().CreateMap(nodeArray, dramaticCycleNodes, breadthFirstNodeSearch());
 
 		//generate wall mesh from nodeArray:
 		FindObjectOfType<MeshGenerator>().GenerateMesh(map, 1, false); //generate wall mesh squareSize of 1
@@ -224,9 +219,6 @@ public class GraphGenerator : MonoBehaviour {
 		//create new one
 		connection newCon = new connection(new Vector3(relPoint.x/2, relPoint.y/2, 0f) + a.obj.transform.position, sprite, angle);
 
-		//add connection to list
-		listOfConnections.Add (newCon);
-
 		//add to connectionsToNodes, if it doesn't already have one?
 		KeyValuePair<connection, node> newConnectionToNode = new KeyValuePair<connection, node> (newCon, b);
 		a.connectionToNodes.Add(newConnectionToNode);
@@ -345,6 +337,30 @@ public class GraphGenerator : MonoBehaviour {
 
         return null;
     }
+ 
+    Dictionary<connection, node> breadthFirstNodeSearch() { //uses queue ordering to breadthfirstSearch the nodeArray and return an order the player encounters connections and nodes by breadth
+        Queue<node> q = new Queue<node>();
+        Dictionary<connection, node> ordered = new Dictionary<connection, node>(); //acts as 'visited' and to accumalate the ordered nodes
+        q.Enqueue(startNode); //start from the root node (start node in this case)
+        
+        while (q.Count > 0) {
+            node current = q.Dequeue();
+            //ordered.Add(current);
+
+            if (current == null) //skip if queue is empty (current is blank as there was nothing to take)
+                continue;
+
+            foreach (KeyValuePair<connection,node> k in current.connectionToNodes) {
+                if (!ordered.Contains(k)) {
+                    q.Enqueue(k.Value);
+                    ordered.Add(k.Key,k.Value);
+                }
+            }
+        }
+
+        return ordered;
+     }
+
 
     // graph grammer functions: //
 
@@ -410,12 +426,18 @@ public class GraphGenerator : MonoBehaviour {
 		//do this only when passing on to map converter: (it eliminates unneccisary nodes)
 		ProcessNodeArray (routeA, routeB);
 
-		//decide goal (for this game its just a boss + item)
-		//create boss token, create item token, generate item + enemy stacks
+        /*
+        string test = ""; //for testing breadth function
+        Dictionary<connection,node> o = breadthFirstNodeSearch();
+        foreach (KeyValuePair<connection, node> k in o) {
+            test = test + k.Value.name + ", " + k.Key.obj.name + ", ";
+        }
+        Debug.Log(test);
+        */
 
-	}
+    }
 
-	void ProcessNodeArray(List<node> routeA, List<node> routeB){ //final prep processing for converting GraphToMap 
+    void ProcessNodeArray(List<node> routeA, List<node> routeB){ //final prep processing for converting GraphToMap 
 		//destroy all connections - what was point in having them in the first place?
 		for (int i = 0; i < nodeArray.Length; i++) {  //foreach node
 			nodeArray [i].connectedNodes.Clear ();
@@ -598,10 +620,9 @@ public class GraphGenerator : MonoBehaviour {
                 TreasureRoom(loopRouteB);
             }
 
-            //TwoEmptyRooms
+            //TwoEmptyRooms pattern
             TwoEmptyRooms(loopRouteA);
             TwoEmptyRooms(loopRouteB);
-
 
             if (goalNode.features.Count == 0)
             { //if goal node has no features, add a boss
@@ -613,7 +634,6 @@ public class GraphGenerator : MonoBehaviour {
             }
 
         }
-                
 
         /* //for if we add other monsters to goal node:
 		if (goalNode.features.Any(x => x.type == "monster") && !goalNode.features.Any(x => x.type == "lock")){
@@ -625,25 +645,27 @@ public class GraphGenerator : MonoBehaviour {
 			goalNode.AddFeature(new token ("boss", monsterCircle));
 		}*/
 
-        
-
     }
 
     // pattern rules: //
 
     void TwoEmptyRooms(List<KeyValuePair<connection, node>> route) {
         bool emptyRoom = false;
-        for (int i = 0; i < route.Count; i++) { 
-            if (route[i].Value.features.Count == 0 && route[i].Value != startNode && route[i].Value != goalNode) { //if room is empty and not start or goal node
-                if (emptyRoom) {//if previous room was empty, therefore two empty rooms!
+        bool emptyConnection = false;
+        for (int i = 0; i < route.Count; i++) {
+            if (route[i].Value.features.Count == 0 && route[i].Value != startNode && route[i].Value != goalNode) { //if room i is empty, and not start or goal node
+                if (emptyRoom && emptyConnection) {//if previous room was empty and connection between them is empty, therefore two empty rooms!
                     route[i].Value.AddFeature(new token("monster", monsterCircle));    //add monster in the second room
+                    Debug.Log("TwoEmptyRooms");
                     break;
                 }
 
-                emptyRoom = true;
+                emptyRoom = true; //we know this room is empty
+
+                if (route[i].Key.features.Count == 0) //now check its connection to the next one
+                    emptyConnection = true;
             }
         }
-        Debug.Log("TwoEmptyRooms");
     }
 
     void TreasureRoom(List<KeyValuePair<connection, node>> longRoute) {
@@ -859,6 +881,10 @@ public class token{
 	public GameObject obj;
 	public token keyLink;
 
+    public token() { //null type "predictible" constructor
+        type = "null";
+    }
+
 	public token(string t, Sprite s){
 		type = t;
 		sprite = s;
@@ -880,9 +906,9 @@ public class connection{
 	public GameObject obj;
 	public List<token> features = new List<token> ();
 
-	public connection(){ //empty constructor = predictable null object
-		obj = new GameObject("null connection");
-	}
+	public connection(){ //empty constructor = predictable null object?
+        obj = new GameObject("null connection");
+    }
 
 	public connection(Vector3 pos, Sprite i, float rot){
 

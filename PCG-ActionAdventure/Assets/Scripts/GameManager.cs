@@ -60,11 +60,10 @@ public class GameManager : MonoBehaviour
 	}
 
 	public void PlacePlayer(){
-		List<Vector3> roomCenters = graphToMapConverter.roomCenterCoords;
-		int startNodeNumber  = System.Array.IndexOf (graphGenerator.nodeArray, graphGenerator.startNode);
+		int startNodeIndex  = System.Array.IndexOf (graphGenerator.nodeArray, graphGenerator.startNode);
 
 		//now spawn player (already in scene so just set position)
-		playerObject.transform.position = roomCenters[startNodeNumber];
+		playerObject.transform.position = graphToMapConverter.getRoomCenter(startNodeIndex);
 	}
 
 	public void PlaceTraps(){

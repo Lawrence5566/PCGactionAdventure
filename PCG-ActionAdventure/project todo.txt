@@ -1,16 +1,14 @@
 
 recent changelog:
-+ Enemy Level scales all stats
-+ Modified def and speed to actually effect enemies
-+ Enemies now have acceleration
-+ Enemy size now scales with bonus health (.1 scale per 20hp)
-+ Def now effects enemies
-+ Enemy weapon decide on by modifier (modifiers required for each weapon are in code comments)
-+ Rework of scaling distribution points values and points value modifiers using new formula
++ Removed the Use of 'room centers' in GraphToMapConverter and GameManager (gave 'room' 'center' member)
++ Created Breadth First Search ordering function GraphManager
++ Made dealing with features in one place on GrpahToMapConverter and in order (using orderedEncounters)
++ Order of enemies now correlates with order player would encounter them/ distance (topology) from player
++ Made TwoEmptyRoomsPattern take into account connections between them (connection between must be empty too)
 
-To do list (must ("decent state")):
--make the order of locations enemys are spawned corelate to number player encounters them (line 51 of GameManager)
+To do list (must ("decent state")):   --Oh, and DON'T FORGET TO BUG FIX ALONG THE WAY
 -add this as a feature to readme - make enemy weapons given depending on modifiers, eg, increased strength gives broadsword etc
+-Add enemys being stronger as level progress (further fro player tololology wise?) to readme
 -make all movesets for each weapon
 -make on-boxman prefabs for each weapon the right rotation?
 -make prefabs for a weapon pickup (spinning sword that uses script to pick sword and type etc?)
@@ -41,3 +39,8 @@ To do list (could/ none portfolio stuff (after applying to jobs or for fun)):
 -lock on to enemys cursor
 -second iteration patterns (create mini patterns within routes?)
 
+
+
+extended Game stuff?:
+each level you play, you get a new one with 1 level higher difficulty.
+at each end, you select a skill from skill tree? (do we need a progression system? (out of scope?))
