@@ -97,7 +97,7 @@ MonoBehaviour:
   - input: 1
     targetAnim: th_attack_2
   - input: 2
-    targetAnim: gs_oh_attack_1
+    targetAnim: gs_th_attack_1
   isTwoHanded: 1
   weaponModel: {fileID: 1025256421703284}
   damageCollider: {fileID: 1930173642909424}
