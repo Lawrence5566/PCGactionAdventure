@@ -126,6 +126,8 @@ public class GraphToMapConverter : MonoBehaviour {
         foreach (KeyValuePair<node, connection> k in orderedEncounters) { //deal with features
             Room currNodeRoom = roomsList[Array.IndexOf(nodeArray, k.Key)];
 
+            //orderedEncounters sometimes has duplicates, so filter in these loops?
+
             // deal with node features //
             foreach (token t in k.Key.features) {
                 // keys & items //

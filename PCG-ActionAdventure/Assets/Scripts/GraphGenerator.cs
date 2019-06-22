@@ -27,7 +27,7 @@ public class GraphGenerator : MonoBehaviour {
 	public node startNode;
 	node goalNode;
 
-	int maxRouteLength = 6;
+    int maxRouteLength = 6;
 
 	node[] dramaticCycleNodes = new node[2];
 		
@@ -213,7 +213,7 @@ public class GraphGenerator : MonoBehaviour {
 
 		//get old connection if there is one, to destroy it
 		KeyValuePair<node, connection> oldCon = a.connectionToNodes.Find (x => x.Key == b); 	//find connection that connects to B
-		if (oldCon.Value != null) Destroy(oldCon.Value.obj);
+		if (oldCon.Value != null) Destroy(oldCon.Value.obj); //destroy old connection
 		a.connectionToNodes.Remove (oldCon);
 
 		//create new one
@@ -223,9 +223,14 @@ public class GraphGenerator : MonoBehaviour {
 		KeyValuePair<node, connection> newConnectionToNode = new KeyValuePair<node, connection> (b, newCon);
 		a.connectionToNodes.Add(newConnectionToNode);
 
-        // add reverse connection that shares same connection object
-        //KeyValuePair<node, connection> newConnectionToNode2 = new KeyValuePair<node, connection>(newCon, a);
-        //b.connectionToNodes.Add(newConnectionToNode2);
+        // destroy connection in B
+        KeyValuePair<node, connection> oldCon2 = b.connectionToNodes.Find(x => x.Key == a);  //find connection that connects to A
+        if (oldCon2.Value != null) Destroy(oldCon2.Value.obj); //destroy old connection, if there was one
+        a.connectionToNodes.Remove(oldCon2);
+
+        // add reverse connection KeyValuePair that shares same connection object
+        KeyValuePair<node, connection> newConnectionToNode2 = new KeyValuePair<node, connection>(a, newCon);
+        b.connectionToNodes.Add(newConnectionToNode2);
 
         if (!a.connectedNodes.Contains (b)) {
 			a.connectedNodes.Add (b); //make nodes adjacent, if they were not already
@@ -358,7 +363,7 @@ public class GraphGenerator : MonoBehaviour {
 
             foreach (KeyValuePair<node, connection> k in current.connectionToNodes) {
                 log += k.Key.name + ", ";
-                if (!ordered.Contains(k)) {
+                if (!ordered.Contains(k) && ordered.FindIndex(x => x.Value == k.Value) < 0 && k.Key.name != startNode.name ) { //make sure keyvaluepair with same connection doesn't exist, and node isn't start node
                     q.Enqueue(k.Key);
                     ordered.Add(k);
                 }
@@ -366,10 +371,12 @@ public class GraphGenerator : MonoBehaviour {
             Debug.Log(log);
         }
 
-        Debug.Log("function called");
- 
+        //int counter = 0;
         string test = ""; //for testing breadth function
         foreach (KeyValuePair<node, connection> k in ordered) {
+           // k.Value.obj.name = "con" + counter; //rename the connections to see if there are duplicates 
+            //counter++;
+            //Debug.Log("count");
             test = test + k.Key.name + ", " + k.Value.obj.name + ", ";
         }
         Debug.Log(test);
@@ -922,7 +929,7 @@ public class connection{
 	public connection(Vector3 pos, Sprite i, float rot){
 
 		//create connection in world
-		obj = new GameObject("connection");	
+		obj = new GameObject("connection");
 		obj.transform.position = pos;
 		obj.transform.Rotate(new Vector3(0f,0f,rot));
 		SpriteRenderer ren = obj.AddComponent<SpriteRenderer>();	
