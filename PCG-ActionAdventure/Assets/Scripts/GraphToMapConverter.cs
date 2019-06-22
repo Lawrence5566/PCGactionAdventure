@@ -39,7 +39,7 @@ public class GraphToMapConverter : MonoBehaviour {
 
 		int[,] currRoomMap = new int[maxRoomSize, maxRoomSize]; //using max sizes as a base for now, create new room
 
-		for (int n = 0; n < nodeArray.Length; n++) {
+		for (int n = 0; n < nodeArray.Length; n++) { //generate rooms
 			List<Coord> newRegion = new List<Coord>();
 			int RoomWidth = UnityEngine.Random.Range(minRoomSize,50);//generate random size for room within boundaries
 			int RoomHeight = UnityEngine.Random.Range(minRoomSize,50);
@@ -109,22 +109,6 @@ public class GraphToMapConverter : MonoBehaviour {
             roomCenter.y = 0; //make any spawned objects are on the ground
             currRoom.center = roomCenter; //add room center if there is one or not (ensuring empty rooms will have 0,0,0 placeholder )
 
-			// deal with node features //
-			/*foreach(token t in nodeArray[n].features){
-				// keys & items //
-				if (t.type == "key" || t.type == "item" || t.type == "healing")
-					ItemLocations.Add (new KeyValuePair<Vector3, token> (roomCenter, t));
-				
-				// monsters & traps //
-				if (t.type == "monster" || t.type == "trap")
-					monsterAndTrapLocations.Add (new KeyValuePair<Vector3, token>(roomCenter, t));
-
-				// goal location - locks on node are chest, boss is boss
-				if (t.type == "lock" || t.type == "boss")
-					goalLocationAndType = new KeyValuePair<Vector3, token> (roomCenter, t);
-		
-			}*/
-
 		}
 
         if (dramaticCycleNodes [0] != null || dramaticCycleNodes [1] != null) {
@@ -133,13 +117,13 @@ public class GraphToMapConverter : MonoBehaviour {
 
 		}
 
-		ConnectRooms(roomsList);
+		ConnectRooms(roomsList); //connect rooms together
 
 		if (dramaticViewRooms.Count > 1) { //only if we have two rooms, connect them dramatically
 			CreateDramaticView (dramaticViewRooms);
 		}
 
-        foreach (KeyValuePair<connection, node> k in orderedEncounters) {
+        foreach (KeyValuePair<connection, node> k in orderedEncounters) { //deal with features
             Room currNodeRoom = roomsList[Array.IndexOf(nodeArray, k.Value)];
 
             // deal with node features //

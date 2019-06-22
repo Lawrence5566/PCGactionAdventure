@@ -166,7 +166,7 @@ public class GraphGenerator : MonoBehaviour {
 				
 		}
 
-		if(validNodes.Count == 0){ 	//hit a dead end, no loops here, go back to node previous node to try find a loop
+		if(validNodes.Count == 0){ 	//hit a dead end, no loops here, go back to previous node to try find a loop
 			if (deadEndNodes.Count >= activeNodes){ //looked through all possible nodes
 				return loops;
 			}
@@ -175,8 +175,8 @@ public class GraphGenerator : MonoBehaviour {
 			deadEndNodes.Add(curr);
 
 			node newPrevious = null;
-			if (path.Count > 1)
-				newPrevious = path [path.Count - 2];
+			if (path.Count > 1) //if after removing current, there is still one more previous node
+				newPrevious = path [path.Count - 2]; //set it
 
 			loops = findLoopsInGraph(path[path.Count - 1], newPrevious, path, deadEndNodes, activeNodes, loops);				//recurse to go back to previous node
 		}
@@ -187,7 +187,7 @@ public class GraphGenerator : MonoBehaviour {
 			
 	}
 
-	KeyValuePair<connection, node> addConnection(node a, node b, Sprite sprite){ //create connection from A -> B and add to each other's connectedNodes
+	KeyValuePair<connection, node> addConnection(node a, node b, Sprite sprite){ //create connection from A -> B add to each other's connectedNodes
 		var relativePoint = a.obj.transform.InverseTransformPoint(b.obj.transform.position); //for arrow direction
 		Vector2 relPoint = new Vector2(relativePoint.x, relativePoint.y);
 		float angle = 0f;
@@ -223,7 +223,11 @@ public class GraphGenerator : MonoBehaviour {
 		KeyValuePair<connection, node> newConnectionToNode = new KeyValuePair<connection, node> (newCon, b);
 		a.connectionToNodes.Add(newConnectionToNode);
 
-		if (!a.connectedNodes.Contains (b)) {
+        // add reverse connection that shares same connection object
+        //KeyValuePair<connection, node> newConnectionToNode2 = new KeyValuePair<connection, node>(newCon, a);
+        //b.connectionToNodes.Add(newConnectionToNode2);
+
+        if (!a.connectedNodes.Contains (b)) {
 			a.connectedNodes.Add (b); //make nodes adjacent, if they were not already
 		}
 		if (!b.connectedNodes.Contains (a)) {
@@ -343,20 +347,32 @@ public class GraphGenerator : MonoBehaviour {
         Dictionary<connection, node> ordered = new Dictionary<connection, node>(); //acts as 'visited' and to accumalate the ordered nodes
         q.Enqueue(startNode); //start from the root node (start node in this case)
         
-        while (q.Count > 0) {
+        while (q.Count > 0) {        
             node current = q.Dequeue();
             //ordered.Add(current);
 
             if (current == null) //skip if queue is empty (current is blank as there was nothing to take)
                 continue;
 
+            string log = "current: " + current.name + " connections: ";
+
             foreach (KeyValuePair<connection,node> k in current.connectionToNodes) {
+                log += k.Value.name + ", ";
                 if (!ordered.Contains(k)) {
                     q.Enqueue(k.Value);
                     ordered.Add(k.Key,k.Value);
                 }
             }
+            Debug.Log(log);
         }
+
+        Debug.Log("function called");
+ 
+        string test = ""; //for testing breadth function
+        foreach (KeyValuePair<connection, node> k in ordered) {
+            test = test + k.Value.name + ", " + k.Key.obj.name + ", ";
+        }
+        Debug.Log(test);
 
         return ordered;
      }
@@ -412,6 +428,7 @@ public class GraphGenerator : MonoBehaviour {
 		}
 			
 		//log paths for testing:
+        /*
 		string s1 = "";
 		string s2 = "";
 		foreach (node n in routeA) {
@@ -422,18 +439,10 @@ public class GraphGenerator : MonoBehaviour {
 		}
 		Debug.Log("routeA: " + s1);
 		Debug.Log("routeB: " + s2);
+        */
 
 		//do this only when passing on to map converter: (it eliminates unneccisary nodes)
 		ProcessNodeArray (routeA, routeB);
-
-        /*
-        string test = ""; //for testing breadth function
-        Dictionary<connection,node> o = breadthFirstNodeSearch();
-        foreach (KeyValuePair<connection, node> k in o) {
-            test = test + k.Value.name + ", " + k.Key.obj.name + ", ";
-        }
-        Debug.Log(test);
-        */
 
     }
 
@@ -462,9 +471,9 @@ public class GraphGenerator : MonoBehaviour {
 		RouteA.Insert (0, new KeyValuePair<connection, node> (new connection (), startNode));
 		RouteB.Insert (0, new KeyValuePair<connection, node> (new connection (), startNode));
 
-		int activeNodes = 0;
+        int activeNodes = 0;
 		foreach (node n in nodeArray) { //calculate number of nodes in graph that are active
-			if (n.connectionToNodes.Count > 0)
+            if (n.connectionToNodes.Count > 0 && n != goalNode) //don't include goal node in loop finding
 				activeNodes++;
 		}
 
@@ -816,7 +825,7 @@ public class GraphGenerator : MonoBehaviour {
 		}
 
 		//longRoute[1].Key.ChangeType(ConType.blocked, connectionBlockedSpr);	//block connection to it
-		DisconnectNodes(longRoute[0].Value, longRoute[1].Value);//for now, remove the connection instead of blocking it - NEEDS CHANGING?
+		DisconnectNodes(longRoute[0].Value, longRoute[1].Value);//for now, remove the connection instead of blocking it
 	}
 
 }

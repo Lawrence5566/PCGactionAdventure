@@ -1,27 +1,34 @@
 
 recent changelog:
-+ Adjusted movesets for each weapon
+
+need to :
++refactored all connectionKeyValue pairs to have the node as the key (obviously)
+///+ Added reverse connection that shares same connection object for each connection KeyValuePair (in AddConnection)
++ fixed BFS bug not getting past goal node
 
 To do list (must ("decent state")):   --Oh, and DON'T FORGET TO BUG FIX ALONG THE WAY
 -make on-boxman prefabs for each weapon the right rotation?
--make prefabs for a weapon pickup (spinning sword that uses script to pick sword and type etc?)
--weapon pickups - make script and patterns to decide what type of item to drop player
 -slow wind-up but bigger (definatly hitting) boss attacks
 -fix colliders for hitting player in rolling (change collider size or make player invunrable while rolling?) (latter is more true to dark souls)
 -fix boss colliders/attacks to hit the player when he's standing still (might need the attacks to visibly aim at the player? or just collider issue)
 	-for this we want colliders of weapons to be the right size, just change how boss aims instead? 
--balancing of weapons and enemies etc
 -make hidden route more obvious (with blurry effect)
 -think about if 2 keys are generated 
 -remove that flask action button?
 -finalise crosshair mechanics & sprite
--make sure that the room that dramatic cycle looks at has something interesting in (or just make sure it only works if it connects to the goal (mayube check and add something interesting?))
 -sound fx (hidden wall sounds?, fight sounds, etc)
--ambient sounds/background noise? (might not need)
 
-To do list (could/ none portfolio stuff (after applying to jobs or for fun)):
+to do list (could):
+-make prefabs for a weapon pickup (spinning sword that uses script to pick sword and type etc?) (can you use spinning animation from hp pickup?)
+-weapon pickups - make script and patterns to decide what type of item to drop player
+-make hp and item pickups more common? (maybe they need to be more common in second level etc)
+-make sure that the room that dramatic cycle looks at has something interesting in (or just make sure it only works if it connects to the goal (mayube check and add something interesting?))
+-balancing of weapons and enemies etc
+
+To do list (maybe/ none portfolio stuff (after applying to jobs or for fun)):
 -weapon of different types doing different damage mechanics
 -weapons type VFX
+-ambient sounds/background noise?
 -"if empty room" patterns - add something interesting!
 -inventory / multiple weapon pickup system
 -switch weapons system (inventory UI and weapon UI)
