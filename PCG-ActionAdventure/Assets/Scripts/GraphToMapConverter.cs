@@ -26,7 +26,7 @@ public class GraphToMapConverter : MonoBehaviour {
 
 	List<Room> dramaticViewRooms = new List<Room> ();
 
-	public int[,] CreateMap(node[] nodeArray, node[] dramaticCycleNodes, Dictionary<connection, node> orderedEncounters ){  		//takes node array, converts to rooms and combines rooms into one map
+	public int[,] CreateMap(node[] nodeArray, node[] dramaticCycleNodes, List<KeyValuePair<node, connection>> orderedEncounters ){  		//takes node array, converts to rooms and combines rooms into one map
 
 		RoomGenerator roomGenerator = new RoomGenerator ();
 
@@ -123,11 +123,11 @@ public class GraphToMapConverter : MonoBehaviour {
 			CreateDramaticView (dramaticViewRooms);
 		}
 
-        foreach (KeyValuePair<connection, node> k in orderedEncounters) { //deal with features
-            Room currNodeRoom = roomsList[Array.IndexOf(nodeArray, k.Value)];
+        foreach (KeyValuePair<node, connection> k in orderedEncounters) { //deal with features
+            Room currNodeRoom = roomsList[Array.IndexOf(nodeArray, k.Key)];
 
             // deal with node features //
-            foreach (token t in k.Value.features) {
+            foreach (token t in k.Key.features) {
                 // keys & items //
                 if (t.type == "key" || t.type == "item" || t.type == "healing")
                     ItemLocations.Add(new KeyValuePair<Vector3, token>(currNodeRoom.center, t));
@@ -142,12 +142,12 @@ public class GraphToMapConverter : MonoBehaviour {
             }
 
             // deal with connection features //
-            foreach (token t in k.Key.features) {
+            foreach (token t in k.Value.features) {
                 foreach (node n in nodeArray) { //look through all nodes in node array
                     bool found = n.connectionToNodes.Contains(k); //if this node has this connectionToNode
-                    if (found) {  //now we have this graph segment: n -> k.Key -> k.Value (node, connection, node)
+                    if (found) {  //now we have this graph segment: n -> k.Value -> k.Key (node, connection, node)
                         int node1Index = Array.IndexOf(nodeArray, n);
-                        int node2Index = Array.IndexOf(nodeArray, k.Value);
+                        int node2Index = Array.IndexOf(nodeArray, k.Key);
 
                         //find the closest tiles between those two nodes using findClostestTiles
                         Coord bestTileA = new Coord();

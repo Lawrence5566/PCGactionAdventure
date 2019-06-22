@@ -50,22 +50,22 @@ public class GraphGenerator : MonoBehaviour {
 					if (relativePoint.x == -4.0 && relativePoint.y == 0) { //has left node (and not above or below)
 						connection newCon = new connection(nodeArray[n].obj.transform.position + new Vector3(-2f,0f,0f), connectionSpr, 90f); //add left connection
 						nodeArray[n].connectedNodes.Add(nodeArray[i]);
-						nodeArray[n].connectionToNodes.Add(new KeyValuePair<connection, node>(newCon ,nodeArray[i]));
+						nodeArray[n].connectionToNodes.Add(new KeyValuePair<node, connection>(nodeArray[i], newCon));
 					}
 					if (relativePoint.x == 4.0 && relativePoint.y == 0) { //has right node
 						connection newCon = new connection(nodeArray[n].obj.transform.position + new Vector3(2f,0f,0f), connectionSpr, 90f); //right
 						nodeArray[n].connectedNodes.Add(nodeArray[i]);
-						nodeArray[n].connectionToNodes.Add(new KeyValuePair<connection, node>(newCon ,nodeArray[i]));
+						nodeArray[n].connectionToNodes.Add(new KeyValuePair<node, connection>(nodeArray[i], newCon));
 					}
 					if (relativePoint.y == 4.0 && relativePoint.x == 0) { //has top node (and not right or left)
 						connection newCon = new connection(nodeArray[n].obj.transform.position + new Vector3(0f,2f,0f), connectionSpr, 0f); //top
 						nodeArray[n].connectedNodes.Add(nodeArray[i]);
-						nodeArray[n].connectionToNodes.Add(new KeyValuePair<connection, node>(newCon,nodeArray[i]));
+						nodeArray[n].connectionToNodes.Add(new KeyValuePair<node, connection>(nodeArray[i], newCon));
 					}
 					if (relativePoint.y == -4.0 && relativePoint.x == 0) { //has bot node
 						connection newCon = new connection(nodeArray[n].obj.transform.position + new Vector3(0f,-2f,0f), connectionSpr, 0f); //bot
 						nodeArray[n].connectedNodes.Add(nodeArray[i]);
-						nodeArray[n].connectionToNodes.Add(new KeyValuePair<connection, node>(newCon,nodeArray[i]));
+						nodeArray[n].connectionToNodes.Add(new KeyValuePair<node, connection>(nodeArray[i], newCon));
 					}
 				}
 				n++;
@@ -187,7 +187,7 @@ public class GraphGenerator : MonoBehaviour {
 			
 	}
 
-	KeyValuePair<connection, node> addConnection(node a, node b, Sprite sprite){ //create connection from A -> B add to each other's connectedNodes
+	KeyValuePair<node, connection> addConnection(node a, node b, Sprite sprite){ //create connection from A -> B add to each other's connectedNodes
 		var relativePoint = a.obj.transform.InverseTransformPoint(b.obj.transform.position); //for arrow direction
 		Vector2 relPoint = new Vector2(relativePoint.x, relativePoint.y);
 		float angle = 0f;
@@ -212,19 +212,19 @@ public class GraphGenerator : MonoBehaviour {
 		}
 
 		//get old connection if there is one, to destroy it
-		KeyValuePair<connection,node> oldCon = a.connectionToNodes.Find (x => x.Value == b); 	//find connection that connects to B
-		if (oldCon.Key != null) Destroy(oldCon.Key.obj);
+		KeyValuePair<node, connection> oldCon = a.connectionToNodes.Find (x => x.Key == b); 	//find connection that connects to B
+		if (oldCon.Value != null) Destroy(oldCon.Value.obj);
 		a.connectionToNodes.Remove (oldCon);
 
 		//create new one
 		connection newCon = new connection(new Vector3(relPoint.x/2, relPoint.y/2, 0f) + a.obj.transform.position, sprite, angle);
 
 		//add to connectionsToNodes, if it doesn't already have one?
-		KeyValuePair<connection, node> newConnectionToNode = new KeyValuePair<connection, node> (newCon, b);
+		KeyValuePair<node, connection> newConnectionToNode = new KeyValuePair<node, connection> (b, newCon);
 		a.connectionToNodes.Add(newConnectionToNode);
 
         // add reverse connection that shares same connection object
-        //KeyValuePair<connection, node> newConnectionToNode2 = new KeyValuePair<connection, node>(newCon, a);
+        //KeyValuePair<node, connection> newConnectionToNode2 = new KeyValuePair<node, connection>(newCon, a);
         //b.connectionToNodes.Add(newConnectionToNode2);
 
         if (!a.connectedNodes.Contains (b)) {
@@ -237,15 +237,15 @@ public class GraphGenerator : MonoBehaviour {
 		return newConnectionToNode;
 	}
 
-    connection getRandomUniqueConnection(List<KeyValuePair<connection, node>> routeA, List<KeyValuePair<connection, node>> routeB)
+    connection getRandomUniqueConnection(List<KeyValuePair<node, connection>> routeA, List<KeyValuePair<node, connection>> routeB)
     { //gets a random unique connection from routeA by comparing to routeB
-        List<KeyValuePair<connection, node>> routeAunique = new List<KeyValuePair<connection, node>>();
-        foreach (KeyValuePair<connection, node> k1 in routeA)
+        List<KeyValuePair<node, connection>> routeAunique = new List<KeyValuePair<node, connection>>();
+        foreach (KeyValuePair<node, connection> k1 in routeA)
         { //get list of unique key value pairs by connection
             bool isEqual = false;
-            foreach (KeyValuePair<connection, node> k2 in routeB)
+            foreach (KeyValuePair<node, connection> k2 in routeB)
             {
-                if (k1.Key.obj.transform.position == k2.Key.obj.transform.position)
+                if (k1.Value.obj.transform.position == k2.Value.obj.transform.position)
                 {                               //if equal, skip to next pair in routeA
                     isEqual = true;
                     break;
@@ -264,19 +264,19 @@ public class GraphGenerator : MonoBehaviour {
             return new connection();//if empty, return null object
         }
 
-        return routeAunique[Random.Range(0, routeAunique.Count)].Key; //return random chosen connection
+        return routeAunique[Random.Range(0, routeAunique.Count)].Value; //return random chosen connection
     }
 
-    node getRandomUniqueNode(List<KeyValuePair<connection, node>> routeA, List<KeyValuePair<connection, node>> routeB)
+    node getRandomUniqueNode(List<KeyValuePair<node, connection>> routeA, List<KeyValuePair<node, connection>> routeB)
     { //gets a random unique node from routeA by comparing to routeB
-        List<KeyValuePair<connection, node>> routeAunique = new List<KeyValuePair<connection, node>>();
+        List<KeyValuePair<node, connection>> routeAunique = new List<KeyValuePair<node, connection>>();
 
-        foreach (KeyValuePair<connection, node> k1 in routeA)
+        foreach (KeyValuePair<node, connection> k1 in routeA)
         { //get list of unique key value pairs by node
             bool isEqual = false;
-            foreach (KeyValuePair<connection, node> k2 in routeB)
+            foreach (KeyValuePair<node, connection> k2 in routeB)
             {
-                if (k1.Value == k2.Value)
+                if (k1.Key == k2.Key)
                 {                               //if equal, skip to next pair in routeA
                     isEqual = true;
                     break;
@@ -295,24 +295,24 @@ public class GraphGenerator : MonoBehaviour {
             return new node();//if empty, return null object
         }
 
-        return routeAunique[Random.Range(0, routeAunique.Count)].Value; //return random chosen node
+        return routeAunique[Random.Range(0, routeAunique.Count)].Key; //return random chosen node
     }
 
     void DisconnectNodes(node a, node b)
     {
 
-        int index = (a.connectionToNodes.FindIndex(x => x.Value == b)); //check if A contains B in connectionToNodes
+        int index = (a.connectionToNodes.FindIndex(x => x.Key == b)); //check if A contains B in connectionToNodes
         if (index != -1)
         {
-            Destroy(a.connectionToNodes[index].Key.obj);    //destroy connection object
+            Destroy(a.connectionToNodes[index].Value.obj);    //destroy connection object
             a.connectionToNodes.RemoveAt(index);            //destroy connectionTo
         }
         a.connectedNodes.Remove(b); //remove from connections if you find
 
-        int index2 = (b.connectionToNodes.FindIndex(x => x.Value == a));
+        int index2 = (b.connectionToNodes.FindIndex(x => x.Key == a));
         if (index2 != -1)
         {
-            Destroy(b.connectionToNodes[index2].Key.obj);
+            Destroy(b.connectionToNodes[index2].Value.obj);
             b.connectionToNodes.RemoveAt(index2);
         }
         b.connectedNodes.Remove(a);
@@ -341,10 +341,10 @@ public class GraphGenerator : MonoBehaviour {
 
         return null;
     }
- 
-    Dictionary<connection, node> breadthFirstNodeSearch() { //uses queue ordering to breadthfirstSearch the nodeArray and return an order the player encounters connections and nodes by breadth
+
+    List<KeyValuePair<node, connection>> breadthFirstNodeSearch() { //uses queue ordering to breadthfirstSearch the nodeArray and return an order the player encounters connections and nodes by breadth
         Queue<node> q = new Queue<node>();
-        Dictionary<connection, node> ordered = new Dictionary<connection, node>(); //acts as 'visited' and to accumalate the ordered nodes
+        List<KeyValuePair<node, connection>> ordered = new List<KeyValuePair<node, connection>>(); //acts as 'visited' and to accumalate the ordered nodes
         q.Enqueue(startNode); //start from the root node (start node in this case)
         
         while (q.Count > 0) {        
@@ -356,11 +356,11 @@ public class GraphGenerator : MonoBehaviour {
 
             string log = "current: " + current.name + " connections: ";
 
-            foreach (KeyValuePair<connection,node> k in current.connectionToNodes) {
-                log += k.Value.name + ", ";
+            foreach (KeyValuePair<node, connection> k in current.connectionToNodes) {
+                log += k.Key.name + ", ";
                 if (!ordered.Contains(k)) {
-                    q.Enqueue(k.Value);
-                    ordered.Add(k.Key,k.Value);
+                    q.Enqueue(k.Key);
+                    ordered.Add(k);
                 }
             }
             Debug.Log(log);
@@ -369,8 +369,8 @@ public class GraphGenerator : MonoBehaviour {
         Debug.Log("function called");
  
         string test = ""; //for testing breadth function
-        foreach (KeyValuePair<connection, node> k in ordered) {
-            test = test + k.Value.name + ", " + k.Key.obj.name + ", ";
+        foreach (KeyValuePair<node, connection> k in ordered) {
+            test = test + k.Key.name + ", " + k.Value.obj.name + ", ";
         }
         Debug.Log(test);
 
@@ -450,8 +450,8 @@ public class GraphGenerator : MonoBehaviour {
 		//destroy all connections - what was point in having them in the first place?
 		for (int i = 0; i < nodeArray.Length; i++) {  //foreach node
 			nodeArray [i].connectedNodes.Clear ();
-			foreach (KeyValuePair<connection, node> k in nodeArray [i].connectionToNodes) {	//foreach connection
-				Destroy(k.Key.obj); //destroy connection object
+			foreach (KeyValuePair<node, connection> k in nodeArray [i].connectionToNodes) {	//foreach connection
+				Destroy(k.Value.obj); //destroy connection object
 			}
 			nodeArray [i].connectionToNodes.Clear ();
 		}
@@ -459,8 +459,8 @@ public class GraphGenerator : MonoBehaviour {
 		//reconnect along routes
 		//add connections for route & converting to KeyValuePairs
         //keep routeA and routeB solo nodes as we use them later
-		List<KeyValuePair<connection, node>> RouteA = new List<KeyValuePair<connection, node>> ();
-		List<KeyValuePair<connection, node>> RouteB = new List<KeyValuePair<connection, node>> ();
+		List<KeyValuePair<node, connection>> RouteA = new List<KeyValuePair<node, connection>> ();
+		List<KeyValuePair<node, connection>> RouteB = new List<KeyValuePair<node, connection>> ();
 		for (int i = 1; i < routeA.Count; i++) { //start from one ahead, so that we don't go out of range
 			RouteA.Add(addConnection (routeA [i - 1], routeA [i], connectionArrowSpr)); //add connection between nodes, and return key value pair for each to new route list
 		}
@@ -468,8 +468,8 @@ public class GraphGenerator : MonoBehaviour {
 			RouteB.Add(addConnection (routeB [i - 1], routeB [i], connectionArrowSpr));
 		}
 		//add start node to beginning of routes (this is for loop stuff later)
-		RouteA.Insert (0, new KeyValuePair<connection, node> (new connection (), startNode));
-		RouteB.Insert (0, new KeyValuePair<connection, node> (new connection (), startNode));
+		RouteA.Insert (0, new KeyValuePair<node, connection> (startNode, new connection()));
+		RouteB.Insert (0, new KeyValuePair<node, connection> (startNode, new connection()));
 
         int activeNodes = 0;
 		foreach (node n in nodeArray) { //calculate number of nodes in graph that are active
@@ -484,20 +484,20 @@ public class GraphGenerator : MonoBehaviour {
         foreach (List<node> loop in loops)
         {
 
-            List<KeyValuePair<connection, node>> loopRouteA = new List<KeyValuePair<connection, node>>();
-            List<KeyValuePair<connection, node>> loopRouteB = new List<KeyValuePair<connection, node>>();
+            List<KeyValuePair<node, connection>> loopRouteA = new List<KeyValuePair<node, connection>>();
+            List<KeyValuePair<node, connection>> loopRouteB = new List<KeyValuePair<node, connection>>();
 
-            foreach (KeyValuePair<connection, node> k in RouteA)
+            foreach (KeyValuePair<node, connection> k in RouteA)
             {  //foreach connection in RouteA
-                if (loop.Contains(k.Value))
+                if (loop.Contains(k.Key))
                 {                        //if loop contains node from that connection
                     loopRouteA.Add(k);                              //add to connection to RouteA half of loop
                 }
             }
 
-            foreach (KeyValuePair<connection, node> k in RouteB)
+            foreach (KeyValuePair<node, connection> k in RouteB)
             {  //foreach connection in RouteB, may have duplicates from A this way, remove them here?
-                if (loop.Contains(k.Value))
+                if (loop.Contains(k.Key))
                 {
                     loopRouteB.Add(k);
                 }
@@ -507,13 +507,13 @@ public class GraphGenerator : MonoBehaviour {
             //testing output
             string one = "loopPart1: ";
             string two = "loopPart2: ";
-            foreach (KeyValuePair<connection, node> k in loopRouteA)
+            foreach (KeyValuePair<node, connection> k in loopRouteA)
             {
-                one += k.Value.name + ", ";
+                one += k.Key.name + ", ";
             }
-            foreach (KeyValuePair<connection, node> k in loopRouteB)
+            foreach (KeyValuePair<node, connection> k in loopRouteB)
             {
-                two += k.Value.name + ", ";
+                two += k.Key.name + ", ";
             }
 
             Debug.Log(one);
@@ -589,8 +589,8 @@ public class GraphGenerator : MonoBehaviour {
             { //both are short, so run on the shorter one
                 Debug.Log("Short a, Short b");
 
-                List<KeyValuePair<connection, node>> shorter = new List<KeyValuePair<connection, node>>();
-                List<KeyValuePair<connection, node>> longer = new List<KeyValuePair<connection, node>>();
+                List<KeyValuePair<node, connection>> shorter = new List<KeyValuePair<node, connection>>();
+                List<KeyValuePair<node, connection>> longer = new List<KeyValuePair<node, connection>>();
 
                 if (ACount >= BCount)
                 {
@@ -658,30 +658,30 @@ public class GraphGenerator : MonoBehaviour {
 
     // pattern rules: //
 
-    void TwoEmptyRooms(List<KeyValuePair<connection, node>> route) {
+    void TwoEmptyRooms(List<KeyValuePair<node, connection>> route) {
         bool emptyRoom = false;
         bool emptyConnection = false;
         for (int i = 0; i < route.Count; i++) {
-            if (route[i].Value.features.Count == 0 && route[i].Value != startNode && route[i].Value != goalNode) { //if room i is empty, and not start or goal node
+            if (route[i].Key.features.Count == 0 && route[i].Key != startNode && route[i].Key != goalNode) { //if room i is empty, and not start or goal node
                 if (emptyRoom && emptyConnection) {//if previous room was empty and connection between them is empty, therefore two empty rooms!
-                    route[i].Value.AddFeature(new token("monster", monsterCircle));    //add monster in the second room
+                    route[i].Key.AddFeature(new token("monster", monsterCircle));    //add monster in the second room
                     Debug.Log("TwoEmptyRooms");
                     break;
                 }
 
                 emptyRoom = true; //we know this room is empty
 
-                if (route[i].Key.features.Count == 0) //now check its connection to the next one
+                if (route[i].Value.features.Count == 0) //now check its connection to the next one
                     emptyConnection = true;
             }
         }
     }
 
-    void TreasureRoom(List<KeyValuePair<connection, node>> longRoute) {
+    void TreasureRoom(List<KeyValuePair<node, connection>> longRoute) {
         List<node> monsterRooms = new List<node>();
-        foreach (KeyValuePair<connection, node> k in longRoute) {
-            if (k.Value.features.Exists(x => x.type == "monster")) { //if room contains an enenmy
-                monsterRooms.Add(k.Value);
+        foreach (KeyValuePair<node, connection> k in longRoute) {
+            if (k.Key.features.Exists(x => x.type == "monster")) { //if room contains an enenmy
+                monsterRooms.Add(k.Key);
             }
         }
 
@@ -712,52 +712,52 @@ public class GraphGenerator : MonoBehaviour {
 
     }
 
-    void BossPrepHPpattern(List<KeyValuePair<connection, node>> route) {
+    void BossPrepHPpattern(List<KeyValuePair<node, connection>> route) {
         //if player encountered an enemy or trap before boss, add HP item
         bool enemyFound = false;
-        foreach (KeyValuePair<connection, node> k in route) {
-            if (k.Value.features.Exists(x => x.type == "trap" || x.type == "monster"))
+        foreach (KeyValuePair<node, connection> k in route) {
+            if (k.Key.features.Exists(x => x.type == "trap" || x.type == "monster"))
                 enemyFound = true;
         }
 
         if (enemyFound) //found enemy on this route, so add hp to room one before end
-            route[route.Count - 2].Value.AddFeature(new token("healing", healItemCircle));
+            route[route.Count - 2].Key.AddFeature(new token("healing", healItemCircle));
 
     }
 
-    void TwoAlternativePaths(List<KeyValuePair<connection, node>> routeA, List<KeyValuePair<connection, node>> routeB){
+    void TwoAlternativePaths(List<KeyValuePair<node, connection>> routeA, List<KeyValuePair<node, connection>> routeB){
         //add monster on routeA, trap on routeB
 		Debug.Log("run Alternate Paths rule");
 
 		DangerousRoute (routeA, routeB); 																	//add monster to routeA (mirrors dangerous route)
 
 		for (int i = 1; i < routeB.Count - 1; i++) { //add traps to each connection except first and last
-			routeB [i].Key.AddFeatureToConnection (new token ("trap", trapCircle));
+			routeB [i].Value.AddFeatureToConnection (new token ("trap", trapCircle));
 		}
 
 		//getRandomUniqueConnection(routeB, routeA).AddFeatureToConnection(new token("trap", trapCircle)); 	//add a trap to connection on route B
 	}
 
-	void HiddenShortcut(List<KeyValuePair<connection, node>> shortRoute, List<KeyValuePair<connection, node>> longRoute){
+	void HiddenShortcut(List<KeyValuePair<node, connection>> shortRoute, List<KeyValuePair<node, connection>> longRoute){
 		Debug.Log ("run Hidden Shortcut rule");
 		//getRandomUniqueConnection(shortRoute,longRoute).AddFeatureToConnection(new token("hidden", hiddenCircle)); 
-		shortRoute[0].Value.connectedNodes.Remove(shortRoute[1].Value); //soft disconnect so path isn't spawned
-		shortRoute[1].Value.connectedNodes.Remove(shortRoute[0].Value); //soft disconnect so path isn't spawned
-		shortRoute [1].Key.AddFeatureToConnection (new token ("hidden", hiddenCircle));
+		shortRoute[0].Key.connectedNodes.Remove(shortRoute[1].Key); //soft disconnect so path isn't spawned
+		shortRoute[1].Key.connectedNodes.Remove(shortRoute[0].Key); //soft disconnect so path isn't spawned
+		shortRoute [1].Value.AddFeatureToConnection (new token ("hidden", hiddenCircle));
 	}
 
-	void DramaticCycle(List<KeyValuePair<connection, node>> shortRoute){
+	void DramaticCycle(List<KeyValuePair<node, connection>> shortRoute){
 		//only ran on short routes
 		Debug.Log("dramatic cycle");
-		//Random.Range (0, routeAunique.Count)].Key
-		dramaticCycleNodes[0] = shortRoute[0].Value; 					//start of dramatic view
-		dramaticCycleNodes[1] = shortRoute[shortRoute.Count - 1].Value;	//end of dramatic view
+		//Random.Range (0, routeAunique.Count)].Value
+		dramaticCycleNodes[0] = shortRoute[0].Key; 					//start of dramatic view
+		dramaticCycleNodes[1] = shortRoute[shortRoute.Count - 1].Key;	//end of dramatic view
 
 		//foreach node on shortRoute, dissconnect
 		//remove connection to first node on short route
 		if (shortRoute.Count > 1) { //should always be but just in case
 			for (int i = 1; i < shortRoute.Count; i++) { //start one ahead
-				DisconnectNodes (shortRoute [i-1].Value, shortRoute [i].Value); //disconnect previous and this
+				DisconnectNodes (shortRoute [i-1].Key, shortRoute [i].Key); //disconnect previous and this
 			}
 		}
 
@@ -765,24 +765,24 @@ public class GraphGenerator : MonoBehaviour {
 		addConnection (dramaticCycleNodes [0], dramaticCycleNodes [1], connectionDramatic);
 	}
 
-	void DangerousRoute(List<KeyValuePair<connection, node>> shortRoute,List<KeyValuePair<connection, node>> longRoute){
+	void DangerousRoute(List<KeyValuePair<node, connection>> shortRoute,List<KeyValuePair<node, connection>> longRoute){
 		//place a danger (monster) on the short route
 		Debug.Log ("run DangerousRoute rule ");
 
 		//add to every node on short route (ends up usually being just one since short routes are 3 long):
 		bool addedMonster = false;
 		for (int i = 1; i < shortRoute.Count-1; i++){ //(skip first and last as they are part of other routes)
-			shortRoute[i].Value.AddFeature(new token("monster", monsterCircle)); 
+			shortRoute[i].Key.AddFeature(new token("monster", monsterCircle)); 
 			addedMonster = true;
 		}
 
         //add to first proper connection as route was too short
         if (addedMonster == false)
-            shortRoute[1].Key.AddFeatureToConnection(new token("monster", monsterCircle));
+            shortRoute[1].Value.AddFeatureToConnection(new token("monster", monsterCircle));
         
 	}
 
-	void UnknownReturn(List<KeyValuePair<connection, node>> shortRoute,List<KeyValuePair<connection, node>> longRoute){
+	void UnknownReturn(List<KeyValuePair<node, connection>> shortRoute,List<KeyValuePair<node, connection>> longRoute){
 		Debug.Log ("run Unknown return rule ");
 
 		//get random unique connection, and add collapsing bridge type
@@ -791,21 +791,21 @@ public class GraphGenerator : MonoBehaviour {
 		con.ChangeType (ConType.collapsing, connectionCollapse);
 	}
 
-	void LockAndKey(List<KeyValuePair<connection, node>> shortRoute,List<KeyValuePair<connection, node>> longRoute){
+	void LockAndKey(List<KeyValuePair<node, connection>> shortRoute,List<KeyValuePair<node, connection>> longRoute){
 		Debug.Log("Lock and Key cycle");
 
-		node endNode = shortRoute [shortRoute.Count - 1].Value; 
+		node endNode = shortRoute [shortRoute.Count - 1].Key; 
 		bool foundOutwardConnections = false; //checking if any outward connections are found to get out of this loop
 
 		token keyToken = new token("key", keyCircle); 
 
 		//add key token to each lock it unlocks
-		foreach (KeyValuePair<connection, node> k in endNode.connectionToNodes) {
+		foreach (KeyValuePair<node, connection> k in endNode.connectionToNodes) {
 			if (!shortRoute.Contains (k) && !longRoute.Contains(k)){  //if connection not in shortRoute or longRoute, lock it (stoping player advance through this route)
-				k.Key.AddFeatureToConnection(new token("lock", lockCircle, keyToken));//add lock
+				k.Value.AddFeatureToConnection(new token("lock", lockCircle, keyToken));//add lock
 				foundOutwardConnections = true;
 
-				Debug.Log ("add lock to connection to " + k.Value.obj.name);
+				Debug.Log ("add lock to connection to " + k.Key.obj.name);
 			}
 		}
 			
@@ -815,17 +815,17 @@ public class GraphGenerator : MonoBehaviour {
 		}
 
 		//place key at the first node of long route, and close long route off in that direction (so player encounters lock before seeing key)
-		longRoute[1].Value.AddFeature(keyToken); //add key to the first node (excluding start node)
+		longRoute[1].Key.AddFeature(keyToken); //add key to the first node (excluding start node)
 
 		//add enemy to guard the key
 		if (longRoute.Count > 2) {
-			longRoute [2].Key.AddFeatureToConnection (new token ("monster", monsterCircle));
+			longRoute [2].Value.AddFeatureToConnection (new token ("monster", monsterCircle));
 		} else {
-			longRoute [1].Value.AddFeature (new token ("monster", monsterCircle));
+			longRoute [1].Key.AddFeature (new token ("monster", monsterCircle));
 		}
 
-		//longRoute[1].Key.ChangeType(ConType.blocked, connectionBlockedSpr);	//block connection to it
-		DisconnectNodes(longRoute[0].Value, longRoute[1].Value);//for now, remove the connection instead of blocking it
+		//longRoute[1].Value.ChangeType(ConType.blocked, connectionBlockedSpr);	//block connection to it
+		DisconnectNodes(longRoute[0].Key, longRoute[1].Key);//for now, remove the connection instead of blocking it
 	}
 
 }
@@ -833,7 +833,7 @@ public class GraphGenerator : MonoBehaviour {
 // utlilty classes used for this generator and other parts of the project //
 
 public class node{
-	public List<KeyValuePair<connection, node>> connectionToNodes = new List<KeyValuePair<connection, node>>(); //connects connections to connected nodes - might be able to just use this?
+	public List<KeyValuePair<node, connection>> connectionToNodes = new List<KeyValuePair<node, connection>>(); //connects connections to connected nodes - might be able to just use this?
 
 	public string name;
 	public GameObject obj;

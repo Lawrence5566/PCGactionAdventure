@@ -21,7 +21,7 @@ public class pickup : MonoBehaviour
             }
 
             if (myPickupType == pickupType.item) {
-                //playerInv.keys.Add(keyToken);   //give player this item
+                //playerInv.Values.Add(keyToken);   //give player this item
                 //gameObject.SetActive(false);  
                 //destroy object
             }

@@ -133,7 +133,7 @@ public class MobSpawner : MonoBehaviour {
 			//spawn all the enemies for the task first
 			if (o.type == "monster"){
 				GameObject newEnemy = Instantiate(enemyPrefabs [Random.Range (0, enemyPrefabs.Length)], taskLocations[locationNo], Quaternion.identity);
-                //newEnemy.transform.localScale = new Vector3(1f, 1f, 1f) * (1f + (o.value * 2f / 10f)); //use level to set enemy scale
+                //newEnemy.transform.localScale = new Vector3(1f, 1f, 1f) * (1f + (o.Key * 2f / 10f)); //use level to set enemy scale
 
                 //set new enemy stats:
                 EnemyStates enemy = newEnemy.GetComponent<EnemyStates> ();
