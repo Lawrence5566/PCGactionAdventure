@@ -359,27 +359,27 @@ public class GraphGenerator : MonoBehaviour {
             if (current == null) //skip if queue is empty (current is blank as there was nothing to take)
                 continue;
 
-            string log = "current: " + current.name + " connections: ";
+           // string log = "current: " + current.name + " connections: ";
 
             foreach (KeyValuePair<node, connection> k in current.connectionToNodes) {
-                log += k.Key.name + ", ";
+               // log += k.Key.name + ", ";
                 if (!ordered.Contains(k) && ordered.FindIndex(x => x.Value == k.Value) < 0 && k.Key.name != startNode.name ) { //make sure keyvaluepair with same connection doesn't exist, and node isn't start node
                     q.Enqueue(k.Key);
                     ordered.Add(k);
                 }
             }
-            Debug.Log(log);
+            //Debug.Log(log);
         }
 
         //int counter = 0;
-        string test = ""; //for testing breadth function
-        foreach (KeyValuePair<node, connection> k in ordered) {
+        //string test = ""; //for testing breadth function
+        //foreach (KeyValuePair<node, connection> k in ordered) {
            // k.Value.obj.name = "con" + counter; //rename the connections to see if there are duplicates 
             //counter++;
             //Debug.Log("count");
-            test = test + k.Key.name + ", " + k.Value.obj.name + ", ";
-        }
-        Debug.Log(test);
+       //     test = test + k.Key.name + ", " + k.Value.obj.name + ", ";
+       // }
+        //Debug.Log(test);
 
         return ordered;
      }
@@ -628,7 +628,7 @@ public class GraphGenerator : MonoBehaviour {
                 }
             }
 
-            // TreasureRoom route
+            // TreasureRoom route on longest route
             if (ACount >= BCount) { //A is longer
                 TreasureRoom(loopRouteA);
             }
@@ -685,9 +685,10 @@ public class GraphGenerator : MonoBehaviour {
     }
 
     void TreasureRoom(List<KeyValuePair<node, connection>> longRoute) {
+        Debug.Log("TreasureRoom");
         List<node> monsterRooms = new List<node>();
         foreach (KeyValuePair<node, connection> k in longRoute) {
-            if (k.Key.features.Exists(x => x.type == "monster")) { //if room contains an enenmy
+            if (k.Key.features.Exists(x => x.type == "monster") || k.Key.features.Exists(x => x.type == "trap")) { //if room contains an enemy or trap
                 monsterRooms.Add(k.Key);
             }
         }
@@ -804,24 +805,23 @@ public class GraphGenerator : MonoBehaviour {
 		node endNode = shortRoute [shortRoute.Count - 1].Key; 
 		bool foundOutwardConnections = false; //checking if any outward connections are found to get out of this loop
 
-		token keyToken = new token("key", keyCircle); 
+		token keyToken = new token("key", keyCircle); //create key for all the locks we are about to place
 
-		//add key token to each lock it unlocks
 		foreach (KeyValuePair<node, connection> k in endNode.connectionToNodes) {
-			if (!shortRoute.Contains (k) && !longRoute.Contains(k)){  //if connection not in shortRoute or longRoute, lock it (stoping player advance through this route)
-				k.Value.AddFeatureToConnection(new token("lock", lockCircle, keyToken));//add lock
+			if (shortRoute.FindIndex(x => x.Value == k.Value) < 0 && longRoute.FindIndex(x => x.Value == k.Value) < 0) {  //if connection not in shortRoute and longRoute, lock it (stoping player advancing past 'end node')
+                                                                        //this means player must explore long and short routes to find the key
+				k.Value.AddFeatureToConnection(new token("lock", lockCircle, keyToken));    //add a lock
 				foundOutwardConnections = true;
-
-				Debug.Log ("add lock to connection to " + k.Key.obj.name);
 			}
 		}
 			
-		//if no connections were outside of routes, then the goal node is also goal of loop, so make the goal only achivable when key is collected (eg if its a monster, keep the monster in stone till key is found)
+		//if no connections were outside of routes, then the goal node is the 'endNode', so make the goal only achivable when key is collected (eg if its a monster, keep the monster in stone till key is found)
+        // (do this later when dealing with lock features)
 		if (!foundOutwardConnections) {
-			goalNode.AddFeature(new token("lock", lockCircle, keyToken));	//add lock onto node
+			goalNode.AddFeature(new token("lock", lockCircle, keyToken));	//add lock onto goal node
 		}
 
-		//place key at the first node of long route, and close long route off in that direction (so player encounters lock before seeing key)
+		//place key at the first node of long route, and close long route off in that direction (so player encounters lock before seeing key and has to go down long route in reverse)
 		longRoute[1].Key.AddFeature(keyToken); //add key to the first node (excluding start node)
 
 		//add enemy to guard the key
