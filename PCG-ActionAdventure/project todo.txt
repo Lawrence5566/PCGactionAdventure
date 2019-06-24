@@ -1,11 +1,9 @@
 
 recent changelog:
-+ Slower speed but bigger (much more likely hitting) boss attacks
-+ Player's def now effects incomming dmg
-+ Gameplay stats adjusted
-+ Player now has one frame of invincibilty while rolling
++ Corrected spawn height of invis teleporter
++ Teleporter is now a invisivble cylinder that reflects light (so player can see it but it's like an active camo effect)
 
-To do list (must ("decent state")):   --Oh, and DON'T FORGET TO BUG FIX ALONG THE WAY
+To do list (must ("decent state")):   -Oh, and DON'T FORGET TO BUG FIX ALONG THE WAY
 -make hidden route more obvious (with blurry effect)
 -think about if 2 keys are generated 
 -remove that flask action button?

@@ -156,8 +156,11 @@ public class GraphToMapConverter : MonoBehaviour {
                         Coord bestTileB = new Coord();
                         FindClosestTiles(roomsList[node1Index], roomsList[node2Index], out bestTileA, out bestTileB);
 
-                        if (t.type == "hidden")
-                            hiddenLocations.Add(new KeyValuePair<Vector3, Vector3>(CoordToWorldPoint(bestTileA), roomsList[node2Index].center));
+                        if (t.type == "hidden") {
+                            Vector3 locA = CoordToWorldPoint(bestTileA);
+                            locA.y = 0f; //set y to zero so it spawns on ground
+                            hiddenLocations.Add(new KeyValuePair<Vector3, Vector3>(locA, roomsList[node2Index].center));
+                        }
 
                         if (t.type == "trap" || t.type == "monster") {
                             //find midpoint between world points, giving center of route to 'trapLocations'  or 'monsterLocations'
