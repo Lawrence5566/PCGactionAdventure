@@ -125,7 +125,7 @@ public class EnemyStates : MonoBehaviour {
                 currSpeed += accelerationAmount; // increase speed by each frame (acceleration)
 
             //if player is within attack range, attack him
-            if (Vector3.Distance (this.transform.position, player.transform.position) < attackRange){
+            if (Vector3.Distance (this.transform.position, player.transform.position) <= attackRange){
 				anim.SetBool (StaticStrings.running, false); //stop running 
 				anim.SetFloat (StaticStrings.vertical, 0f, 0.4f, Time.deltaTime); //stop character
                 currSpeed = 0; //stop acceleration when attacking
@@ -137,13 +137,14 @@ public class EnemyStates : MonoBehaviour {
 				if (targetDir == Vector3.zero)
 					targetDir = transform.forward;
 				Quaternion targetRot = Quaternion.LookRotation (targetDir);	 	//create rotation towards target
-				targetRot = Quaternion.Slerp (transform.rotation, targetRot, Time.deltaTime * 15);  //when aiming, "snap" towards player (use * 15 so no lost time turning around) 
+				targetRot = Quaternion.Slerp (transform.rotation, targetRot, Time.deltaTime * 50);  //when aiming, "snap" towards player
 				transform.rotation = targetRot;
 
 				//attack
-				string stringAttackAnim = weaponScript.actions[Random.Range(0, weaponScript.actions.Count)].targetAnim;
+				string stringAttackAnim = weaponScript.actions[Random.Range(0, weaponScript.actions.Count)].targetAnim; //pick random anim
 
 				if (canAttack) { //if we can, attack
+                    Debug.Log("can attack");
 					anim.speed = attackSpeed;
 					anim.CrossFade (stringAttackAnim, 0.2f);
 					canAttack = false;
@@ -183,7 +184,7 @@ public class EnemyStates : MonoBehaviour {
 	}
 
 	public void DoDamage(float v){
-		if (isInvincible)
+		if (isInvincible) //removed damaging animation and invincibility frames
 			return;
 
 		hp -= v * 1/def; //incoming damage modified by 1/def
@@ -192,9 +193,12 @@ public class EnemyStates : MonoBehaviour {
         // 100 incoming at 3 def = 100 * 1/3 = 33
     
 		isInvincible = true;
-		anim.Play ("damage_1");
-		anim.applyRootMotion = true;
-		anim.SetBool (StaticStrings.canMove, false);
+        if (!(level == 5)) { //if not a boss (bosses don't stagger)
+            anim.Play("damage_1");
+            anim.applyRootMotion = true;
+            anim.SetBool(StaticStrings.canMove, false);
+        }
+
 
 		healthBar.SetSize (hp / startHP);
 	}

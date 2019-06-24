@@ -5,7 +5,9 @@ using UnityEngine;
 //works as State manager and input handler
 public class InputHandler : MonoBehaviour {
 
-	[Header("Inputs")]
+    PlayerStats stats;
+
+    [Header("Inputs")]
 	public float vertical;
 	public float horizontal;
 	public float moveAmount;
@@ -72,8 +74,10 @@ public class InputHandler : MonoBehaviour {
 	void Start () {
 		Setup ();
 
-		//set up rigid constraints
-		rigid.angularDrag = 999;
+        stats = GetComponent<PlayerStats>();
+
+        //set up rigid constraints
+        rigid.angularDrag = 999;
 		rigid.drag = 4;
 		rigid.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationZ;
 
@@ -248,6 +252,7 @@ public class InputHandler : MonoBehaviour {
 		}
 
 		a_hook.rm_multi = 1; //reset root motion multiplier
+        stats.invincible = false; // turn off invincibility from rolling if it's on
 		HandleRolls (); //check for rolling
 
 		//if we got this far, turn off root motion cus we are moving
@@ -368,8 +373,9 @@ public class InputHandler : MonoBehaviour {
 		anim.SetFloat (StaticStrings.vertical, v);
 		anim.SetFloat (StaticStrings.horizontal, h);
 
-		canMove = false; //enable action (since we are rolling)
-		inAction = true; 
+		canMove = false; //disable action (since we are rolling)
+        stats.invincible = true;                  //make invincible for 1 frame while rolling
+        inAction = true; 
 		anim.CrossFade ("Rolls", 0.2f);
 
 	} 

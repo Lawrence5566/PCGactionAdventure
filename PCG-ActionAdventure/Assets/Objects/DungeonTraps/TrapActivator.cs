@@ -41,7 +41,7 @@ public class TrapActivator : MonoBehaviour
 	void OnCollisionEnter(Collision collision){
 		if (player.gameObject == collision.gameObject && time >= timer) { //if hit player and its been at least 2 seconds since last damage
 			//apply damage to player
-			player.DamagePlayer (30f, false);
+			player.DamagePlayer (30f);
 
 			timer = time + 2;	//reset timer to 2 seconds in the future
 		}

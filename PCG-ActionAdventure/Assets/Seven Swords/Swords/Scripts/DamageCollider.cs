@@ -21,17 +21,13 @@ public class DamageCollider : MonoBehaviour {
 				return;
 
 			//do damage
-			float dmg = stats.str * 10;
+			float dmg = stats.str * 20;
 			Weapon weapon = GetComponentInParent<Weapon> ();
 
 			if (weapon) //add weapon damage
 				dmg += weapon.damage;
-
-			float defMultiplier = 1;
-			if (eStates.def > 1)
-				defMultiplier = 5 / (5 + eStates.def);
 			
-			eStates.DoDamage (dmg * defMultiplier); //damage divided by def/5
+			eStates.DoDamage (dmg); //deal damage
 		}
 
 		if (enemy) {
@@ -40,13 +36,7 @@ public class DamageCollider : MonoBehaviour {
 			if (player != null) { //if hit player
 				//do damage
 
-				//if you wanna give player defense stat:
-				//float defMultiplier = 1;
-				//if (player.def > 1)
-				//	defMultiplier = 5 / (5 + eStates.def);
-				//eStates.DoDamage (dmg * defMultiplier); //damage divided by def/5
-
-				player.DamagePlayer(enemy.str * 10 + GetComponentInParent<Weapon> ().damage, false);
+				player.DamagePlayer(enemy.str * 5 + GetComponentInParent<Weapon> ().damage);
 			}
 		}
 	}

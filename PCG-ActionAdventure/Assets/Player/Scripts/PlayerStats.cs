@@ -7,8 +7,11 @@ public class PlayerStats : MonoBehaviour
 {
 	public float hp = 100;
 	private float startHp;
-	public float str = 2f;
+	public float str = 1f;
+    public float def = 1f;
 	float damageTimer;
+
+    public bool invincible = false;
 
 	public healthbarController healthBar;
 
@@ -25,18 +28,17 @@ public class PlayerStats : MonoBehaviour
         healthBar.SetSize(hp / startHp); //set health bar
     }
     
-	public void DamagePlayer(float amount, bool isPercentage){
+	public void DamagePlayer(float amount){
+        if (invincible)
+            return;
+
 		if (Time.time < damageTimer) //don't damage if the player has just been damaged
 			return;
 
-		//percentage values given as decimals
-		if (isPercentage) {
-			hp -= (hp * amount); 
-		} else {
-			hp -= amount;
-		}
+        hp -= amount * 1 / def;
 
-		healthBar.SetSize (hp / startHp); //set health bar
+
+        healthBar.SetSize (hp / startHp); //set health bar
 
 		if (hp <= 0) {
 			//player dies, this is basic atm
@@ -47,6 +49,7 @@ public class PlayerStats : MonoBehaviour
 		GetComponentInChildren<Animator> ().CrossFade ("damage_1", 0.2f);
 
 		//set timer
-		damageTimer = Time.time + 0.75f;
+		damageTimer = Time.time + 1f;
+        Debug.Log("damage0");
 	}
 }

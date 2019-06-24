@@ -136,8 +136,7 @@ public class MobSpawner : MonoBehaviour {
                 //newEnemy.transform.localScale = new Vector3(1f, 1f, 1f) * (1f + (o.Key * 2f / 10f)); //use level to set enemy scale
 
                 //set new enemy stats:
-                EnemyStates enemy = newEnemy.GetComponent<EnemyStates> ();
-				enemy.attackRange = 2f + o.value / 2f; //set attack range by level (bigger enemys need more)
+                EnemyStates enemy = newEnemy.GetComponent<EnemyStates> ();	
                 enemy.str = o.value; //starting stats = enemy level
                 enemy.def = o.value;
                 enemy.speed = o.value;
@@ -145,12 +144,13 @@ public class MobSpawner : MonoBehaviour {
                 enemy.level = o.value;
 
                 if (o.value == 5) { //if boss
-                    enemy.attackSpeed = 1.5f;
+                    enemy.attackSpeed = 0.85f;
                     enemy.startHP = 300.0f; //manual set starthp for bosses
                 }
 
                 float bonusHealth = enemy.startHP - 100;
                 newEnemy.transform.localScale = new Vector3(1f, 1f, 1f) * (1 + ( bonusHealth / 200)); //use bonus health (health over 100) to scale size
+                enemy.attackRange = 2f + newEnemy.transform.localScale.y * 2; //set attack range by scale (bigger enemys need more)
 
                 enemiesInTask.Add (enemy);
 			}
@@ -186,8 +186,8 @@ public class MobSpawner : MonoBehaviour {
             List<SwordType> possibleChoices = checkMods((enemy.hp - (80 + (level * 20))), enemy.str - level, enemy.speed - level, enemy.def - level);
 
             int weaponDamage = 5;
+
             if (enemy.level == 5) {
-                weaponDamage = 20;
                 if (possibleChoices.Contains(SwordType.broadsword))
                     possibleChoices.Remove(SwordType.broadsword);
                 if (possibleChoices.Count == 0)

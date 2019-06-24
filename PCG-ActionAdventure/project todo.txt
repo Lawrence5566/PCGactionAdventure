@@ -1,13 +1,12 @@
 
 recent changelog:
-+ Fixed lock and key cycle adding lock on wrong connection from key / removing wrong connection TO key
-+ TreasureRoom pattern change to include traps
++ Slower speed but bigger (much more likely hitting) boss attacks
++ Player's def now effects incomming dmg
++ Gameplay stats adjusted
++ Player now has one frame of invincibilty while rolling
 
 To do list (must ("decent state")):   --Oh, and DON'T FORGET TO BUG FIX ALONG THE WAY
--slow wind-up but bigger (definatly hitting) boss attacks
 -fix colliders for hitting player in rolling (change collider size or make player invunrable while rolling?) (latter is more true to dark souls)
--fix boss colliders/attacks to hit the player when he's standing still (might need the attacks to visibly aim at the player? or just collider issue)
-	-for this we want colliders of weapons to be the right size, just change how boss aims instead? 
 -make hidden route more obvious (with blurry effect)
 -think about if 2 keys are generated 
 -remove that flask action button?
