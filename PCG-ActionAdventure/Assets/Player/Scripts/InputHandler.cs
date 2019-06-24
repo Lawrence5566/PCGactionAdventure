@@ -374,7 +374,7 @@ public class InputHandler : MonoBehaviour {
 		anim.SetFloat (StaticStrings.horizontal, h);
 
 		canMove = false; //disable action (since we are rolling)
-        stats.invincible = true;                  //make invincible for 1 frame while rolling
+        stats.invincible = true;                  //make invincible while rolling
         inAction = true; 
 		anim.CrossFade ("Rolls", 0.2f);
 

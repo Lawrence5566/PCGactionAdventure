@@ -6,7 +6,6 @@ recent changelog:
 + Player now has one frame of invincibilty while rolling
 
 To do list (must ("decent state")):   --Oh, and DON'T FORGET TO BUG FIX ALONG THE WAY
--fix colliders for hitting player in rolling (change collider size or make player invunrable while rolling?) (latter is more true to dark souls)
 -make hidden route more obvious (with blurry effect)
 -think about if 2 keys are generated 
 -remove that flask action button?
