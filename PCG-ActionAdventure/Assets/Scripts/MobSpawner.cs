@@ -144,7 +144,7 @@ public class MobSpawner : MonoBehaviour {
                 enemy.level = o.value;
 
                 if (o.value == 5) { //if boss
-                    enemy.attackSpeed = 0.85f;
+                    enemy.attackSpeed = .95f;
                     enemy.startHP = 300.0f; //manual set starthp for bosses
                 }
 
@@ -187,7 +187,7 @@ public class MobSpawner : MonoBehaviour {
 
             int weaponDamage = 5;
 
-            if (enemy.level == 5) {
+            if (enemy.level == 5) { 
                 if (possibleChoices.Contains(SwordType.broadsword))
                     possibleChoices.Remove(SwordType.broadsword);
                 if (possibleChoices.Count == 0)

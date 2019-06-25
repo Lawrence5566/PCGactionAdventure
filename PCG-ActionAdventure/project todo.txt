@@ -1,34 +1,28 @@
 
 recent changelog:
-+ Corrected spawn height of invis teleporter
-+ Teleporter is now a invisivble cylinder that reflects light (so player can see it but it's like an active camo effect)
-
-To do list (must ("decent state")):   -Oh, and DON'T FORGET TO BUG FIX ALONG THE WAY
--make hidden route more obvious (with blurry effect)
--think about if 2 keys are generated 
--remove that flask action button?
--finalise crosshair mechanics & sprite
--sound fx (hidden wall sounds?, fight sounds, etc)
-
-after this stuff:	create video of game / get people to test
++ removed flask action button
++ some small gameplay tweaks
 
 to do list (could):
+-sound fx (hidden wall sounds?, fight sounds, etc)
 -make prefabs for a weapon pickup (spinning sword that uses script to pick sword and type etc?) (can you use spinning animation from hp pickup?)
 -weapon pickups - make script and patterns to decide what type of item to drop player (need to write 'dealing with items')
 -make hp and item pickups more common? (maybe they need to be more common in second level etc)
 -make sure that the room that dramatic cycle looks at has something interesting in (or just make sure it only works if it connects to the goal (mayube check and add something interesting?))
+-make lock on targets switchable with bumpers (inputs already there)
 -balancing of weapons and enemies etc
 -Fix dramtic cycle to work with BFS
 -make sure BFS works after all cycle stuff (e.g if any routes are removed make surte it takes account of that (by running after all graph stuff))
 
-To do list (maybe/ none portfolio stuff (after applying to jobs or for fun)):
+To do list (maybe):
 -weapon of different types doing different damage mechanics
 -weapons type VFX
 -ambient sounds/background noise?
 -"if empty room" patterns - add something interesting!
--inventory / multiple weapon pickup system
+-inventory / multiple weapon/item/key pickup system
 -switch weapons system (inventory UI and weapon UI)
 -basic fog + SUN?
+-Gameplay Balancing - write out system to balance properly
 -patrolling AI? (+ patrolling pattern)
 -make sure 2 lock and keys work together
 -visualise monster changes/mods

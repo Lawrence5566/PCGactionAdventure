@@ -186,10 +186,10 @@ public class InputHandler : MonoBehaviour {
 		moveDir = (v + h).normalized;
 		moveAmount = Mathf.Clamp01(Mathf.Abs (horizontal) + Mathf.Abs (vertical));
 
-		itemInput = rb_input;
+        //itemInput = rb_input; //replace this with item input button you decide
 
-		if (itemInput)
-			b_input = false;
+        if (itemInput)
+			b_input = false; 
 
 		if (b_input && b_timer > 0.5f) { //if run button pressed and held for more than .5s
 			run = (moveAmount > 0); //start running
