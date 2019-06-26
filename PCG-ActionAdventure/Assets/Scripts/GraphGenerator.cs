@@ -392,11 +392,13 @@ public class GraphGenerator : MonoBehaviour {
 		//set start symbol - picks random location
 		startNode = nodeArray[Random.Range(0,11)];
 		GameObject text = Instantiate(TextBasePrefab,  startNode.obj.transform);
-		startNode.obj.name = "StartNode";
+        text.transform.position = new Vector3(text.transform.position.x, text.transform.position.y, -0.1f); //modify z so text is in front of node
+        startNode.obj.name = "StartNode";
 		text.GetComponent<TextMesh>().text = "Start";
+        text.layer = 15; //change culling layer
 
-		//fire 'goal' function
-		GoalRule();
+        //fire 'goal' function
+        GoalRule();
 		
 	}
 
@@ -408,7 +410,9 @@ public class GraphGenerator : MonoBehaviour {
 		} while (goalNode.obj.name == "StartNode");
 
 		GameObject text = Instantiate(TextBasePrefab,  goalNode.obj.transform);
-		goalNode.obj.name = "GoalNode";
+        text.transform.position = new Vector3(text.transform.position.x, text.transform.position.y, -0.01f); //modify z so text is in front of node
+        text.layer = 15; //change culling layer
+        goalNode.obj.name = "GoalNode";
 		text.GetComponent<TextMesh>().text = "Goal";
 
 		//generate 2 paths between them
