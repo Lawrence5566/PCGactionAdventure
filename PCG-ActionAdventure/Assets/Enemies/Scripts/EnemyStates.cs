@@ -187,12 +187,12 @@ public class EnemyStates : MonoBehaviour {
 		if (isInvincible) //removed damaging animation and invincibility frames
 			return;
 
-		hp -= v * 1/def; //incoming damage modified by 1/def
+        hp -= v * 1/def; //incoming damage modified by 1/def
         // 100 incoming at 1 def = 100 * 1/1 = 100
         // 100 incoming at 2 def = 100 * 1/2 = 50
         // 100 incoming at 3 def = 100 * 1/3 = 33
-    
-		isInvincible = true;
+
+        isInvincible = true;
         if (!(level == 5)) { //if not a boss (bosses don't stagger)
             anim.Play("damage_1");
             anim.applyRootMotion = true;

@@ -1,0 +1,144 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &956432256
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 956432257}
+  - component: {fileID: 956432259}
+  - component: {fileID: 956432258}
+  m_Layer: 0
+  m_Name: Camera
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &956432257
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 956432256}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 2.75, y: 6.1, z: -12.5}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 2831204118567193234}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!20 &956432259
+Camera:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 956432256}
+  m_Enabled: 0
+  serializedVersion: 2
+  m_ClearFlags: 1
+  m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
+  m_projectionMatrixMode: 1
+  m_SensorSize: {x: 36, y: 24}
+  m_LensShift: {x: 0, y: 0}
+  m_GateFitMode: 2
+  m_FocalLength: 50
+  m_NormalizedViewPortRect:
+    serializedVersion: 2
+    x: 0
+    y: 0
+    width: 1
+    height: 1
+  near clip plane: 0.3
+  far clip plane: 1000
+  field of view: 60
+  orthographic: 0
+  orthographic size: 5
+  m_Depth: 0
+  m_CullingMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_RenderingPath: -1
+  m_TargetTexture: {fileID: 0}
+  m_TargetDisplay: 0
+  m_TargetEye: 3
+  m_HDR: 1
+  m_AllowMSAA: 1
+  m_AllowDynamicResolution: 0
+  m_ForceIntoRT: 0
+  m_OcclusionCulling: 1
+  m_StereoConvergence: 10
+  m_StereoSeparation: 0.022
+--- !u!81 &956432258
+AudioListener:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 956432256}
+  m_Enabled: 1
+--- !u!1 &2831204118567193235
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2831204118567193234}
+  - component: {fileID: 2831204118567193233}
+  m_Layer: 0
+  m_Name: GraphGenerator
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2831204118567193234
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2831204118567193235}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: -30, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 956432257}
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2831204118567193233
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2831204118567193235}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5cb52b88f87c4d04a9a4ad011e326885, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  TextBasePrefab: {fileID: 1671205331967562, guid: 5333c75f1779d23488ab22893046db1f,
+    type: 3}
+  circle: {fileID: 21300000, guid: 141e4a6faaf101d49a474edefdc5e37f, type: 3}
+  connectionSpr: {fileID: 21300000, guid: 177aa661da563104eacefe6f2aa46ee8, type: 3}
+  connectionBlockedSpr: {fileID: 21300000, guid: 9df87c66c8d77bf4b8fa4cfb5163171a,
+    type: 3}
+  connectionArrowSpr: {fileID: 21300000, guid: 380ca652803997f49925a0f97bc00db1, type: 3}
+  connectionDramatic: {fileID: 21300000, guid: a7fb0c651863d064596482aecc670706, type: 3}
+  connectionCollapse: {fileID: 21300000, guid: 5f293b352689d4a4fbb38af27fdfadb0, type: 3}
+  lockCircle: {fileID: 21300000, guid: 68dbcd337f3f4d64faf6e5bb531b6979, type: 3}
+  keyCircle: {fileID: 21300000, guid: 121671e0224fff94e841556c8546b2ca, type: 3}
+  monsterCircle: {fileID: 21300000, guid: d18c3bd6b9b30bf44bdecafacf0702c4, type: 3}
+  trapCircle: {fileID: 21300000, guid: 0a557a52f2251db409a6ab74493572fe, type: 3}
+  itemCircle: {fileID: 21300000, guid: dae3e9eeed0e83048ab8ef6bdbb5b9fd, type: 3}
+  healItemCircle: {fileID: 0}
+  hiddenCircle: {fileID: 21300000, guid: 3f5705492a67cd14ab3fb0e21c10a1bd, type: 3}

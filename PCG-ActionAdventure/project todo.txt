@@ -1,7 +1,12 @@
 
 recent changelog:
-+ removed flask action button
-+ some small gameplay tweaks
++ HPSprite added to graph generator
++ Sprites in graph generator are now added to there "GraphGenerator" object
++ Switch camera button added to swap to new camera on GraphGenerator
++ HP pickups now spawn 
++ TwoEmpyRooms pattern now spawns an item or heal (as monster was ruining cycles)
++ BossHpPattern only spawns HP if there was 3+ enemies in the route
++ Reorganised some files and prefabs
 
 to do list (could):
 -sound fx (hidden wall sounds?, fight sounds, etc)

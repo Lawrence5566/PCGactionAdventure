@@ -1,0 +1,126 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &9142462730391946477
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 9142462730391946476}
+  - component: {fileID: 9142462730391946479}
+  - component: {fileID: 9142462730391946478}
+  - component: {fileID: 9142462730391946481}
+  - component: {fileID: 9142462730391946480}
+  m_Layer: 0
+  m_Name: GameManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &9142462730391946476
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9142462730391946477}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 35.852955, y: 22.19963, z: -43.162384}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &9142462730391946479
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9142462730391946477}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: db657e9b8049e0742a9ef0b4d0ee3d0e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  levelPointsValue: 1
+  graphToMapConverter: {fileID: 0}
+  graphGenerator: {fileID: 0}
+  mobSpawner: {fileID: 9142462730391946478}
+  playerObject: {fileID: 0}
+  traps:
+  - {fileID: 7984534088572421621, guid: 8eddf4842b9675740b36cf813926c1c6, type: 3}
+  doorPrefab: {fileID: 7885523352516218517, guid: 615d770379cc4b243853ffd47c77ab1f,
+    type: 3}
+  keyPrefab: {fileID: 155280, guid: 41d1cac196452694fb10f2476db79e6e, type: 3}
+  teleporterPrefab: {fileID: 8489301500732843841, guid: 2d02608feab9a7e4dafa3d0c2712c3d1,
+    type: 3}
+  chestPrefab: {fileID: 1000014188511100, guid: 5dcae5adf53292945adef517afe8041e,
+    type: 3}
+  hpPrefab: {fileID: 7010358058772159220, guid: 66622d24d2d4e7940b52e46f4d5e6ecc,
+    type: 3}
+--- !u!114 &9142462730391946478
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9142462730391946477}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 35f8cbcde1f153140bcc210e44d465f7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enemyPrefabs:
+  - {fileID: 8969964588722973556, guid: dd7ad621b0da36641882fc703a896c2a, type: 3}
+--- !u!114 &9142462730391946481
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9142462730391946477}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4129fe3877ed2894cb93bedd01758ce4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  weaponManager: {fileID: 0}
+  enemyTargets: []
+--- !u!114 &9142462730391946480
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9142462730391946477}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f62ce68bc3e09ac429b257738171e218, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  temp_Enemy: {fileID: 0}
+  temp_Type: 0
+  temp_Dmg: 0
+  temp_SwordType: 0
+  broadswordPrefab: {fileID: 1020744188431956, guid: 40642408571de44418de22ce9e1c4868,
+    type: 3}
+  katanaPrefab: {fileID: 1025256421703284, guid: af5b5a4086b49f342ac750b87fa864d4,
+    type: 3}
+  longswordPrefab: {fileID: 1079530512405334, guid: a3588178ff7c97846a6c3cdbf9cb7e4c,
+    type: 3}
+  rapierPrefab: {fileID: 1036863752799598, guid: ad966b4815fa25f468a837e7246db805,
+    type: 3}
+  sabrePrefab: {fileID: 1420259404692978, guid: 170bd630381c79f45955c308f082b822,
+    type: 3}
+  scimitarPrefab: {fileID: 1974100050759824, guid: a6c841363c6c49842a576caa513bd2b5,
+    type: 3}
+  ulfberhtPrefab: {fileID: 1965698383389824, guid: ca5471d0c890d3b4189cf0ef6b7871ca,
+    type: 3}
+  fireMat: {fileID: 2100000, guid: cb0af4ed4b33aa145865d9392376e0be, type: 2}
+  waterMat: {fileID: 2100000, guid: 92c4aca39c234f044a7abc91ad33b5a4, type: 2}
+  earthMat: {fileID: 2100000, guid: c82a58a49cbb9ea47bc9610c49b3b119, type: 2}
+  airMat: {fileID: 2100000, guid: b5683b7235a00be418f1ff1c4f31e520, type: 2}

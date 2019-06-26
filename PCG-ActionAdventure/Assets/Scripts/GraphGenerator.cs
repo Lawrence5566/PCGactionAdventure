@@ -7,7 +7,7 @@ using System.Linq;
 //need to clear up/remove/merge connections, connected nodes and connectednodeforgraph
 //try to remove 'connections' keyvalues are more useful
 
-public class GraphGenerator : MonoBehaviour {
+public class GraphGenerator : MonoBehaviour {  
 	public GameObject TextBasePrefab;
 	public Sprite circle;
 	public Sprite connectionSpr;
@@ -36,7 +36,7 @@ public class GraphGenerator : MonoBehaviour {
 		int n = 0;
 		for (int x = 0; x < 3; x++) { //3 across and 4 down node array - starts bottom left in world, goes up
 			for (int y = 0; y < 4; y++) {
-				nodeArray[n] = new node(this.transform.position + new Vector3 (x * 4f, y * 4f, 0f), "node" + n, circle); //space nodes out 3.5 units apart
+				nodeArray[n] = new node(this.transform.position + new Vector3 (x * 4f, y * 4f, 0f), "node" + n, circle, this.transform); //space nodes out 3.5 units apart
 				n ++;
 			}
 		}
@@ -48,22 +48,22 @@ public class GraphGenerator : MonoBehaviour {
 					var relativePoint = nodeArray[n].obj.transform.InverseTransformPoint(nodeArray[i].obj.transform.position);
 
 					if (relativePoint.x == -4.0 && relativePoint.y == 0) { //has left node (and not above or below)
-						connection newCon = new connection(nodeArray[n].obj.transform.position + new Vector3(-2f,0f,0f), connectionSpr, 90f); //add left connection
+						connection newCon = new connection(nodeArray[n].obj.transform.position + new Vector3(-2f,0f,0f), connectionSpr, 90f, this.transform); //add left connection
 						nodeArray[n].connectedNodes.Add(nodeArray[i]);
 						nodeArray[n].connectionToNodes.Add(new KeyValuePair<node, connection>(nodeArray[i], newCon));
 					}
 					if (relativePoint.x == 4.0 && relativePoint.y == 0) { //has right node
-						connection newCon = new connection(nodeArray[n].obj.transform.position + new Vector3(2f,0f,0f), connectionSpr, 90f); //right
+						connection newCon = new connection(nodeArray[n].obj.transform.position + new Vector3(2f,0f,0f), connectionSpr, 90f, this.transform); //right
 						nodeArray[n].connectedNodes.Add(nodeArray[i]);
 						nodeArray[n].connectionToNodes.Add(new KeyValuePair<node, connection>(nodeArray[i], newCon));
 					}
 					if (relativePoint.y == 4.0 && relativePoint.x == 0) { //has top node (and not right or left)
-						connection newCon = new connection(nodeArray[n].obj.transform.position + new Vector3(0f,2f,0f), connectionSpr, 0f); //top
+						connection newCon = new connection(nodeArray[n].obj.transform.position + new Vector3(0f,2f,0f), connectionSpr, 0f, this.transform); //top
 						nodeArray[n].connectedNodes.Add(nodeArray[i]);
 						nodeArray[n].connectionToNodes.Add(new KeyValuePair<node, connection>(nodeArray[i], newCon));
 					}
 					if (relativePoint.y == -4.0 && relativePoint.x == 0) { //has bot node
-						connection newCon = new connection(nodeArray[n].obj.transform.position + new Vector3(0f,-2f,0f), connectionSpr, 0f); //bot
+						connection newCon = new connection(nodeArray[n].obj.transform.position + new Vector3(0f,-2f,0f), connectionSpr, 0f, this.transform); //bot
 						nodeArray[n].connectedNodes.Add(nodeArray[i]);
 						nodeArray[n].connectionToNodes.Add(new KeyValuePair<node, connection>(nodeArray[i], newCon));
 					}
@@ -217,7 +217,7 @@ public class GraphGenerator : MonoBehaviour {
 		a.connectionToNodes.Remove (oldCon);
 
 		//create new one
-		connection newCon = new connection(new Vector3(relPoint.x/2, relPoint.y/2, 0f) + a.obj.transform.position, sprite, angle);
+		connection newCon = new connection(new Vector3(relPoint.x/2, relPoint.y/2, 0f) + a.obj.transform.position, sprite, angle, this.transform);
 
 		//add to connectionsToNodes, if it doesn't already have one?
 		KeyValuePair<node, connection> newConnectionToNode = new KeyValuePair<node, connection> (b, newCon);
@@ -636,7 +636,7 @@ public class GraphGenerator : MonoBehaviour {
                 TreasureRoom(loopRouteB);
             }
 
-            //TwoEmptyRooms pattern
+            //TwoEmptyRooms pattern 
             TwoEmptyRooms(loopRouteA);
             TwoEmptyRooms(loopRouteB);
 
@@ -644,7 +644,7 @@ public class GraphGenerator : MonoBehaviour {
             { //if goal node has no features, add a boss
                 goalNode.AddFeature(new token("boss", monsterCircle));
 
-                BossPrepHPpattern(loopRouteA); //if any enemies or traps present in the routes, will add hp right before the boss
+                BossPrepHPpattern(loopRouteA); //if 3+ enemies or traps present in the routes, will add hp right before the boss
                 BossPrepHPpattern(loopRouteB);
 
             }
@@ -671,7 +671,17 @@ public class GraphGenerator : MonoBehaviour {
         for (int i = 0; i < route.Count; i++) {
             if (route[i].Key.features.Count == 0 && route[i].Key != startNode && route[i].Key != goalNode) { //if room i is empty, and not start or goal node
                 if (emptyRoom && emptyConnection) {//if previous room was empty and connection between them is empty, therefore two empty rooms!
-                    route[i].Key.AddFeature(new token("monster", monsterCircle));    //add monster in the second room
+                    int choice = Random.Range(0, 2); //inclusive, exclusive
+                    switch (choice){ //add heal or item in the second room
+                        case 0:
+                            route[i].Key.AddFeature(new token("heal", healItemCircle));    
+                            break;
+                        case 1:
+                            route[i].Key.AddFeature(new token("item", itemCircle));  
+                            break;
+                    }
+          
+
                     Debug.Log("TwoEmptyRooms");
                     break;
                 }
@@ -720,17 +730,18 @@ public class GraphGenerator : MonoBehaviour {
 
     }
 
-    void BossPrepHPpattern(List<KeyValuePair<node, connection>> route) {
-        //if player encountered an enemy or trap before boss, add HP item
-        bool enemyFound = false;
+    void BossPrepHPpattern(List<KeyValuePair<node, connection>> route) { //returns true if it could place a hp pickup
+        //if player encounters >= 3 enemies or trap before boss, add HP item
+        int obstacleCount = 0;
         foreach (KeyValuePair<node, connection> k in route) {
             if (k.Key.features.Exists(x => x.type == "trap" || x.type == "monster"))
-                enemyFound = true;
+                obstacleCount++;
         }
 
-        if (enemyFound) //found enemy on this route, so add hp to room one before end
-            route[route.Count - 2].Key.AddFeature(new token("healing", healItemCircle));
-
+        if (obstacleCount >= 3) { //found 3+ obstacles on this route, so add hp to room one before end
+            route[route.Count - 2].Key.AddFeature(new token("heal", healItemCircle));
+        }
+        
     }
 
     void TwoAlternativePaths(List<KeyValuePair<node, connection>> routeA, List<KeyValuePair<node, connection>> routeB){
@@ -850,9 +861,9 @@ public class node{
 	public node(){
 		name = "null node";
 		obj = new GameObject ("null node");
-	}
+    }
 
-	public node(Vector3 pos, string n, Sprite i){
+	public node(Vector3 pos, string n, Sprite i, Transform parent){
 		name = n;
 
 		//create node in world
@@ -860,7 +871,10 @@ public class node{
 		obj.transform.position = pos;
 		SpriteRenderer ren = obj.AddComponent<SpriteRenderer>();	
 		ren.sprite = i;
-	}
+
+        obj.transform.parent = parent;
+        obj.layer = 15; //set camera culling layer
+    }
 
 	public void AddFeature(token newToken){
 		features.Add (newToken); //add new node to features
@@ -882,7 +896,8 @@ public class node{
 			features[i].obj.transform.position = pos;
 			features [i].obj.transform.localScale = new Vector3(.5f,.5f,.5f);
 			features [i].obj.transform.SetParent (obj.transform); //set parent to node
-			SpriteRenderer ren = features[i].obj.AddComponent<SpriteRenderer>();	
+            features[i].obj.layer = 15; //set camera culling layer
+            SpriteRenderer ren = features[i].obj.AddComponent<SpriteRenderer>();	
 			ren.sprite = features[i].sprite;
 			ren.sortingOrder = 2;  //set order in layer infront of parent
 		}
@@ -926,7 +941,7 @@ public class connection{
         obj = new GameObject("null connection");
     }
 
-	public connection(Vector3 pos, Sprite i, float rot){
+	public connection(Vector3 pos, Sprite i, float rot, Transform parent){
 
 		//create connection in world
 		obj = new GameObject("connection");
@@ -934,15 +949,18 @@ public class connection{
 		obj.transform.Rotate(new Vector3(0f,0f,rot));
 		SpriteRenderer ren = obj.AddComponent<SpriteRenderer>();	
 		ren.sprite = i;
-	
-	}
+
+        obj.transform.parent = parent;
+        obj.layer = 15; //set camera culling layer
+    }
 
 	public void AddFeatureToConnection(token newToken){ //for adding to connection
 		newToken.obj = new GameObject(newToken.type);
 		newToken.obj.transform.position = obj.transform.position;
 		newToken.obj.transform.localScale = new Vector3(.5f,.5f,.5f);
 		newToken.obj.transform.SetParent (obj.transform); //set parent to connection
-		SpriteRenderer ren = newToken.obj.AddComponent<SpriteRenderer>();	
+        newToken.obj.layer = 15; //set camera culling layer
+        SpriteRenderer ren = newToken.obj.AddComponent<SpriteRenderer>();	
 		ren.sprite = newToken.sprite;
 		ren.sortingOrder = 2;  							//set order in layer infront of parent
 		features.Add (newToken); 				//add new token to list of connection features

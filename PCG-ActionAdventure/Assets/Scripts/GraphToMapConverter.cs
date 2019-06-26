@@ -126,12 +126,10 @@ public class GraphToMapConverter : MonoBehaviour {
         foreach (KeyValuePair<node, connection> k in orderedEncounters) { //deal with features
             Room currNodeRoom = roomsList[Array.IndexOf(nodeArray, k.Key)];
 
-            //orderedEncounters sometimes has duplicates, so filter in these loops?
-
             // deal with node features //
             foreach (token t in k.Key.features) {
                 // keys & items //
-                if (t.type == "key" || t.type == "item" || t.type == "healing")
+                if (t.type == "key" || t.type == "item" || t.type == "heal")
                     ItemLocations.Add(new KeyValuePair<Vector3, token>(currNodeRoom.center, t));
 
                 // monsters & traps //
@@ -155,6 +153,12 @@ public class GraphToMapConverter : MonoBehaviour {
                         Coord bestTileA = new Coord();
                         Coord bestTileB = new Coord();
                         FindClosestTiles(roomsList[node1Index], roomsList[node2Index], out bestTileA, out bestTileB);
+
+                        if (t.type == "heal") {
+                            Vector3 midpoint = Vector3.Lerp(CoordToWorldPoint(bestTileA), CoordToWorldPoint(bestTileB), 0.5f);
+                            midpoint.y = 0.0f; //make sure obstacle is on the ground
+                            ItemLocations.Add(new KeyValuePair<Vector3, token>(midpoint, t));
+                        }
 
                         if (t.type == "hidden") {
                             Vector3 locA = CoordToWorldPoint(bestTileA);
