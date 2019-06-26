@@ -116,11 +116,11 @@ public class GameManager : MonoBehaviour
 	}
 
     public void PlaceItems() {
-        List<KeyValuePair<Vector3, token>> items = graphToMapConverter.ItemLocations.FindAll(x => x.Value.type != "key"); //get all non-key locations from itemLocations list
+        //List<KeyValuePair<Vector3, token>> items = graphToMapConverter.ItemLocations.FindAll(x => x.Value.type != "key"); //get all non-key locations from itemLocations list
 
         List<KeyValuePair<Vector3, token>> healItems = graphToMapConverter.ItemLocations.FindAll(x => x.Value.type == "heal"); //get all heal locations from itemLocations list
         foreach (KeyValuePair<Vector3, token> k in healItems) {
-            GameObject heal = Instantiate(hpPrefab, k.Key, Quaternion.identity);    //spawn Heal
+            Instantiate(hpPrefab, k.Key, Quaternion.identity);    //spawn Heal
         }
     }
 }
