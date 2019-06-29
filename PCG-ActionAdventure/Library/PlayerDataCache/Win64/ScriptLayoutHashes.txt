@@ -1,6 +1,6 @@
 Win64
 PlayerPath?
-C:/Users/lawre/Documents/GitHub/PCGactionAdventure/PCG-ActionAdventure/App/PCGActionAdventure.exe
+C:/Users/lawre/Desktop/New folder/PCGActionAdventure.exe
 SceneListBegin?
 Assets/Scenes/DungeonGenerator.unity
 SceneListEnd?
