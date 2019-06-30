@@ -102,8 +102,8 @@ MonoBehaviour:
   isTwoHanded: 1
   weaponModel: {fileID: 1025256421703284}
   damageCollider: {fileID: 1930173642909424}
-  type: 4
-  damage: 10
+  type: 0
+  damage: 15
 --- !u!1 &1930173642909424
 GameObject:
   m_ObjectHideFlags: 0

@@ -91,6 +91,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3b6b0bf820137c042ac2b2e509e9973e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  swordType: 0
   actions:
   - input: 0
     targetAnim: oh_attack_1
@@ -99,7 +100,7 @@ MonoBehaviour:
   isTwoHanded: 0
   weaponModel: {fileID: 1020744188431956}
   damageCollider: {fileID: 1298664740746084}
-  type: 1
+  type: 0
   damage: 5
 --- !u!1 &1298664740746084
 GameObject:

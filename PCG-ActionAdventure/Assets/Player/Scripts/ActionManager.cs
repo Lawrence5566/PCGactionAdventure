@@ -4,8 +4,7 @@ using UnityEngine;
 
 public class ActionManager : MonoBehaviour {
 
-	[HideInInspector]
-	public List<Action> actionSlots = new List<Action> ();
+	private List<Action> actionSlots = new List<Action> (); //slots for actions the player has, contains actions mapped to inputs but no target anims at start (see constructor below), keep this private (otherwise it turns to 2?)
 
 	public ItemAction consumableItem;
 
@@ -17,31 +16,33 @@ public class ActionManager : MonoBehaviour {
 		UpdateActionsWithCurrentWeapon ();
 	}
 
-	public void UpdateActionsWithCurrentWeapon(){
-		EmptyAllSlots (); //clear all actions first
+    ActionManager() {
+        for (int i = 0; i < 3; i++) { //setup actions list, needs to be the same number as number of inputs you want (e.g x,y,rb = 3)
+            Action a = new Action();
+            a.input = (ActionInput)i;
+            a.targetAnim = null;
+            actionSlots.Add(a);
+        }
+    }
+
+    public void UpdateActionsWithCurrentWeapon(){
+
+        EmptyAllSlots (); //clear all actions first
 
 		Weapon w = inputHandler.inventoryManager.weapon;
-		for (int i = 0; i < w.actions.Count; i++) { //loop through all actions in weapon
+        for (int i = 0; i < w.actions.Count; i++) { //loop through all actions in weapon
 
-			Action a = GetAction(w.actions[i].input); //assign animations using weapon actions
-			a.targetAnim = w.actions [i].targetAnim;
+            Action a = GetAction(w.actions[i].input); //foreach action slot the player has
+            a.targetAnim = w.actions [i].targetAnim; //set target anim to be the weapons target anim of that slot
+            
 		}
 
 		inputHandler.isTwoHanded = w.isTwoHanded; //set twoHanded mode on inputhandler to mirror the weapon
 	}
 
 	void EmptyAllSlots(){
-		for(int i = 0; i < 2; i++){
-			Action a = GetAction((ActionInput)i);
-			a.targetAnim = null; //make all actions null
-		}
-	}
-
-	ActionManager(){
-		for(int i = 0; i < 2; i++){ //setup actions list
-			Action a = new Action();
-			a.input = (ActionInput)i;
-			actionSlots.Add (a);
+		foreach(Action a in actionSlots) { //make all actions null
+            a.targetAnim = null;
 		}
 	}
 
@@ -50,9 +51,9 @@ public class ActionManager : MonoBehaviour {
 		return GetAction (a_input);
 	}
 
-	Action GetAction(ActionInput inp){
-		for (int i = 0; i < actionSlots.Count; i++) {
-			if (actionSlots [i].input == inp)
+	Action GetAction(ActionInput inp){ //return action, given actionInput button enum type
+		for (int i = 0; i < actionSlots.Count; i++) { //for each actionSlot
+			if (actionSlots [i].input == inp) //if the action slot has the same ActionInput as the ActionInput given, return the action in that slot
 				return actionSlots [i];
 		}
 
@@ -60,12 +61,13 @@ public class ActionManager : MonoBehaviour {
 	}
 
 	public ActionInput GetActionInput(InputHandler ih){
-
 		if (ih.x_input) //if x button pressed
 			return ActionInput.x;
 		if (ih.y_input)	//if y button pressed
 			return ActionInput.y;
-		return ActionInput.x; //return x as default
+		if (ih.rb_input)
+            return ActionInput.rb;
+        return ActionInput.x; //reuturn x as default
 		
 	}
 

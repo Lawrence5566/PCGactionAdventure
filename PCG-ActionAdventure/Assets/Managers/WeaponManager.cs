@@ -147,6 +147,9 @@ public class WeaponManager : MonoBehaviour {
 
         //set damage
         WeaponScript.damage = dmg;
+
+        //giving new weapon to palyer, so update actions
+        playerInv.GetComponent<ActionManager>().UpdateActionsWithCurrentWeapon();
     }
 }
 

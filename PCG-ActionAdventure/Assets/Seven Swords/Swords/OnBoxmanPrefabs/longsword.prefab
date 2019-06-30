@@ -103,7 +103,7 @@ MonoBehaviour:
   weaponModel: {fileID: 1079530512405334}
   damageCollider: {fileID: 1911370743204202}
   type: 0
-  damage: 10
+  damage: 15
 --- !u!1 &1911370743204202
 GameObject:
   m_ObjectHideFlags: 0

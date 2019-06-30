@@ -1,11 +1,11 @@
 
 recent changelog:
-+ GiveWeapon function added in inv manager
-+ Pickups for weapons now work except animations
++ ActionManager now updated when player gets given a weapon, so attacks change
++ ActionManager.actionSlots made private to stop forced 2 slots bug and modified some functions to account for any number of actionslots
 
 to do list (could):
--Add animations when changing weapons (animations need to change with sword type (just use attached script on weapon))
 -Fix multiple items/weapon/enemys spawning on center (order points in a cirlce at center)
+-add skill points type thing in - player gets one of the skills (they chose) of the monsters they kill by using an ability on their dead bodies?
 -sound fx (hidden wall sounds?, fight sounds, etc)
 -make hp and item pickups more common? (maybe they need to be more common in second level etc)
 -make sure that the room that dramatic cycle looks at has something interesting in (or just make sure it only works if it connects to the goal (mayube check and add something interesting?))
@@ -15,6 +15,7 @@ to do list (could):
 -make sure BFS works after all cycle stuff (e.g if any routes are removed make surte it takes account of that (by running after all graph stuff))
 
 To do list (maybe):
+-change attacks instead of different buttons for player
 -weapon of different types doing different damage mechanics
 -weapons type VFX
 -ambient sounds/background noise?
@@ -24,6 +25,8 @@ To do list (maybe):
 -basic fog + SUN?
 -Gameplay Balancing - write out system to balance properly
 -patrolling AI? (+ patrolling pattern)
+-chain attacks for enemies?
+-more AI changes (smarter)
 -make sure 2 lock and keys work together
 -visualise monster changes/mods
 -lock on to enemys cursor
