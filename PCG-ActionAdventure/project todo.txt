@@ -1,7 +1,7 @@
 
 recent changelog:
-+ Fixed multiple items/enemy tokens being spawned
-+ Items/weapons/enemies now spawn in a random spot within a circle of 3 radius of room center
++ Fixed small bug in graphToMapConverter checking if connection had been visited
++ Built app
 
 to do list (could):
 -add skill points type thing in - player gets one of the skills (they chose) of the monsters they kill by using an ability on their dead bodies?

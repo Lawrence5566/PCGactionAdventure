@@ -146,7 +146,7 @@ public class GraphToMapConverter : MonoBehaviour {
             }
 
             // deal with connection features //
-            if (visitedConns.Contains(k.Value)) { //if connection hasn't been visited yet
+            if (!visitedConns.Contains(k.Value)) { //if connection hasn't been visited yet
                 foreach (token t in k.Value.features) {
                     foreach (node n in nodeArray) { //look through all nodes in node array
                         bool found = n.connectionToNodes.Contains(k); //if this node has this connectionToNode
@@ -167,6 +167,7 @@ public class GraphToMapConverter : MonoBehaviour {
 
                             if (t.type == "hidden") {
                                 Vector3 locA = CoordToWorldPoint(bestTileA);
+                                Debug.Log("HIDDEN");
                                 locA.y = 0f; //set y to zero so it spawns on ground
                                 hiddenLocations.Add(new KeyValuePair<Vector3, Vector3>(locA, roomsList[node2Index].center));
                             }

@@ -1,6 +1,6 @@
 Win64
 PlayerPath?
-C:/Users/lawre/Desktop/New folder/PCGActionAdventure.exe
+C:/Users/lawre/Documents/GitHub/PCGactionAdventure/PCG-ActionAdventure/App/PCGActionAdventure.exe
 SceneListBegin?
 Assets/Scenes/DungeonGenerator.unity
 SceneListEnd?
@@ -130,7 +130,7 @@ d5e51383eae54230bbbae4b052f524aa Assembly-CSharp.dll:.Helper
 703102201974478915a34e26badb2b8b Assembly-CSharp.dll:.EnemyManager
 4fd8bf02e3089425d3502e26c44ba31a Unity.TextMeshPro.dll:TMPro.TextContainer
 c8501cad2282b61d2632597591e37780 Assembly-CSharp.dll:.GraphGenerator
-489a76f023257a1581ce9617461c8657 Assembly-CSharp.dll:.Weapon
+0150c1b652477514a8319f5b4fbb53b5 Assembly-CSharp.dll:.Weapon
 818a89a2810da89b2f79e426cf77a53e Assembly-CSharp.dll:.SwitchCamButton
 87b4234182395bb5b2c7f52247a4bd8e Assembly-CSharp.dll:.KeepBool
 71bb6a6b6c8f052f948db64c7dd3ca4f Assembly-CSharp.dll:.Door
@@ -152,7 +152,7 @@ ad9173d3a69d99153f38ed4b62226129 UnityEngine.Networking.dll:UnityEngine.Networki
 35a9693c388776aaf487636491a20f11 Unity.TextMeshPro.dll:TMPro.TMP_FontAsset
 e1300922cc039f41ab46a47f4cb05898 Unity.TextMeshPro.dll:TMPro.TMP_Settings
 71bb6a6b6c8f052f948db64c7dd3ca4f Assembly-CSharp.dll:.TheVoidHandler
-981700ccac4d1a827072aeac9b26f12b Assembly-CSharp.dll:.ActionManager
+3a96dbad4fde099e83d969e6e997eb81 Assembly-CSharp.dll:.ActionManager
 88cc9df3c6fc697bfbeacd24c0d6f2d7 UnityEngine.TestRunner.dll:UnityEngine.TestTools.BeforeAfterTestCommandState
 88cc9df3c6fc697bfbeacd24c0d6f2d7 UnityEngine.TestRunner.dll:UnityEngine.TestTools.EnumerableSetUpTearDownCommandState
 71bb6a6b6c8f052f948db64c7dd3ca4f UnityEngine.TestRunner.dll:UnityEngine.TestTools.TestRunner.Callbacks.PlayModeRunnerCallback
@@ -169,11 +169,11 @@ fb6a1ea36b4f6ef5948d283d93760765 UnityEngine.GoogleAudioSpatializer.dll:UnityEng
 5b0391b7e3d9ea9db6c0a8fbd0ca23f6 UnityEngine.GoogleAudioSpatializer.dll:UnityEngine.Experimental.Audio.Google.GvrAudioSoundfieldExtension
 5b0391b7e3d9ea9db6c0a8fbd0ca23f6 UnityEngine.GoogleAudioSpatializer.dll:UnityEngine.Experimental.Audio.Google.GvrAudioSourceExtension
 526f3255b5e40094fc0ec72785fcd9f2 Assembly-CSharp.dll:.WeaponManager
-5608815f867483d9755e700e28adbf76 Assembly-CSharp.dll:.GameManager
+ba055f282dd147a2615710302732d316 Assembly-CSharp.dll:.GameManager
 ee0cef6caaac8ae485bfa82f000f0f7b Unity.TextMeshPro.dll:TMPro.TextMeshProUGUI
 82994db8d0509720b671f7bd51365a2a Assembly-CSharp.dll:.MeshGenerator
 b8d39b429d595b4dbf80e76ae69ccda3 Assembly-CSharp.dll:.Teleporter
-dd1d88b112cbc442760e61bcfbd4e570 Assembly-CSharp.dll:.InventoryManager
+aaf9c0fadcc850a90ca5e5c0688c2f40 Assembly-CSharp.dll:.InventoryManager
 5fc094978ce3e3591a7500ed380d854a Unity.Analytics.DataPrivacy.dll:UnityEngine.Analytics.DataPrivacyButton
 d251bf88db6c95a6b1aa0b69298da9ef UnityEngine.SpatialTracking.dll:UnityEngine.SpatialTracking.TrackedPoseDriver
 afed453c2af5a5229eba79bb18abcb08 Assembly-CSharp.dll:.LockedEnemyAnalyser
