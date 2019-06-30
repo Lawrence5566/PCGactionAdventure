@@ -1,17 +1,15 @@
 
 recent changelog:
-+ HPSprite added to graph generator
-+ Sprites in graph generator are now added to there "GraphGenerator" object
-+ Switch camera button added to swap to new camera on GraphGenerator
-+ HP pickups now spawn 
-+ TwoEmpyRooms pattern now spawns an item or heal (as monster was ruining cycles)
-+ BossHpPattern only spawns HP if there was 3+ enemies in the route
-+ Reorganised some files and prefabs
++ Created Y rotation pickupSpin
++ Created PickupPrefab for weapons
++ Adjusted pickup script to account for if its on a weapon
++ GameManager now spawns weapon prefabs and chooses random weapon to add to pickup
++ Turned off damage colliders on weapon prefabs on boxman by default
 
 to do list (could):
+-Write "GiveWeapon" function in InventoryManager script to handle giving player a weapon on pickup
+-Fix multiple items/weapon/enemys spawning on center (order points in a cirlce at center)
 -sound fx (hidden wall sounds?, fight sounds, etc)
--make prefabs for a weapon pickup (spinning sword that uses script to pick sword and type etc?) (can you use spinning animation from hp pickup?)
--weapon pickups - make script and patterns to decide what type of item to drop player (need to write 'dealing with items')
 -make hp and item pickups more common? (maybe they need to be more common in second level etc)
 -make sure that the room that dramatic cycle looks at has something interesting in (or just make sure it only works if it connects to the goal (mayube check and add something interesting?))
 -make lock on targets switchable with bumpers (inputs already there)

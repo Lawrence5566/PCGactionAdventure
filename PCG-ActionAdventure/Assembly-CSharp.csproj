@@ -60,9 +60,9 @@
      <Compile Include="Assets\Objects\DoorsAndKeys\Door.cs" />
      <Compile Include="Assets\Objects\DoorsAndKeys\Key.cs" />
      <Compile Include="Assets\Objects\DungeonTraps\TrapActivator.cs" />
-     <Compile Include="Assets\Objects\Other\Chest.cs" />
-     <Compile Include="Assets\Objects\Other\Pickups\pickup.cs" />
-     <Compile Include="Assets\Objects\Other\Teleporter.cs" />
+     <Compile Include="Assets\Objects\Pickups\pickup.cs" />
+     <Compile Include="Assets\Objects\Teleporter.cs" />
+     <Compile Include="Assets\Objects\Treasure chest closed\Chest.cs" />
      <Compile Include="Assets\Player\Scripts\ActionManager.cs" />
      <Compile Include="Assets\Player\Scripts\AnimatorHook.cs" />
      <Compile Include="Assets\Player\Scripts\CameraManager.cs" />

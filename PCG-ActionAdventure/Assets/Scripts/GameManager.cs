@@ -22,6 +22,8 @@ public class GameManager : MonoBehaviour
 	public GameObject teleporterPrefab;
 	public GameObject chestPrefab;
     public GameObject hpPrefab;
+    public GameObject weaponPickupPrefab;
+    public GameObject[] weaponsPrefabs;
 
     // Start is called before the first frame update
     void Start()
@@ -116,11 +118,21 @@ public class GameManager : MonoBehaviour
 	}
 
     public void PlaceItems() {
-        //List<KeyValuePair<Vector3, token>> items = graphToMapConverter.ItemLocations.FindAll(x => x.Value.type != "key"); //get all non-key locations from itemLocations list
+        List<KeyValuePair<Vector3, token>> items = graphToMapConverter.ItemLocations.FindAll(x => x.Value.type != "key"); //get all non-key locations from itemLocations list
 
         List<KeyValuePair<Vector3, token>> healItems = graphToMapConverter.ItemLocations.FindAll(x => x.Value.type == "heal"); //get all heal locations from itemLocations list
         foreach (KeyValuePair<Vector3, token> k in healItems) {
             Instantiate(hpPrefab, k.Key, Quaternion.identity);    //spawn Heal
+        }
+
+        foreach (KeyValuePair<Vector3, token> k in items) {
+            GameObject pickup = Instantiate(weaponPickupPrefab, k.Key, Quaternion.identity);    //spawn sword pickup prefab
+            pickup.transform.position += new Vector3(0f,1f,0f); //put prefab 1metre in the air ready for weapon
+            GameObject weapon = Instantiate(weaponsPrefabs[Random.Range(0, weaponsPrefabs.Length)], new Vector3(0f, 0f, 0f), Quaternion.identity, pickup.transform);  //give the required weapon (in this case we just randomise (we can use points based or something later))
+            weapon.transform.localPosition = new Vector3(0f, 0f, 0f); //reset position and roataion after adding to parent
+            weapon.transform.localEulerAngles = new Vector3(0f, 0f, 0f);
+            weapon.transform.localScale = new Vector3(1f, 1f, 1f); //set scale to 1 as on prefabs they are 0.25 (don't change prefab as prefab is for on character)
+
         }
     }
 }

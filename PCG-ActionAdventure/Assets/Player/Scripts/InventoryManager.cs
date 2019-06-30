@@ -11,4 +11,8 @@ public class InventoryManager : MonoBehaviour {
 		curWeapon.CloseDamageColliders (); //close damage collider initially of current weapon
 	}
 
+    public void GiveWeapon(Weapon weapon) {
+
+    }
+
 }

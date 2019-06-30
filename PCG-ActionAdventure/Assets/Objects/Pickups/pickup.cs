@@ -21,9 +21,16 @@ public class pickup : MonoBehaviour
             }
 
             if (myPickupType == pickupType.item) {
-                //playerInv.Values.Add(keyToken);   //give player this item
-                //gameObject.SetActive(false);  
-                //destroy object
+                //playerInv.Values.Add(keyToken);   //give player this item's token?
+
+                //if it's a weapon, add appropraite weapon script when you spawn the prefab
+                Weapon weapon = GetComponent<Weapon>();
+                if (weapon) {
+                    playerInv.GiveWeapon(weapon);
+                }
+
+                gameObject.SetActive(false);
+                Object.Destroy(this.gameObject); //destroy object
             }
 
         }
