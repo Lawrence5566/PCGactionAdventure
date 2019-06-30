@@ -648,7 +648,7 @@ public class GraphGenerator : MonoBehaviour {
             { //if goal node has no features, add a boss
                 goalNode.AddFeature(new token("boss", monsterCircle));
 
-                BossPrepHPpattern(loopRouteA); //if 3+ enemies or traps present in the routes, will add hp right before the boss
+                BossPrepHPpattern(loopRouteA); //if 3+ enemies or traps present in the route, will add hp right before the boss
                 BossPrepHPpattern(loopRouteB);
 
             }
@@ -678,9 +678,11 @@ public class GraphGenerator : MonoBehaviour {
                     int choice = Random.Range(0, 2); //inclusive, exclusive
                     switch (choice){ //add heal or item in the second room
                         case 0:
-                            route[i].Key.AddFeature(new token("heal", healItemCircle));    
+                            route[i].Key.AddFeature(new token("heal", healItemCircle));
+                            Debug.Log("added heal from two empty");
                             break;
                         case 1:
+                            Debug.Log("added item from two empty");
                             route[i].Key.AddFeature(new token("item", itemCircle));  
                             break;
                     }
@@ -720,6 +722,7 @@ public class GraphGenerator : MonoBehaviour {
                     if (n.connectionToNodes.Count == 0 && n != startNode && n != goalNode) { //if room is not part of a route, and is not goal or start node
                         addConnection(n, monsterRooms[currIndex], connectionArrowSpr); //create connection 
                         n.AddFeature(new token("item", itemCircle));                   //and add an item
+                        Debug.Log("added item from treasure room prep");
                         foundEmptyAdjacentRoom = true;
                         break;
                     }
@@ -743,6 +746,7 @@ public class GraphGenerator : MonoBehaviour {
         }
 
         if (obstacleCount >= 3) { //found 3+ obstacles on this route, so add hp to room one before end
+            Debug.Log("added heal from boss prep");
             route[route.Count - 2].Key.AddFeature(new token("heal", healItemCircle));
         }
         

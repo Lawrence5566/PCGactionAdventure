@@ -1,10 +1,9 @@
 
 recent changelog:
-+ ActionManager now updated when player gets given a weapon, so attacks change
-+ ActionManager.actionSlots made private to stop forced 2 slots bug and modified some functions to account for any number of actionslots
++ Fixed multiple items/enemy tokens being spawned
++ Items/weapons/enemies now spawn in a random spot within a circle of 3 radius of room center
 
 to do list (could):
--Fix multiple items/weapon/enemys spawning on center (order points in a cirlce at center)
 -add skill points type thing in - player gets one of the skills (they chose) of the monsters they kill by using an ability on their dead bodies?
 -sound fx (hidden wall sounds?, fight sounds, etc)
 -make hp and item pickups more common? (maybe they need to be more common in second level etc)
@@ -15,11 +14,12 @@ to do list (could):
 -make sure BFS works after all cycle stuff (e.g if any routes are removed make surte it takes account of that (by running after all graph stuff))
 
 To do list (maybe):
--change attacks instead of different buttons for player
+-chain/combo attacks instead of different buttons for player
 -weapon of different types doing different damage mechanics
 -weapons type VFX
 -ambient sounds/background noise?
 -"if empty room" patterns - add something interesting!
+-Add clause to stop weapons/items/enemies occasionaly spawning on top of each other (cus they pick a random spot inside circle)
 -inventory / multiple weapon/item/key pickup system
 -switch weapons system (inventory UI and weapon UI)
 -basic fog + SUN?

@@ -33,7 +33,6 @@ public class GameManager : MonoBehaviour
 		PlaceMonsters ();
 		PlaceTraps(); //place traps
 		PlaceDoors(); //place doors
-		PlaceKeys();
 		PlaceHiddens ();
         PlaceItems();
 		PlaceGoal ();
@@ -90,15 +89,6 @@ public class GameManager : MonoBehaviour
 		}
 	}
 
-	public void PlaceKeys(){
-		List<KeyValuePair<Vector3, token>> keyLocations = graphToMapConverter.ItemLocations.FindAll(x => x.Value.type == "key"); //get all key locations from itemLocations list
-
-		foreach (KeyValuePair<Vector3, token> k in keyLocations){
-			GameObject key = Instantiate (keyPrefab, k.Key, Quaternion.identity); 	//spawn key
-			key.GetComponent<Key>().keyToken = k.Value;								//give key its token
-		}
-	}
-
 	public void PlaceHiddens(){
 		List<KeyValuePair<Vector3, Vector3>> locations = graphToMapConverter.hiddenLocations;
 		foreach (KeyValuePair<Vector3, Vector3> k in locations) {
@@ -118,20 +108,30 @@ public class GameManager : MonoBehaviour
 	}
 
     public void PlaceItems() {
-        List<KeyValuePair<Vector3, token>> items = graphToMapConverter.ItemLocations.FindAll(x => x.Value.type != "key"); //get all non-key locations from itemLocations list
-
-        List<KeyValuePair<Vector3, token>> healItems = graphToMapConverter.ItemLocations.FindAll(x => x.Value.type == "heal"); //get all heal locations from itemLocations list
-        foreach (KeyValuePair<Vector3, token> k in healItems) {
-            Instantiate(hpPrefab, k.Key, Quaternion.identity);    //spawn Heal
-        }
+        List<KeyValuePair<Vector3, token>> items = graphToMapConverter.ItemLocations;
 
         foreach (KeyValuePair<Vector3, token> k in items) {
-            GameObject pickup = Instantiate(weaponPickupPrefab, k.Key, Quaternion.identity);    //spawn sword pickup prefab
-            pickup.transform.position += new Vector3(0f,1f,0f); //put prefab 1metre in the air ready for weapon
-            GameObject weapon = Instantiate(weaponsPrefabs[Random.Range(0, weaponsPrefabs.Length)], new Vector3(0f, 0f, 0f), Quaternion.identity, pickup.transform);  //give the required weapon (in this case we just randomise (we can use points based or something later))
-            weapon.transform.localPosition = new Vector3(0f, 0f, 0f); //reset position and roataion after adding to parent
-            weapon.transform.localEulerAngles = new Vector3(0f, 0f, 0f);
-            weapon.transform.localScale = new Vector3(1f, 1f, 1f); //set scale to 1 as on prefabs they are 0.25 (don't change prefab as prefab is for on character)
+            Vector3 randomPoint = Random.insideUnitCircle * 3; //get random point in a * x radius circle
+            randomPoint.z = randomPoint.y; //swap z for y
+            randomPoint.y = 0f;
+
+            if (k.Value.type == "key") {
+                GameObject key = Instantiate(keyPrefab, k.Key + randomPoint, Quaternion.identity);    //spawn key
+                key.GetComponent<Key>().keyToken = k.Value;								//give key its token
+            }
+
+            if (k.Value.type == "heal") {
+                Instantiate(hpPrefab, k.Key + randomPoint, Quaternion.identity);    //spawn Heal
+            }
+
+            if (k.Value.type == "item") {
+                GameObject pickup = Instantiate(weaponPickupPrefab, k.Key + randomPoint, Quaternion.identity);    //spawn sword pickup prefab
+                pickup.transform.position += new Vector3(0f, 1f, 0f); //put prefab 1metre in the air ready for weapon
+                GameObject weapon = Instantiate(weaponsPrefabs[Random.Range(0, weaponsPrefabs.Length)], new Vector3(0f, 0f, 0f), Quaternion.identity, pickup.transform);  //give the required weapon (in this case we just randomise (we can use points based or something later))
+                weapon.transform.localPosition = new Vector3(0f, 0f, 0f); //reset position and roataion after adding to parent
+                weapon.transform.localEulerAngles = new Vector3(0f, 0f, 0f);
+                weapon.transform.localScale = new Vector3(1f, 1f, 1f); //set scale to 1 as on prefabs they are 0.25 (don't change prefab as prefab is for on character)
+            }
 
         }
     }

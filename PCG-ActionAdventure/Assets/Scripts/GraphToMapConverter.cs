@@ -123,69 +123,79 @@ public class GraphToMapConverter : MonoBehaviour {
 			CreateDramaticView (dramaticViewRooms);
 		}
 
+        List<node> visitedNodes = new List<node>();
+        List<connection> visitedConns = new List<connection>();
         foreach (KeyValuePair<node, connection> k in orderedEncounters) { //deal with features
             Room currNodeRoom = roomsList[Array.IndexOf(nodeArray, k.Key)];
 
             // deal with node features //
-            foreach (token t in k.Key.features) {
-                // keys & items //
-                if (t.type == "key" || t.type == "item" || t.type == "heal")
-                    ItemLocations.Add(new KeyValuePair<Vector3, token>(currNodeRoom.center, t));
+            if (!visitedNodes.Contains(k.Key)) { //if node hasn't been checked for features yet
+                foreach (token t in k.Key.features) {
+                    // keys & items //
+                    if (t.type == "key" || t.type == "item" || t.type == "heal")
+                        ItemLocations.Add(new KeyValuePair<Vector3, token>(currNodeRoom.center, t));
 
-                // monsters & traps //
-                if (t.type == "monster" || t.type == "trap")
-                    monsterAndTrapLocations.Add(new KeyValuePair<Vector3, token>(currNodeRoom.center, t));
+                    // monsters & traps //
+                    if (t.type == "monster" || t.type == "trap")
+                        monsterAndTrapLocations.Add(new KeyValuePair<Vector3, token>(currNodeRoom.center, t));
 
-                // goal location - locks on node are chest, boss is boss
-                if (t.type == "lock" || t.type == "boss")
-                    goalLocationAndType = new KeyValuePair<Vector3, token>(currNodeRoom.center, t);
+                    // goal location - locks on node are chest, boss is boss
+                    if (t.type == "lock" || t.type == "boss")
+                        goalLocationAndType = new KeyValuePair<Vector3, token>(currNodeRoom.center, t);
+                }
             }
 
             // deal with connection features //
-            foreach (token t in k.Value.features) {
-                foreach (node n in nodeArray) { //look through all nodes in node array
-                    bool found = n.connectionToNodes.Contains(k); //if this node has this connectionToNode
-                    if (found) {  //now we have this graph segment: n -> k.Value -> k.Key (node, connection, node)
-                        int node1Index = Array.IndexOf(nodeArray, n);
-                        int node2Index = Array.IndexOf(nodeArray, k.Key);
+            if (visitedConns.Contains(k.Value)) { //if connection hasn't been visited yet
+                foreach (token t in k.Value.features) {
+                    foreach (node n in nodeArray) { //look through all nodes in node array
+                        bool found = n.connectionToNodes.Contains(k); //if this node has this connectionToNode
+                        if (found) {  //now we have this graph segment: n -> k.Value -> k.Key (node, connection, node)
+                            int node1Index = Array.IndexOf(nodeArray, n);
+                            int node2Index = Array.IndexOf(nodeArray, k.Key);
 
-                        //find the closest tiles between those two nodes using findClostestTiles
-                        Coord bestTileA = new Coord();
-                        Coord bestTileB = new Coord();
-                        FindClosestTiles(roomsList[node1Index], roomsList[node2Index], out bestTileA, out bestTileB);
+                            //find the closest tiles between those two nodes using findClostestTiles
+                            Coord bestTileA = new Coord();
+                            Coord bestTileB = new Coord();
+                            FindClosestTiles(roomsList[node1Index], roomsList[node2Index], out bestTileA, out bestTileB);
 
-                        if (t.type == "heal") {
-                            Vector3 midpoint = Vector3.Lerp(CoordToWorldPoint(bestTileA), CoordToWorldPoint(bestTileB), 0.5f);
-                            midpoint.y = 0.0f; //make sure obstacle is on the ground
-                            ItemLocations.Add(new KeyValuePair<Vector3, token>(midpoint, t));
-                        }
+                            if (t.type == "heal") {
+                                Vector3 midpoint = Vector3.Lerp(CoordToWorldPoint(bestTileA), CoordToWorldPoint(bestTileB), 0.5f);
+                                midpoint.y = 0.0f; //make sure obstacle is on the ground
+                                ItemLocations.Add(new KeyValuePair<Vector3, token>(midpoint, t));
+                            }
 
-                        if (t.type == "hidden") {
-                            Vector3 locA = CoordToWorldPoint(bestTileA);
-                            locA.y = 0f; //set y to zero so it spawns on ground
-                            hiddenLocations.Add(new KeyValuePair<Vector3, Vector3>(locA, roomsList[node2Index].center));
-                        }
+                            if (t.type == "hidden") {
+                                Vector3 locA = CoordToWorldPoint(bestTileA);
+                                locA.y = 0f; //set y to zero so it spawns on ground
+                                hiddenLocations.Add(new KeyValuePair<Vector3, Vector3>(locA, roomsList[node2Index].center));
+                            }
 
-                        if (t.type == "trap" || t.type == "monster") {
-                            //find midpoint between world points, giving center of route to 'trapLocations'  or 'monsterLocations'
-                            Vector3 midpoint = Vector3.Lerp(CoordToWorldPoint(bestTileA), CoordToWorldPoint(bestTileB), 0.5f);
-                            midpoint.y = 0.0f; //make sure obstacle is on the ground
+                            if (t.type == "trap" || t.type == "monster") {
+                                //find midpoint between world points, giving center of route to 'trapLocations'  or 'monsterLocations'
+                                Vector3 midpoint = Vector3.Lerp(CoordToWorldPoint(bestTileA), CoordToWorldPoint(bestTileB), 0.5f);
+                                midpoint.y = 0.0f; //make sure obstacle is on the ground
 
-                            monsterAndTrapLocations.Add(new KeyValuePair<Vector3, token>(midpoint, t));
-                        }
+                                monsterAndTrapLocations.Add(new KeyValuePair<Vector3, token>(midpoint, t));
+                            }
 
-                        if (t.type == "lock") {
-                            Vector3 DoorPos = CoordToWorldPoint(bestTileA); //find entrance on first room
-                            Vector3 rotPos = CoordToWorldPoint(bestTileB); //find rotation direction
+                            if (t.type == "lock") {
+                                Vector3 DoorPos = CoordToWorldPoint(bestTileA); //find entrance on first room
+                                Vector3 rotPos = CoordToWorldPoint(bestTileB); //find rotation direction
 
-                            DoorPos.y = 0.0f; //make sure door is on the ground
-                            DoorLocations.Add(new KeyValuePair<Vector3[], token>(new Vector3[2] { DoorPos, rotPos }, t.keyLink));
+                                DoorPos.y = 0.0f; //make sure door is on the ground
+                                DoorLocations.Add(new KeyValuePair<Vector3[], token>(new Vector3[2] { DoorPos, rotPos }, t.keyLink));
 
-                            // break;
+                                // break;
+                            }
                         }
                     }
                 }
             }
+
+            visitedNodes.Add(k.Key);
+            visitedConns.Add(k.Value);
+
         }
 
         return Map;
