@@ -15,23 +15,21 @@ public class pickup : MonoBehaviour
 
         if (playerInv) { //if hit player
             if (myPickupType == pickupType.health) {
-                collision.gameObject.GetComponent<PlayerStats>().GiveHealth(healthValue); //give health
-                gameObject.SetActive(false);    //turn off object
-                Object.Destroy(this.gameObject); //destroy object
+                collision.gameObject.GetComponent<PlayerStats>().GiveHealth(healthValue); //give health         
             }
 
             if (myPickupType == pickupType.item) {
-                //playerInv.Values.Add(keyToken);   //give player this item's token?
 
                 //if it's a weapon, add appropraite weapon script when you spawn the prefab
-                Weapon weapon = GetComponent<Weapon>();
+                Weapon weapon = GetComponentInChildren<Weapon>();
                 if (weapon) {
-                    playerInv.GiveWeapon(weapon);
+                    WeaponManager.singleton.GiveWeapon(playerInv, weapon.type, weapon.damage, weapon.swordType);
                 }
-
-                gameObject.SetActive(false);
-                Object.Destroy(this.gameObject); //destroy object
+                
             }
+
+            gameObject.SetActive(false); //turn off object
+            Object.Destroy(this.gameObject); //destroy object
 
         }
 

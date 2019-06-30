@@ -4,15 +4,17 @@ using UnityEngine;
 
 public class InventoryManager : MonoBehaviour {
 
-	public Weapon curWeapon;
 	public List<token> keys = new List<token>();
+    public Transform rightHand; // to connect weapons
+    public Weapon weapon;
 
-	public void Init(){
-		curWeapon.CloseDamageColliders (); //close damage collider initially of current weapon
+    public void Init(){
+        if (!rightHand) //if no righthand linked
+            transform.Find("RightHand");
+        if (!weapon)
+            GetComponentInChildren<Weapon>();
+
+        weapon.CloseDamageColliders (); //close damage collider initially of current weapon
 	}
-
-    public void GiveWeapon(Weapon weapon) {
-
-    }
 
 }

@@ -20,7 +20,7 @@ public class ActionManager : MonoBehaviour {
 	public void UpdateActionsWithCurrentWeapon(){
 		EmptyAllSlots (); //clear all actions first
 
-		Weapon w = inputHandler.inventoryManager.curWeapon;
+		Weapon w = inputHandler.inventoryManager.weapon;
 		for (int i = 0; i < w.actions.Count; i++) { //loop through all actions in weapon
 
 			Action a = GetAction(w.actions[i].input); //assign animations using weapon actions

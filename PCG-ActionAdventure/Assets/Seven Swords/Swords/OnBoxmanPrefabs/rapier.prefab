@@ -91,6 +91,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3b6b0bf820137c042ac2b2e509e9973e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  swordType: 3
   actions:
   - input: 0
     targetAnim: rap_oh_attack_1

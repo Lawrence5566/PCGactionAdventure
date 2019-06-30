@@ -1,13 +1,10 @@
 
 recent changelog:
-+ Created Y rotation pickupSpin
-+ Created PickupPrefab for weapons
-+ Adjusted pickup script to account for if its on a weapon
-+ GameManager now spawns weapon prefabs and chooses random weapon to add to pickup
-+ Turned off damage colliders on weapon prefabs on boxman by default
++ GiveWeapon function added in inv manager
++ Pickups for weapons now work except animations
 
 to do list (could):
--Write "GiveWeapon" function in InventoryManager script to handle giving player a weapon on pickup
+-Add animations when changing weapons (animations need to change with sword type (just use attached script on weapon))
 -Fix multiple items/weapon/enemys spawning on center (order points in a cirlce at center)
 -sound fx (hidden wall sounds?, fight sounds, etc)
 -make hp and item pickups more common? (maybe they need to be more common in second level etc)

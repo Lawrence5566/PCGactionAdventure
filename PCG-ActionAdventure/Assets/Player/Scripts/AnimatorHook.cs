@@ -69,7 +69,7 @@ public class AnimatorHook : MonoBehaviour {
 		}
 		
 
-		inputHan.inventoryManager.curWeapon.OpenDamageColliders();
+		inputHan.inventoryManager.weapon.OpenDamageColliders();
 	}
 
 	public void CloseDamageColliders(){
@@ -78,6 +78,6 @@ public class AnimatorHook : MonoBehaviour {
 			return;
 		}
 		
-		inputHan.inventoryManager.curWeapon.CloseDamageColliders();
+		inputHan.inventoryManager.weapon.CloseDamageColliders();
 	}
 }

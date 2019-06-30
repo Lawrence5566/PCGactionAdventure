@@ -45,7 +45,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 33fd6f5e39dd60544875339e4039ebe9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  myPickupType: 0
+  myPickupType: 1
   healthValue: 30
 --- !u!95 &1440784441129025944
 Animator:

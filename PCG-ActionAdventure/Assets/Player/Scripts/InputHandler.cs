@@ -208,7 +208,7 @@ public class InputHandler : MonoBehaviour {
 		DetectItemAction ();//check if use item button pressed
 		DetectAction(); 	//check if attack action buttons pressed
 
-		inventoryManager.curWeapon.weaponModel.SetActive (!usingItem); //make sure weapon isn't hidden
+		inventoryManager.weapon.weaponModel.SetActive (!usingItem); //make sure weapon isn't hidden
 
 		if (inAction){ //skip rest of function if character is in action (it can't move whilest inAction)
 			anim.applyRootMotion = true; //we are in an action so use root motion

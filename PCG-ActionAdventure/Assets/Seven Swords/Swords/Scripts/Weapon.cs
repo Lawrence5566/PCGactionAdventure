@@ -4,6 +4,7 @@ using UnityEngine;
 
 //set actions, isTwohanded etc on prefab
 public class Weapon : MonoBehaviour {
+    public SwordType swordType;
 	public List<Action> actions;
 	public bool isTwoHanded;
 	public GameObject weaponModel;
